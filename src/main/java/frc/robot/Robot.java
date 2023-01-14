@@ -36,11 +36,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Field", mField);
 
     // Camera server
-    if (RobotBase.isReal()) {
-      mCamera = CameraServer.startAutomaticCapture();
-      mCamera.setFPS(30);
-      mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-    }
+    mCamera = CameraServer.startAutomaticCapture();
+    mCamera.setFPS(30);
+    mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
 
     mAllSubsystems.add(mDrive);
   }
