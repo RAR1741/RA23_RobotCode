@@ -1,17 +1,27 @@
 package frc.robot;
 
 public class Constants {
-  //Swerve
-  public static final int k_talFL = 0;
-  public static final int k_talFR = 0;
-  public static final int k_talBL = 0;
-  public static final int k_talBR = 0;
+  // Drivetrain (drive) constants
+  public static final int kDrivetrainFLDriveMotorId = 5;
+  public static final int kDrivetrainBLDriveMotorId = 6;
+  public static final int kDrivetrainFRDriveMotorId = 7;
+  public static final int kDrivetrainBRDriveMotorId = 8;
 
-  public static final int k_neoFL = 0;
-  public static final int k_neoFR = 0;
-  public static final int k_neoBL = 0;
-  public static final int k_neoBR = 0;
+  public static final int kDrivetrainFLTurnEncoderChannelA = 0;
+  public static final int kDrivetrainFLTurnEncoderChannelB = 1;
+  public static final int kDrivetrainBLTurnEncoderChannelA = 2;
+  public static final int kDrivetrainBLTurnEncoderChannelB = 3;
+  public static final int kDrivetrainFRTurnEncoderChannelA = 4;
+  public static final int kDrivetrainFRTurnEncoderChannelB = 5;
+  public static final int kDrivetrainBRTurnEncoderChannelA = 6;
+  public static final int kDrivetrainBRTurnEncoderChannelB = 7;
 
-  public static final double k_xDistance = 0.000;
-  public static final double k_yDistance = 0.000;
+  // Drivetrain (turn) constants
+  public static final int kDrivetrainFLTurnMotorId = 9;
+  public static final int kDrivetrainBLTurnMotorId = 10;
+  public static final int kDrivetrainFRTurnMotorId = 11;
+  public static final int kDrivetrainBRTurnMotorId = 12;
+
+  public static final double kDrivetrainXDistance = 0.381;
+  public static final double kDrivetrainYDistance = 0.381;
 }

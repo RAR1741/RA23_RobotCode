@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
-import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Subsystem;
 
 public class Robot extends TimedRobot {
@@ -24,7 +23,7 @@ public class Robot extends TimedRobot {
 
   // Robot subsystems
   private List<Subsystem> mAllSubsystems = new ArrayList<>();
-  private final Drivetrain mDrive = Drivetrain.getInstance();
+  // private final Drivetrain mDrive = Drivetrain.getInstance();
 
   private UsbCamera mCamera;
 
@@ -42,7 +41,7 @@ public class Robot extends TimedRobot {
       mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
     }
 
-    mAllSubsystems.add(mDrive);
+    // mAllSubsystems.add(mDrive);
   }
 
   @Override
@@ -60,12 +59,14 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double xSpeed = -mSpeedLimiter.calculate(mDriverController.getForwardAxis()) * Drivetrain.kMaxSpeed;
+    // double xSpeed = -mSpeedLimiter.calculate(mDriverController.getForwardAxis())
+    // * Drivetrain.kMaxSpeed;
 
-    mDrive.slowMode(mDriverController.getWantsSlowMode());
+    // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
-    double rot = -mRotLimiter.calculate(mDriverController.getTurnAxis()) * Drivetrain.kMaxAngularSpeed;
-    mDrive.drive(xSpeed, rot);
+    // double rot = -mRotLimiter.calculate(mDriverController.getTurnAxis()) *
+    // Drivetrain.kMaxAngularSpeed;
+    // mDrive.drive(xSpeed, rot);
 
     // // Intake controls
     if (mDriverController.getWantsIntakeOpen()) {
@@ -92,14 +93,14 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     // Stop the robot when disabled.
-    mDrive.drive(0.0, 0.0);
+    // mDrive.drive(0.0, 0.0);
 
     updateSim();
   }
 
   private void updateSim() {
     // Update the odometry in the sim.
-    mDrive.simulationPeriodic();
-    mField.setRobotPose(mDrive.getPose());
+    // mDrive.simulationPeriodic();
+    // mField.setRobotPose(mDrive.getPose());
   }
 }
