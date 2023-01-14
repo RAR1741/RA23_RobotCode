@@ -1,45 +1,90 @@
 {
   "MainWindow": {
     "GLOBAL": {
-      "height": "720",
+      "height": "727",
       "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "1280",
-      "xpos": "-1",
-      "ypos": "-1"
+      "width": "1273",
+      "xpos": "282",
+      "ypos": "205"
     }
   },
   "Window": {
+    "###/FMSInfo": {
+      "Collapsed": "0",
+      "Pos": "60,60",
+      "Size": "169,167"
+    },
+    "###/LiveWindow/Ungrouped/AnalogGyro[0]": {
+      "Collapsed": "0",
+      "Pos": "577,212",
+      "Size": "320,380"
+    },
+    "###/LiveWindow/Ungrouped/MotorControllerGroup[1]": {
+      "Collapsed": "0",
+      "Pos": "367,584",
+      "Size": "217,54"
+    },
+    "###/LiveWindow/Ungrouped/PIDController[1]": {
+      "Collapsed": "0",
+      "Pos": "60,60",
+      "Size": "123,144"
+    },
+    "###/SmartDashboard/Field": {
+      "Collapsed": "0",
+      "Pos": "207,83",
+      "Size": "785,421"
+    },
+    "###Analog Inputs": {
+      "Collapsed": "0",
+      "Pos": "394,584",
+      "Size": "260,71"
+    },
     "###FMS": {
       "Collapsed": "0",
-      "Pos": "5,540",
+      "Pos": "3,513",
       "Size": "283,146"
     },
     "###Joysticks": {
-      "Collapsed": "0",
-      "Pos": "250,465",
+      "Collapsed": "1",
+      "Pos": "206,62",
       "Size": "796,73"
     },
     "###NetworkTables": {
-      "Collapsed": "0",
-      "Pos": "250,277",
-      "Size": "750,185"
+      "Collapsed": "1",
+      "Pos": "206,44",
+      "Size": "750,230"
     },
     "###Other Devices": {
       "Collapsed": "0",
-      "Pos": "1025,20",
-      "Size": "250,695"
+      "Pos": "1003,21",
+      "Size": "263,692"
+    },
+    "###PWM Outputs": {
+      "Collapsed": "1",
+      "Pos": "763,49",
+      "Size": "110,135"
+    },
+    "###Plot <0>": {
+      "Collapsed": "0",
+      "Pos": "196,226",
+      "Size": "700,400"
+    },
+    "###RoboRIO": {
+      "Collapsed": "0",
+      "Pos": "5,125",
+      "Size": "119,146"
     },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "5,350",
+      "Pos": "6,285",
       "Size": "192,218"
     },
     "###Timing": {
       "Collapsed": "0",
-      "Pos": "5,150",
-      "Size": "135,127"
+      "Pos": "5,126",
+      "Size": "135,150"
     },
     "Debug##Default": {
       "Collapsed": "0",
