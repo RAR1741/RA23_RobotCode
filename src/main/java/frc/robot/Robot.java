@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
       mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
     }
 
-    mAllSubsystems.add(mDrive);
+    mAllSubsystems.add(mDrive)
   }
 
   @Override
