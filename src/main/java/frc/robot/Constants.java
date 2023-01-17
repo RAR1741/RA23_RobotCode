@@ -1,27 +1,45 @@
 package frc.robot;
 
-public class Constants {
-  // Drivetrain (drive) constants
-  public static final int kDrivetrainFLDriveMotorId = 5;
-  public static final int kDrivetrainBLDriveMotorId = 6;
-  public static final int kDrivetrainFRDriveMotorId = 7;
-  public static final int kDrivetrainBRDriveMotorId = 8;
+public final class Constants {
+  public class Drivetrain {
+    // Drivetrain wheel offsets
+    public static final double kXDistance = 0.381;
+    public static final double kYDistance = 0.381;
 
-  public static final int kDrivetrainFLTurnEncoderChannelA = 0;
-  public static final int kDrivetrainFLTurnEncoderChannelB = 1;
-  public static final int kDrivetrainBLTurnEncoderChannelA = 2;
-  public static final int kDrivetrainBLTurnEncoderChannelB = 3;
-  public static final int kDrivetrainFRTurnEncoderChannelA = 4;
-  public static final int kDrivetrainFRTurnEncoderChannelB = 5;
-  public static final int kDrivetrainBRTurnEncoderChannelA = 6;
-  public static final int kDrivetrainBRTurnEncoderChannelB = 7;
+    // Drivetrain drive motor constants
+    public class Drive {
+      public static final int kFLDriveMotorId = 5;
+      public static final int kBLDriveMotorId = 6;
+      public static final int kFRDriveMotorId = 7;
+      public static final int kBRDriveMotorId = 8;
+    }
 
-  // Drivetrain (turn) constants
-  public static final int kDrivetrainFLTurnMotorId = 9;
-  public static final int kDrivetrainBLTurnMotorId = 10;
-  public static final int kDrivetrainFRTurnMotorId = 11;
-  public static final int kDrivetrainBRTurnMotorId = 12;
+    // Drivetrain (turn) constants
+    public class Turn {
+      // Drivetrain turning offset constants
+      public static final double kFLTurnOffset = 0.0;
+      public static final double kBLTurnOffset = 0.0;
+      public static final double kFRTurnOffset = 0.0;
+      public static final double kBRTurnOffset = 0.0;
 
-  public static final double kDrivetrainXDistance = 0.381;
-  public static final double kDrivetrainYDistance = 0.381;
+      public static final int kFLTurnMotorId = 9;
+      public static final int kBLTurnMotorId = 10;
+      public static final int kFRTurnMotorId = 11;
+      public static final int kBRTurnMotorId = 12;
+
+      public static final int kFLTurnEncoderChannelA = 0;
+      public static final int kFLTurnEncoderChannelB = 1;
+
+      public static final int kBLTurnEncoderChannelA = 2;
+      public static final int kBLTurnEncoderChannelB = 3;
+
+      public static final int kFRTurnEncoderChannelA = 4;
+      public static final int kFRTurnEncoderChannelB = 5;
+
+      public static final int kBRTurnEncoderChannelA = 6;
+      public static final int kBRTurnEncoderChannelB = 7;
+    }
+
+  }
+
 }
