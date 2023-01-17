@@ -9,8 +9,8 @@ public final class Constants {
     // Drivetrain drive motor constants
     public class Drive {
       public static final int kFLDriveMotorId = 5;
-      public static final int kBLDriveMotorId = 6;
-      public static final int kFRDriveMotorId = 7;
+      public static final int kFRDriveMotorId = 6;
+      public static final int kBLDriveMotorId = 7;
       public static final int kBRDriveMotorId = 8;
     }
 
@@ -23,8 +23,8 @@ public final class Constants {
       public static final double kBRTurnOffset = 0.0;
 
       public static final int kFLTurnMotorId = 9;
-      public static final int kBLTurnMotorId = 10;
-      public static final int kFRTurnMotorId = 11;
+      public static final int kFRTurnMotorId = 10;
+      public static final int kBLTurnMotorId = 11;
       public static final int kBRTurnMotorId = 12;
 
       public static final int kFLTurnEncoderChannelA = 0;
