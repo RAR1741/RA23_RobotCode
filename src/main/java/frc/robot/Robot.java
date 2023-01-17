@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.subsystems.Subsystem;
+import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class Robot extends TimedRobot {
   private final DriverController mDriverController = new DriverController(0, true, true);
@@ -23,7 +24,7 @@ public class Robot extends TimedRobot {
 
   // Robot subsystems
   private List<Subsystem> mAllSubsystems = new ArrayList<>();
-  // private final Drivetrain mDrive = Drivetrain.getInstance();
+  private final SwerveDrive mSwerve = SwerveDrive.getInstance();
 
   private UsbCamera mCamera;
 
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
       mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
     }
 
-    // mAllSubsystems.add(mDrive);
+    mAllSubsystems.add(mSwerve);
   }
 
   @Override
@@ -59,21 +60,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // double xSpeed = -mSpeedLimiter.calculate(mDriverController.getForwardAxis())
+    //double xSpeed = -mSpeedLimiter.calculate(mDriverController.getForwardAxis())
     // * Drivetrain.kMaxSpeed;
 
     // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
-    // double rot = -mRotLimiter.calculate(mDriverController.getTurnAxis()) *
+    //double rot = -mRotLimiter.calculate(mDriverController.getTurnAxis()) *
     // Drivetrain.kMaxAngularSpeed;
-    // mDrive.drive(xSpeed, rot);
+    mSwerve.drive(mDriverController.getForwardAxis(),mDriverController.getStrafeAxis(), mDriverController.getTurnAxis(),true);
 
     // // Intake controls
-    if (mDriverController.getWantsIntakeOpen()) {
+    /*if (mDriverController.getWantsIntakeOpen()) {
       // m_intake.open();
     } else if (mDriverController.getWantsIntakeClose()) {
       // m_intake.close();
-    }
+    }*/
 
     mAllSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     mAllSubsystems.forEach(subsystem -> subsystem.outputTelemetry());

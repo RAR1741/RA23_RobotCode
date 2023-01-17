@@ -17,11 +17,11 @@ public class DriverController extends FilteredController {
   }
 
   public double getStrafeAxis() {
-    return this.getFilteredAxis(2);
+    return this.getFilteredAxis(0);
   }
 
   public double getTurnAxis() {
-    return this.getFilteredAxis(4);
+    return this.getFilteredAxis(2);
   }
 
   public boolean getWantsSlowMode() {
@@ -29,11 +29,11 @@ public class DriverController extends FilteredController {
   }
 
   // Intake
-  public boolean getWantsIntakeOpen() {
+  /*public boolean getWantsIntakeOpen() {
     return this.getLeftBumper();
   }
 
   public boolean getWantsIntakeClose() {
     return this.getRightBumper();
-  }
+  }*/
 }
