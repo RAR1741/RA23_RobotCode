@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -23,13 +24,15 @@ public class SwerveModule {
   private final WPI_TalonFX m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
-  private final RelativeEncoder m_driveEncoder;
+  private final TalonFXSensorCollection m_driveEncoder;
   private final RelativeEncoder m_turningEncoder;
 
-  // Gains are for example purposes only - must be determined for your own robot!
+  // TODO: Gains are for example purposes only - must be determined for your own
+  // robot!
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
-  // Gains are for example purposes only - must be determined for your own robot!
+  // TODO: Gains are for example purposes only - must be determined for your own
+  // robot!
   private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
       1,
       0,
@@ -37,7 +40,8 @@ public class SwerveModule {
       new TrapezoidProfile.Constraints(
           kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
-  // Gains are for example purposes only - must be determined for your own robot!
+  // TODO: Gains are for example purposes only - must be determined for your own
+  // robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
@@ -56,19 +60,22 @@ public class SwerveModule {
 
     // Probably need to update these to match the encoder channels from the
     // brushless motors
-    m_driveEncoder = m_driveMotor.getSelectedSensorPosition();
+    m_driveEncoder = m_driveMotor.getSensorCollection();
     m_turningEncoder = m_turningMotor.getEncoder();
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
+    // TODO: Figure this out
+    // m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius /
+    // kEncoderResolution);
 
     // Set the distance (in this case, angle) in radians per pulse for the turning
     // encoder.
     // This is the the angle through an entire rotation (2 * pi) divided by the
     // encoder resolution.
-    m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
+    // TODO: Figure this out
+    // m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -82,7 +89,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        m_driveEncoder.getRate(), new Rotation2d(m_turningEncoder.getPosition()));
+        m_driveEncoder.getIntegratedSensorVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
   }
 
   /**
@@ -92,7 +99,7 @@ public class SwerveModule {
    */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        m_driveEncoder.getDistance(), new Rotation2d(m_turningEncoder.getPosition()));
+        m_driveEncoder.getIntegratedSensorPosition(), new Rotation2d(m_turningEncoder.getPosition()));
   }
 
   /**
@@ -105,7 +112,8 @@ public class SwerveModule {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getRate(), state.speedMetersPerSecond);
+    final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getIntegratedSensorVelocity(),
+        state.speedMetersPerSecond);
 
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 

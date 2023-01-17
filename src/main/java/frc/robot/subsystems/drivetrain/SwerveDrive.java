@@ -18,23 +18,23 @@ public class SwerveDrive extends Subsystem {
   public static final double kMaxSpeed = 3.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(Constants.kDrivetrainXDistance,
-      Constants.kDrivetrainYDistance);
-  private final Translation2d m_frontRightLocation = new Translation2d(Constants.kDrivetrainXDistance,
-      -Constants.kDrivetrainYDistance);
-  private final Translation2d m_backLeftLocation = new Translation2d(-Constants.kDrivetrainXDistance,
-      Constants.kDrivetrainYDistance);
-  private final Translation2d m_backRightLocation = new Translation2d(-Constants.kDrivetrainXDistance,
-      -Constants.kDrivetrainYDistance);
+  private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.kXDistance,
+      Constants.Drivetrain.kYDistance);
+  private final Translation2d m_frontRightLocation = new Translation2d(Constants.Drivetrain.kXDistance,
+      -Constants.Drivetrain.kYDistance);
+  private final Translation2d m_backLeftLocation = new Translation2d(-Constants.Drivetrain.kXDistance,
+      Constants.Drivetrain.kYDistance);
+  private final Translation2d m_backRightLocation = new Translation2d(-Constants.Drivetrain.kXDistance,
+      -Constants.Drivetrain.kYDistance);
 
   private final SwerveModule m_frontLeft = new SwerveModule(
-      Constants.kDrivetrainFLDriveMotorId, Constants.kDrivetrainFLTurnMotorId);
+      Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId);
   private final SwerveModule m_frontRight = new SwerveModule(
-      Constants.kDrivetrainFRDriveMotorId, Constants.kDrivetrainFRTurnMotorId);
+      Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId);
   private final SwerveModule m_backLeft = new SwerveModule(
-      Constants.kDrivetrainBLDriveMotorId, Constants.kDrivetrainBLTurnMotorId);
+      Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId);
   private final SwerveModule m_backRight = new SwerveModule(
-      Constants.kDrivetrainBRDriveMotorId, Constants.kDrivetrainBRTurnMotorId);
+      Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId);
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
