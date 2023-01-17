@@ -18,8 +18,8 @@ public final class Constants {
     public class Turn {
       // Drivetrain turning offset constants
       public static final double kFLTurnOffset = 0.0;
-      public static final double kBLTurnOffset = 0.0;
       public static final double kFRTurnOffset = 0.0;
+      public static final double kBLTurnOffset = 0.0;
       public static final double kBRTurnOffset = 0.0;
 
       public static final int kFLTurnMotorId = 9;
@@ -30,11 +30,11 @@ public final class Constants {
       public static final int kFLTurnEncoderChannelA = 0;
       public static final int kFLTurnEncoderChannelB = 1;
 
-      public static final int kBLTurnEncoderChannelA = 2;
-      public static final int kBLTurnEncoderChannelB = 3;
-
       public static final int kFRTurnEncoderChannelA = 4;
       public static final int kFRTurnEncoderChannelB = 5;
+
+      public static final int kBLTurnEncoderChannelA = 2;
+      public static final int kBLTurnEncoderChannelB = 3;
 
       public static final int kBRTurnEncoderChannelA = 6;
       public static final int kBRTurnEncoderChannelB = 7;

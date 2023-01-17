@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants;
 import frc.robot.subsystems.Subsystem;
@@ -59,6 +60,7 @@ public class SwerveDrive extends Subsystem {
   }
 
   private SwerveDrive() {
+    // TODO: Make a separate method for this
     m_gyro.reset();
   }
 
@@ -72,12 +74,14 @@ public class SwerveDrive extends Subsystem {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    var swerveModuleStates = m_kinematics.toSwerveModuleStates(
+    SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+
+    // TODO: Check to see if it does turn optimization, or we need to do that
 
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
