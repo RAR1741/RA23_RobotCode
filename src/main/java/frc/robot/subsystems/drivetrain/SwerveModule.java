@@ -92,6 +92,10 @@ public class SwerveModule {
         m_driveEncoder.getIntegratedSensorVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
   }
 
+  public double getTurnPosition() {
+    return m_turningEncoder.getPosition();
+  }
+
   /**
    * Returns the current position of the module.
    *
@@ -123,7 +127,7 @@ public class SwerveModule {
 
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
+    //m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
 }
