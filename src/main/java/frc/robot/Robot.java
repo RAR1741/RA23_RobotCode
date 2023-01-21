@@ -2,12 +2,14 @@ package frc.robot;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.cameraserver.CameraServer;
+// import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSource;
+// import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.RobotBase;
+// import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,8 +32,14 @@ public class Robot extends TimedRobot {
 
   private final Field2d mField = new Field2d();
 
+  private CANSparkMax FLNeo;
+  private CANSparkMax BLNeo;
+  private CANSparkMax FRNeo;
+  private CANSparkMax BRNeo;
+
   @Override
   public void robotInit() {
+
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", mField);
 
@@ -43,6 +51,11 @@ public class Robot extends TimedRobot {
     }*/
 
     mAllSubsystems.add(mSwerve);
+    
+    FLNeo = new CANSparkMax(Constants.Drivetrain.Turn.kFLTurnMotorId, MotorType.kBrushless);
+    BLNeo = new CANSparkMax(Constants.Drivetrain.Turn.kBLTurnMotorId, MotorType.kBrushless);
+    FRNeo = new CANSparkMax(Constants.Drivetrain.Turn.kFRTurnMotorId, MotorType.kBrushless);
+    BRNeo = new CANSparkMax(Constants.Drivetrain.Turn.kBRTurnMotorId, MotorType.kBrushless);
   }
 
   @Override
