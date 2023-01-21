@@ -32,10 +32,56 @@
             },
             {
               "label": "Power",
+              "lockMax": true,
+              "lockMin": true,
               "min": -1.0
             }
           ],
-          "height": 189,
+          "height": 207,
+          "name": "FL",
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/FL: turnOutput",
+              "yAxis": 1
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/FL: Turn Position"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/FL: turnTarget"
+            }
+          ],
+          "yaxis2": true
+        },
+        {
+          "axis": [
+            {
+              "label": "Position"
+            },
+            {
+              "label": "Power",
+              "min": -1.0
+            }
+          ],
+          "height": 207,
           "name": "FR",
           "series": [
             {
@@ -72,6 +118,50 @@
         {
           "axis": [
             {
+              "label": "Position"
+            },
+            {
+              "label": "Power",
+              "min": -1.0
+            }
+          ],
+          "height": 207,
+          "name": "BL",
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/BL: turnOutput",
+              "yAxis": 1
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/BL: Turn Position"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/BL: turnTarget"
+            }
+          ],
+          "yaxis2": true
+        },
+        {
+          "axis": [
+            {
               "label": "Position",
               "lockMax": true,
               "lockMin": true
@@ -79,10 +169,11 @@
             {
               "label": "Power",
               "lockMax": true,
-              "lockMin": true
+              "lockMin": true,
+              "min": -1.0
             }
           ],
-          "height": 189,
+          "height": 207,
           "name": "BR",
           "series": [
             {
@@ -112,49 +203,6 @@
                 1.0
               ],
               "id": "NT:/SmartDashboard/BR: turnTarget"
-            }
-          ],
-          "yaxis2": true
-        },
-        {
-          "axis": [
-            {
-              "label": "Position"
-            },
-            {
-              "label": "Power",
-              "min": -1.0
-            }
-          ],
-          "height": 189,
-          "name": "FL",
-          "series": [
-            {
-              "color": [
-                0.2980392277240753,
-                0.44705885648727417,
-                0.6901960968971252,
-                1.0
-              ],
-              "id": "NT:/SmartDashboard/FL: turnOutput"
-            },
-            {
-              "color": [
-                0.8666667342185974,
-                0.5176470875740051,
-                0.32156863808631897,
-                1.0
-              ],
-              "id": "NT:/SmartDashboard/FL: Turn Position"
-            },
-            {
-              "color": [
-                0.3333333432674408,
-                0.658823549747467,
-                0.4078431725502014,
-                1.0
-              ],
-              "id": "NT:/SmartDashboard/FL: turnTarget"
             }
           ],
           "yaxis2": true
