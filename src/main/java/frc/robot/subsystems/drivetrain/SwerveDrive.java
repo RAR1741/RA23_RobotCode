@@ -30,13 +30,17 @@ public class SwerveDrive extends Subsystem {
       -Constants.Drivetrain.kYDistance);
 
   private final SwerveModule m_frontLeft = new SwerveModule(
-      Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId);
+      Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId,
+      Constants.Drivetrain.Turn.kFLTurnOffset);
   private final SwerveModule m_frontRight = new SwerveModule(
-      Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId);
+      Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId,
+      Constants.Drivetrain.Turn.kFRTurnOffset);
   private final SwerveModule m_backLeft = new SwerveModule(
-      Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId);
+      Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId,
+      Constants.Drivetrain.Turn.kBLTurnOffset);
   private final SwerveModule m_backRight = new SwerveModule(
-      Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId);
+      Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId,
+      Constants.Drivetrain.Turn.kBRTurnOffset);
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 

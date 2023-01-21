@@ -20,15 +20,17 @@ public class SwerveModule {
   private static final double kWheelRadius = 0.0508;
   private static final int kEncoderResolution = 4096;
 
-  private static final double kTurningP = 1;
-  private static final double kTurningI = 0;
-  private static final double kTurningD = 0;
+  private static final double kTurningP = 8;
+  private static final double kTurningI = 0.1;
+  private static final double kTurningD = 0.0;
 
   private static final double kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final WPI_TalonFX m_driveMotor;
   private final CANSparkMax m_turningMotor;
+
+  private final double m_turningOffset;
 
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -58,7 +60,9 @@ public class SwerveModule {
    * @param driveMotorChannel   CAN output for the drive motor.
    * @param turningMotorChannel CAN output for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset) {
+    m_turningOffset = turningOffset;
+
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
@@ -90,11 +94,9 @@ public class SwerveModule {
 
     // m_turningEncoder.setPositionConversionFactor(2 * Math.PI);
 
-    // Limit the PID Controller's input range between -pi and pi and set the input
-    // to be continuous.
+    // Limit the PID Controller's input range between 0 and 1 and set the input to
+    // be continuous.
     m_turningPIDController.enableContinuousInput(0, 1);
-    // m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-    // m_turningPIDController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   /**
@@ -104,11 +106,15 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        m_driveEncoder.getIntegratedSensorVelocity(), new Rotation2d(m_turningEncoder.getPosition()));
+        m_driveEncoder.getIntegratedSensorVelocity(), new Rotation2d(getTurnPosition()));
   }
 
   public double getTurnPosition() {
-    return m_turningEncoder.getPosition();
+    double tempPos = m_turningEncoder.getPosition() - m_turningOffset;
+    if (tempPos < 0) {
+      tempPos += 1;
+    }
+    return tempPos;
   }
 
   /**
@@ -118,7 +124,7 @@ public class SwerveModule {
    */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        m_driveEncoder.getIntegratedSensorPosition(), new Rotation2d(m_turningEncoder.getPosition()));
+        m_driveEncoder.getIntegratedSensorPosition(), new Rotation2d(getTurnPosition()));
   }
 
   /**
@@ -131,7 +137,7 @@ public class SwerveModule {
     // TODO: Add this back, please (and use it)
     // TODO This no worky with offset
     // SwerveModuleState state = SwerveModuleState.optimize(desiredState,
-    // Rotation2d.fromRotations(m_turningEncoder.getPosition()));
+    // Rotation2d.fromRotations(getTurnPosition()));
 
     // Calculate the drive output from the drive PID controller.
     // final double driveOutput =
@@ -144,11 +150,12 @@ public class SwerveModule {
     // Calculate the turning motor output from the turning PID controller.
     double turnTarget = desiredState.angle.getRotations();
 
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(), turnTarget);
-    final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    double turnOutput = m_turningPIDController.calculate(getTurnPosition(), turnTarget);
+
+    double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
     SmartDashboard.putNumber("turnTarget", turnTarget);
-    SmartDashboard.putNumber("turnOutput", turnOutput);
+    SmartDashboard.putNumber("turnOutput", turnOutput + turnFeedforward);
 
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }

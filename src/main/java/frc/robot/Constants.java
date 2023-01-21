@@ -20,7 +20,7 @@ public final class Constants {
       public static final double kFLTurnOffset = 0.0;
       public static final double kFRTurnOffset = 0.0;
       public static final double kBLTurnOffset = 0.0;
-      public static final double kBRTurnOffset = 0.0;
+      public static final double kBRTurnOffset = 0.861655;
 
       public static final int kFLTurnMotorId = 9;
       public static final int kFRTurnMotorId = 10;
