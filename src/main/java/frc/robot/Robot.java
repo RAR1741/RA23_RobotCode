@@ -3,11 +3,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,11 +33,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Field", mField);
 
     // Camera server
-    /*if (RobotBase.isReal()) {
-      mCamera = CameraServer.startAutomaticCapture();
-      mCamera.setFPS(30);
-      mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-    }*/
+    /*
+     * if (RobotBase.isReal()) {
+     * mCamera = CameraServer.startAutomaticCapture();
+     * mCamera.setFPS(30);
+     * mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+     * }
+     */
 
     mAllSubsystems.add(mSwerve);
   }
@@ -60,23 +59,26 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //double xSpeed = -mSpeedLimiter.calculate(mDriverController.getForwardAxis())
+    // double xSpeed = -mSpeedLimiter.calculate(mDriverController.getForwardAxis())
     // * Drivetrain.kMaxSpeed;
 
     // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
-    //double rot = -mRotLimiter.calculate(mDriverController.getTurnAxis()) *
+    // double rot = -mRotLimiter.calculate(mDriverController.getTurnAxis()) *
     // Drivetrain.kMaxAngularSpeed;
-    
-    mSwerve.drive(mDriverController.getForwardAxis(),mDriverController.getStrafeAxis(), mDriverController.getTurnAxis(),true);
-    //mSwerve.drive(0, 0, 0, false);
+
+    // mSwerve.drive(mDriverController.getForwardAxis(),mDriverController.getStrafeAxis(),
+    // mDriverController.getTurnAxis(),true);
+    mSwerve.drive(6, 0, 0, false);
 
     // // Intake controls
-    /*if (mDriverController.getWantsIntakeOpen()) {
-      // m_intake.open();
-    } else if (mDriverController.getWantsIntakeClose()) {
-      // m_intake.close();
-    }*/
+    /*
+     * if (mDriverController.getWantsIntakeOpen()) {
+     * // m_intake.open();
+     * } else if (mDriverController.getWantsIntakeClose()) {
+     * // m_intake.close();
+     * }
+     */
 
     mAllSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     mAllSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
