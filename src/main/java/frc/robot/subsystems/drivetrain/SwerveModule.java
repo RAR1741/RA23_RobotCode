@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {
   private static final double kWheelRadius = 0.0508;
@@ -55,9 +56,7 @@ public class SwerveModule {
    * @param driveMotorChannel   CAN output for the drive motor.
    * @param turningMotorChannel CAN output for the turning motor.
    */
-  public SwerveModule(
-      int driveMotorChannel,
-      int turningMotorChannel) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel) {
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
     // m_turningMotor.restoreFactoryDefaults();
@@ -122,8 +121,10 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     // TODO: Add this back, please (and use it)
-    // SwerveModuleState state = SwerveModuleState.optimize(desiredState, new
-    // Rotation2d(m_turningEncoder.getPosition()));
+    //TODO This no worky with offset
+     SwerveModuleState state = SwerveModuleState.optimize(desiredState, //new
+     //Rotation2d(m_turningEncoder.getPosition() * 2 * Math.PI));
+     Rotation2d.fromRotations(m_turningEncoder.getPosition()));
 
     // Calculate the drive output from the drive PID controller.
     // final double driveOutput =
@@ -142,6 +143,7 @@ public class SwerveModule {
 
     // m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     // m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+    SmartDashboard.putNumber("turnOutput", turnOutput);
     m_turningMotor.setVoltage(turnOutput);
   }
 }
