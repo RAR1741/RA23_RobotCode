@@ -88,7 +88,7 @@ public class SwerveDrive extends Subsystem {
 
     // TODO: Check to see if it does turn optimization, or we need to do that
 
-    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     // m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
@@ -127,7 +127,7 @@ public class SwerveDrive extends Subsystem {
     // SmartDashboard.putNumber("BR: Drive Position",
     // m_backRight.getPosition().distanceMeters);
 
-    // SmartDashboard.putNumber("FL: Turn Position", m_frontLeft.getTurnPosition());
+    SmartDashboard.putNumber("FL: Turn Position", m_frontLeft.getTurnPosition());
     SmartDashboard.putNumber("FR: Turn Position", m_frontRight.getTurnPosition());
     // SmartDashboard.putNumber("BL: Turn Position", m_backLeft.getTurnPosition());
     SmartDashboard.putNumber("BR: Turn Position", m_backRight.getTurnPosition());
