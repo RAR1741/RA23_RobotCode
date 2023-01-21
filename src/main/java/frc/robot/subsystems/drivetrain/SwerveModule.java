@@ -67,7 +67,9 @@ public class SwerveModule {
     m_driveEncoder = m_driveMotor.getSensorCollection();
     // m_turningMotor.get
     m_turningEncoder = m_turningMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-    // m_turningEncoder = m_turningMotor.getAlternateEncoder(Type.kQuadrature, kEncoderResolution); //turningMotorChannel); //.getEncoder();
+    // m_turningEncoder.setAverageDepth(12);
+    // m_turningEncoder = m_turningMotor.getAlternateEncoder(Type.kQuadrature,
+    // kEncoderResolution); //turningMotorChannel); //.getEncoder();
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -120,21 +122,25 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     // TODO: Add this back, please (and use it)
-    // SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getPosition()));
+    // SwerveModuleState state = SwerveModuleState.optimize(desiredState, new
+    // Rotation2d(m_turningEncoder.getPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    // final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getIntegratedSensorVelocity(),
-    //     desiredState.speedMetersPerSecond);
+    // final double driveOutput =
+    // m_drivePIDController.calculate(m_driveEncoder.getIntegratedSensorVelocity(),
+    // desiredState.speedMetersPerSecond);
 
-    // final double driveFeedforward = m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
+    // final double driveFeedforward =
+    // m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getPosition(),
-        desiredState.angle.getRadians()/(2*Math.PI));
+        desiredState.angle.getRadians() / (2 * Math.PI));
 
-    // final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    // final double turnFeedforward =
+    // m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    //m_driveMotor.setVoltage(driveOutput + driveFeedforward);
+    // m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     // m_turningMotor.setVoltage(turnOutput + turnFeedforward);
     m_turningMotor.setVoltage(turnOutput);
   }
