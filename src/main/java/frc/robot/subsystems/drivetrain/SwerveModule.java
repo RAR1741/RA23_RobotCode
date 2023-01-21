@@ -31,6 +31,7 @@ public class SwerveModule {
   private final CANSparkMax m_turningMotor;
 
   private final double m_turningOffset;
+  private final String m_moduleName;
 
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -60,8 +61,9 @@ public class SwerveModule {
    * @param driveMotorChannel   CAN output for the drive motor.
    * @param turningMotorChannel CAN output for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset, String moduleName) {
     m_turningOffset = turningOffset;
+    m_moduleName = moduleName;
 
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
 
@@ -154,8 +156,8 @@ public class SwerveModule {
 
     double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    SmartDashboard.putNumber("turnTarget", turnTarget);
-    SmartDashboard.putNumber("turnOutput", turnOutput + turnFeedforward);
+    SmartDashboard.putNumber(m_moduleName + ": turnTarget", turnTarget);
+    SmartDashboard.putNumber(m_moduleName + ": turnOutput", turnOutput + turnFeedforward);
 
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }

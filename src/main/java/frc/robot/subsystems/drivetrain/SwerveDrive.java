@@ -31,16 +31,16 @@ public class SwerveDrive extends Subsystem {
 
   private final SwerveModule m_frontLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId,
-      Constants.Drivetrain.Turn.kFLTurnOffset);
+      Constants.Drivetrain.Turn.kFLTurnOffset, "FL");
   private final SwerveModule m_frontRight = new SwerveModule(
       Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId,
-      Constants.Drivetrain.Turn.kFRTurnOffset);
+      Constants.Drivetrain.Turn.kFRTurnOffset, "FR");
   private final SwerveModule m_backLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId,
-      Constants.Drivetrain.Turn.kBLTurnOffset);
+      Constants.Drivetrain.Turn.kBLTurnOffset, "BL");
   private final SwerveModule m_backRight = new SwerveModule(
       Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId,
-      Constants.Drivetrain.Turn.kBRTurnOffset);
+      Constants.Drivetrain.Turn.kBRTurnOffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -89,7 +89,7 @@ public class SwerveDrive extends Subsystem {
     // TODO: Check to see if it does turn optimization, or we need to do that
 
     // m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    // m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
     // m_backLeft.setDesiredState(swerveModuleStates[2]);
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
@@ -118,19 +118,19 @@ public class SwerveDrive extends Subsystem {
             m_backLeft.getPosition(),
             m_backRight.getPosition()
         });
-    // SmartDashboard.putNumber("FL Drive Position",
+    // SmartDashboard.putNumber("FL: Drive Position",
     // m_frontLeft.getPosition().distanceMeters);
-    // SmartDashboard.putNumber("FR Drive Position",
+    // SmartDashboard.putNumber("FR: Drive Position",
     // m_frontRight.getPosition().distanceMeters);
-    // SmartDashboard.putNumber("BL Drive Position",
+    // SmartDashboard.putNumber("BL: Drive Position",
     // m_backLeft.getPosition().distanceMeters);
-    // SmartDashboard.putNumber("BR Drive Position",
+    // SmartDashboard.putNumber("BR: Drive Position",
     // m_backRight.getPosition().distanceMeters);
 
-    // SmartDashboard.putNumber("FL Turn Position", m_frontLeft.getTurnPosition());
-    // SmartDashboard.putNumber("FR Turn Position", m_frontRight.getTurnPosition());
-    // SmartDashboard.putNumber("BL Turn Position", m_backLeft.getTurnPosition());
-    SmartDashboard.putNumber("BR Turn Position", m_backRight.getTurnPosition());
+    // SmartDashboard.putNumber("FL: Turn Position", m_frontLeft.getTurnPosition());
+    SmartDashboard.putNumber("FR: Turn Position", m_frontRight.getTurnPosition());
+    // SmartDashboard.putNumber("BL: Turn Position", m_backLeft.getTurnPosition());
+    SmartDashboard.putNumber("BR: Turn Position", m_backRight.getTurnPosition());
 
     // SmartDashboard.putNumber("BR State A",
     // m_backRight.getState().angle.getDegrees());

@@ -69,8 +69,8 @@ public class Robot extends TimedRobot {
 
     // mSwerve.drive(mDriverController.getForwardAxis(),mDriverController.getStrafeAxis(),
     // mDriverController.getTurnAxis(),true);
-    // mSwerve.drive(6, 0, 0, false);
-    mSwerve.drive(0, 6, 0, false);
+    mSwerve.drive(6, 0, 0, false);
+    // mSwerve.drive(0, 6, 0, false);
 
     // // Intake controls
     /*
