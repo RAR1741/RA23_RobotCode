@@ -142,8 +142,7 @@ public class SwerveModule {
     // Optimize the reference state to avoid spinning further than 90 degrees
     // TODO: Add this back, please (and use it)
     // TODO This no worky with offset
-    // SwerveModuleState state = SwerveModuleState.optimize(desiredState,
-    // Rotation2d.fromRotations(getTurnPosition()));
+    desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRotations(getTurnPosition()));
 
     // Calculate the drive output from the drive PID controller.
     double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
