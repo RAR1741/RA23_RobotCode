@@ -88,10 +88,10 @@ public class SwerveDrive extends Subsystem {
 
     // TODO: Check to see if it does turn optimization, or we need to do that
 
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
+    // m_backLeft.setDesiredState(swerveModuleStates[2]);
+    // m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
   @Override
@@ -110,14 +110,16 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    m_odometry.update(
-        m_gyro.getRotation2d(),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backLeft.getPosition(),
-            m_backRight.getPosition()
-        });
+    // TODO: Add this back in
+    // m_odometry.update(
+    // m_gyro.getRotation2d(),
+    // new SwerveModulePosition[] {
+    // m_frontLeft.getPosition(),
+    // m_frontRight.getPosition(),
+    // m_backLeft.getPosition(),
+    // m_backRight.getPosition()
+    // });
+
     // SmartDashboard.putNumber("FL: Drive Position",
     // m_frontLeft.getPosition().distanceMeters);
     // SmartDashboard.putNumber("FR: Drive Position",

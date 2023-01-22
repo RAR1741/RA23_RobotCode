@@ -17,13 +17,20 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {
-  private static final double kWheelRadius = 0.0508;
+  private static final double kWheelRadius = 0.0508; // 2in in meters
+  private static final double kDriveGearRatio = 6.75;
+  private static final double kDriveEncPerSec = 204.8;
   private static final int kEncoderResolution = 4096;
 
-  private static final double kTurningP = 8;
+  private static final double kTurningP = 8.0;
   private static final double kTurningI = 0.1;
   private static final double kTurningD = 0.0;
 
+  private static final double kDriveP = 1.0;
+  private static final double kDriveI = 0.0;
+  private static final double kDriveD = 0.0;
+
+  // TODO: Make sure these are right
   private static final double kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
@@ -38,10 +45,8 @@ public class SwerveModule {
 
   // TODO: Gains are for example purposes only - must be determined for your own
   // robot!
-  private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
+  private final PIDController m_drivePIDController = new PIDController(kDriveP, kDriveI, kDriveD);
 
-  // TODO: Gains are for example purposes only - must be determined for your own
-  // robot!
   private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
       kTurningP,
       kTurningI,
@@ -66,19 +71,13 @@ public class SwerveModule {
     m_moduleName = moduleName;
 
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
+    m_driveEncoder = m_driveMotor.getSensorCollection();
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
-    m_turningMotor.setInverted(true);
-    // m_turningMotor.restoreFactoryDefaults();
-
-    // Probably need to update these to match the encoder channels from the
-    // brushless motors
-    m_driveEncoder = m_driveMotor.getSensorCollection();
-    // m_turningMotor.get
     m_turningEncoder = m_turningMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-    // m_turningEncoder.setAverageDepth(12);
-    // m_turningEncoder = m_turningMotor.getAlternateEncoder(Type.kQuadrature,
-    // kEncoderResolution); //turningMotorChannel); //.getEncoder();
+    m_turningMotor.setInverted(true);
+    // TODO: maybe we should be doing this too?
+    // m_turningMotor.restoreFactoryDefaults();
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -86,15 +85,6 @@ public class SwerveModule {
     // TODO: Figure this out
     // m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius /
     // kEncoderResolution);
-
-    // Set the distance (in this case, angle) in radians per pulse for the turning
-    // encoder.
-    // This is the the angle through an entire rotation (2 * pi) divided by the
-    // encoder resolution.
-    // TODO: Figure this out
-    // m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
-
-    // m_turningEncoder.setPositionConversionFactor(2 * Math.PI);
 
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
@@ -108,7 +98,7 @@ public class SwerveModule {
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        m_driveEncoder.getIntegratedSensorVelocity(), new Rotation2d(getTurnPosition()));
+        getDriveVelocity(), Rotation2d.fromRotations(getTurnPosition()));
   }
 
   public double getTurnPosition() {
@@ -119,6 +109,20 @@ public class SwerveModule {
     return tempPos;
   }
 
+  // Returns the drive velocity in meters per second.
+  public double getDriveVelocity() {
+    // In revs per second
+    double velocity = m_driveEncoder.getIntegratedSensorVelocity() / kDriveEncPerSec;
+
+    // Convert to in per second
+    velocity *= ((2 * kWheelRadius * Math.PI) / kDriveGearRatio);
+
+    // Convert to m per second
+    // velocity *= 0.0254;
+
+    return velocity;
+  }
+
   /**
    * Returns the current position of the module.
    *
@@ -126,7 +130,7 @@ public class SwerveModule {
    */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        m_driveEncoder.getIntegratedSensorPosition(), new Rotation2d(getTurnPosition()));
+        m_driveEncoder.getIntegratedSensorPosition(), Rotation2d.fromRotations(getTurnPosition()));
   }
 
   /**
@@ -142,12 +146,9 @@ public class SwerveModule {
     // Rotation2d.fromRotations(getTurnPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    // final double driveOutput =
-    // m_drivePIDController.calculate(m_driveEncoder.getIntegratedSensorVelocity(),
-    // desiredState.speedMetersPerSecond);
+    double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
 
-    // final double driveFeedforward =
-    // m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
+    double driveFeedforward = m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
     double turnTarget = desiredState.angle.getRotations();
@@ -159,6 +160,12 @@ public class SwerveModule {
     SmartDashboard.putNumber(m_moduleName + ": turnTarget", turnTarget);
     SmartDashboard.putNumber(m_moduleName + ": turnOutput", turnOutput + turnFeedforward);
 
+    SmartDashboard.putNumber(m_moduleName + ": drivePos", m_driveEncoder.getIntegratedSensorPosition());
+    SmartDashboard.putNumber(m_moduleName + ": driveVelocity", getDriveVelocity());
+    SmartDashboard.putNumber(m_moduleName + ": driveTargetVelocity", desiredState.speedMetersPerSecond);
+    SmartDashboard.putNumber(m_moduleName + ": driveOutput", driveOutput + driveFeedforward);
+
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
   }
 }

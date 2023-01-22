@@ -18,8 +18,8 @@
   "Window": {
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "32,213",
-      "Size": "750,495"
+      "Pos": "31,213",
+      "Size": "750,664"
     },
     "###NetworkTables Settings": {
       "Collapsed": "0",
@@ -27,13 +27,13 @@
       "Size": "329,169"
     },
     "###Plot <0>": {
-      "Collapsed": "0",
+      "Collapsed": "1",
       "Pos": "789,28",
       "Size": "902,972"
     },
     "###Plot <1>": {
       "Collapsed": "0",
-      "Pos": "850,323",
+      "Pos": "791,62",
       "Size": "700,400"
     },
     "Debug##Default": {
