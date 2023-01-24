@@ -118,7 +118,7 @@ public class SwerveModule {
     velocity *= ((2 * kWheelRadius * Math.PI) / kDriveGearRatio);
 
     // Convert to m per second
-    // velocity *= 0.0254;
+    velocity *= 0.0254; // TODO: Ask Coulombe
 
     return velocity;
   }

@@ -37,7 +37,7 @@
               "min": -1.0
             }
           ],
-          "height": 207,
+          "height": 185,
           "name": "FL",
           "series": [
             {
@@ -81,7 +81,7 @@
               "min": -1.0
             }
           ],
-          "height": 207,
+          "height": 185,
           "name": "FR",
           "series": [
             {
@@ -125,7 +125,7 @@
               "min": -1.0
             }
           ],
-          "height": 207,
+          "height": 185,
           "name": "BL",
           "series": [
             {
@@ -173,7 +173,7 @@
               "min": -1.0
             }
           ],
-          "height": 207,
+          "height": 185,
           "name": "BR",
           "series": [
             {
@@ -225,7 +225,7 @@
               "min": -1.0
             }
           ],
-          "height": 338,
+          "height": 243,
           "series": [
             {
               "color": [

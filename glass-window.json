@@ -1,12 +1,12 @@
 {
   "Docking": {
     "Data": [
-      "DockSpace ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,19 Size=1705,1003 CentralNode=1"
+      "DockSpace ID=0x8B93E3BD Window=0xA787BDB4 Pos=0,19 Size=1705,909 CentralNode=1"
     ]
   },
   "MainWindow": {
     "GLOBAL": {
-      "height": "1022",
+      "height": "928",
       "maximized": "0",
       "style": "0",
       "userScale": "2",
@@ -27,14 +27,14 @@
       "Size": "329,169"
     },
     "###Plot <0>": {
-      "Collapsed": "1",
-      "Pos": "789,28",
-      "Size": "902,972"
+      "Collapsed": "0",
+      "Pos": "788,28",
+      "Size": "902,885"
     },
     "###Plot <1>": {
-      "Collapsed": "0",
-      "Pos": "791,62",
-      "Size": "700,400"
+      "Collapsed": "1",
+      "Pos": "789,51",
+      "Size": "368,305"
     },
     "Debug##Default": {
       "Collapsed": "0",
@@ -44,7 +44,7 @@
     "DockSpaceViewport_11111111": {
       "Collapsed": "0",
       "Pos": "0,19",
-      "Size": "1705,1003"
+      "Size": "1705,909"
     }
   }
 }
