@@ -17,10 +17,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {
-  private static final double kWheelRadius = 0.0508; // 2in in meters
-  private static final double kDriveGearRatio = 6.75;
+  private static final double kWheelRadiusIn = 2; // 2in
+  private static final double kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
   private static final double kDriveEncPerSec = 204.8;
-  private static final int kEncoderResolution = 4096;
+  private static final double kEncoderResolution = 4096.0;
 
   private static final double kTurningP = 8.0;
   private static final double kTurningI = 0.1;
@@ -83,7 +83,7 @@ public class SwerveModule {
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
     // TODO: Figure this out
-    // m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius /
+    // m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadiusIn /
     // kEncoderResolution);
 
     // Limit the PID Controller's input range between 0 and 1 and set the input to
@@ -115,10 +115,10 @@ public class SwerveModule {
     double velocity = m_driveEncoder.getIntegratedSensorVelocity() / kDriveEncPerSec;
 
     // Convert to in per second
-    velocity *= ((2 * kWheelRadius * Math.PI) / kDriveGearRatio);
+    velocity *= ((2 * kWheelRadiusIn * Math.PI) / kDriveGearRatio);
 
     // Convert to m per second
-    velocity *= 0.0254; // TODO: Ask Coulombe
+    velocity *= 0.0254;
 
     return velocity;
   }
