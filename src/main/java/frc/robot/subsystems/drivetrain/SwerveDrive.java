@@ -31,16 +31,16 @@ public class SwerveDrive extends Subsystem {
 
   private final SwerveModule m_frontLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId,
-      Constants.Drivetrain.Turn.kFLTurnOffset, "FL");
+      Constants.Drivetrain.Turn.kFLTurnOffset, "FL", true);
   private final SwerveModule m_frontRight = new SwerveModule(
       Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId,
-      Constants.Drivetrain.Turn.kFRTurnOffset, "FR");
+      Constants.Drivetrain.Turn.kFRTurnOffset, "FR", false);
   private final SwerveModule m_backLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId,
-      Constants.Drivetrain.Turn.kBLTurnOffset, "BL");
+      Constants.Drivetrain.Turn.kBLTurnOffset, "BL", true);
   private final SwerveModule m_backRight = new SwerveModule(
       Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId,
-      Constants.Drivetrain.Turn.kBRTurnOffset, "BR");
+      Constants.Drivetrain.Turn.kBRTurnOffset, "BR", false);
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -86,12 +86,10 @@ public class SwerveDrive extends Subsystem {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
 
-    // TODO: Check to see if it does turn optimization, or we need to do that
-
-    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
-    // m_backLeft.setDesiredState(swerveModuleStates[2]);
-    // m_backRight.setDesiredState(swerveModuleStates[3]);
+    m_backLeft.setDesiredState(swerveModuleStates[2]);
+    m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
   @Override

@@ -39,6 +39,7 @@ public class SwerveModule {
 
   private final double m_turningOffset;
   private final String m_moduleName;
+  private final boolean m_inverted;
 
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -66,11 +67,13 @@ public class SwerveModule {
    * @param driveMotorChannel   CAN output for the drive motor.
    * @param turningMotorChannel CAN output for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset, String moduleName) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset, String moduleName, boolean inverted) {
     m_turningOffset = turningOffset;
     m_moduleName = moduleName;
+    m_inverted = inverted;
 
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
+    m_driveMotor.setInverted(m_inverted);
     m_driveEncoder = m_driveMotor.getSensorCollection();
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
