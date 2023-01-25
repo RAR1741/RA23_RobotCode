@@ -20,7 +20,6 @@ public class SwerveModule {
   private static final double kWheelRadiusIn = 2; // 2in
   private static final double kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
   private static final double kDriveEncPerSec = 204.8;
-  private static final double kEncoderResolution = 4096.0;
 
   private static final double kTurningP = 8.0;
   private static final double kTurningI = 0.1;
@@ -39,13 +38,12 @@ public class SwerveModule {
 
   private final double m_turningOffset;
   private final String m_moduleName;
-  private final boolean m_inverted;
+  private final String m_smartDashboardKey;
+  private final boolean m_DriveMotorInverted;
 
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
 
-  // TODO: Gains are for example purposes only - must be determined for your own
-  // robot!
   private final PIDController m_drivePIDController = new PIDController(kDriveP, kDriveI, kDriveD);
 
   private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
@@ -67,13 +65,16 @@ public class SwerveModule {
    * @param driveMotorChannel   CAN output for the drive motor.
    * @param turningMotorChannel CAN output for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset, String moduleName, boolean inverted) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset, String moduleName,
+      boolean inverted) {
     m_turningOffset = turningOffset;
     m_moduleName = moduleName;
-    m_inverted = inverted;
+    m_DriveMotorInverted = inverted;
+
+    m_smartDashboardKey = "Drivetrain/" + m_moduleName + "/";
 
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-    m_driveMotor.setInverted(m_inverted);
+    m_driveMotor.setInverted(m_DriveMotorInverted);
     m_driveEncoder = m_driveMotor.getSensorCollection();
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
@@ -81,13 +82,6 @@ public class SwerveModule {
     m_turningMotor.setInverted(true);
     // TODO: maybe we should be doing this too?
     // m_turningMotor.restoreFactoryDefaults();
-
-    // Set the distance per pulse for the drive encoder. We can simply use the
-    // distance traveled for one rotation of the wheel divided by the encoder
-    // resolution.
-    // TODO: Figure this out
-    // m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadiusIn /
-    // kEncoderResolution);
 
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
@@ -143,8 +137,6 @@ public class SwerveModule {
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    // TODO: Add this back, please (and use it)
-    // TODO This no worky with offset
     desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRotations(getTurnPosition()));
 
     // Calculate the drive output from the drive PID controller.
@@ -159,15 +151,18 @@ public class SwerveModule {
 
     double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    SmartDashboard.putNumber(m_moduleName + ": turnTarget", turnTarget);
-    SmartDashboard.putNumber(m_moduleName + ": turnOutput", turnOutput + turnFeedforward);
-
-    SmartDashboard.putNumber(m_moduleName + ": drivePos", m_driveEncoder.getIntegratedSensorPosition());
-    SmartDashboard.putNumber(m_moduleName + ": driveVelocity", getDriveVelocity());
-    SmartDashboard.putNumber(m_moduleName + ": driveTargetVelocity", desiredState.speedMetersPerSecond);
-    SmartDashboard.putNumber(m_moduleName + ": driveOutput", driveOutput + driveFeedforward);
+    SmartDashboard.putNumber(m_smartDashboardKey + "TurnTarget", turnTarget);
+    SmartDashboard.putNumber(m_smartDashboardKey + "TurnOutput", turnOutput + turnFeedforward);
+    SmartDashboard.putNumber(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
+    SmartDashboard.putNumber(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
 
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
+  }
+
+  public void outputTelemetry() {
+    SmartDashboard.putNumber(m_smartDashboardKey + "DriveMotorPos", m_driveEncoder.getIntegratedSensorPosition());
+    SmartDashboard.putNumber(m_smartDashboardKey + "DriveMotorVelocity", getDriveVelocity());
+    SmartDashboard.putNumber(m_smartDashboardKey + "TurnMotorPosition", getTurnPosition());
   }
 }

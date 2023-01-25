@@ -109,27 +109,20 @@ public class SwerveDrive extends Subsystem {
   @Override
   public void outputTelemetry() {
     // TODO: Add this back in
-    // m_odometry.update(
-    // m_gyro.getRotation2d(),
-    // new SwerveModulePosition[] {
-    // m_frontLeft.getPosition(),
-    // m_frontRight.getPosition(),
-    // m_backLeft.getPosition(),
-    // m_backRight.getPosition()
-    // });
+    m_odometry.update(
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+        });
 
-    // SmartDashboard.putNumber("FL: Drive Position",
-    // m_frontLeft.getPosition().distanceMeters);
-    // SmartDashboard.putNumber("FR: Drive Position",
-    // m_frontRight.getPosition().distanceMeters);
-    // SmartDashboard.putNumber("BL: Drive Position",
-    // m_backLeft.getPosition().distanceMeters);
-    // SmartDashboard.putNumber("BR: Drive Position",
-    // m_backRight.getPosition().distanceMeters);
+    m_frontLeft.outputTelemetry();
+    m_frontRight.outputTelemetry();
+    m_backLeft.outputTelemetry();
+    m_backRight.outputTelemetry();
 
-    SmartDashboard.putNumber("FL: Turn Position", m_frontLeft.getTurnPosition());
-    SmartDashboard.putNumber("FR: Turn Position", m_frontRight.getTurnPosition());
-    SmartDashboard.putNumber("BL: Turn Position", m_backLeft.getTurnPosition());
-    SmartDashboard.putNumber("BR: Turn Position", m_backRight.getTurnPosition());
+    SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
   }
 }
