@@ -1,12 +1,11 @@
 package frc.robot.controls.controllers;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.controls.Deadband;
 import frc.robot.controls.SquaredInput;
 
 public class FilteredController extends Joystick {
-  private static final double DEADBAND_LIMIT = 0.01;
+  private static final double DEADBAND_LIMIT = 0.03;
 
   private boolean useDeadband;
   private boolean useSquaredInput;
