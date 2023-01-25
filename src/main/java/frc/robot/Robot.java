@@ -16,12 +16,13 @@ public class Robot extends TimedRobot {
   private final DriverController mDriverController = new DriverController(0, true, true);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter mSpeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter mXSpeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter mYSpeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter mRotLimiter = new SlewRateLimiter(3);
 
   // Robot subsystems
   private List<Subsystem> mAllSubsystems = new ArrayList<>();
-  private final SwerveDrive mSwerve = SwerveDrive.getInstance();
+  private final SwerveDrive m_swerve = SwerveDrive.getInstance();
 
   private UsbCamera mCamera;
 
@@ -41,7 +42,7 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    mAllSubsystems.add(mSwerve);
+    mAllSubsystems.add(m_swerve);
   }
 
   @Override
@@ -59,24 +60,25 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // double xSpeed = -mSpeedLimiter.calculate(mDriverController.getForwardAxis())
-    // * Drivetrain.kMaxSpeed;
+    double xSpeed = mXSpeedLimiter.calculate(mDriverController.getForwardAxis())
+        * SwerveDrive.kMaxSpeed;
+
+    double ySpeed = mYSpeedLimiter.calculate(mDriverController.getStrafeAxis())
+        * SwerveDrive.kMaxSpeed;
+
+    double rot = mRotLimiter.calculate(mDriverController.getTurnAxis()) *
+        SwerveDrive.kMaxAngularSpeed;
+
+    // m_swerve.drive(mDriverController.getForwardAxis(),
+    // mDriverController.getStrafeAxis(),
+    // 0, true);
 
     // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
-    // double rot = -mRotLimiter.calculate(mDriverController.getTurnAxis()) *
-    // Drivetrain.kMaxAngularSpeed;
+    m_swerve.drive(xSpeed, ySpeed, rot, true);
 
-    mSwerve.drive(mDriverController.getForwardAxis(),
-        mDriverController.getStrafeAxis(),
-        0, true);
-
-    // mSwerve.drive(mDriverController.getForwardAxis(),
-    // mDriverController.getStrafeAxis(),
-    // mDriverController.getTurnAxis(), true);
-
-    // mSwerve.drive(1, 0, 0, false);
-    // mSwerve.drive(0, 6, 0, false);
+    // m_swerve.drive(1, 0, 0, false);
+    // m_swerve.drive(0, 6, 0, false);
 
     // // Intake controls
     /*
@@ -105,7 +107,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     // Stop the robot when disabled.
-    // mDrive.drive(0.0, 0.0);
+    m_swerve.drive(0.0, 0.0, 0.0, true);
 
     updateSim();
   }
@@ -113,6 +115,6 @@ public class Robot extends TimedRobot {
   private void updateSim() {
     // Update the odometry in the sim.
     // mDrive.simulationPeriodic();
-    // mField.setRobotPose(mDrive.getPose());
+    mField.setRobotPose(m_swerve.getPose());
   }
 }
