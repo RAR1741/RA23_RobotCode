@@ -3,15 +3,12 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
+import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Subsystem;
 
@@ -25,8 +22,7 @@ public class Robot extends TimedRobot {
   // Robot subsystems
   private List<Subsystem> mAllSubsystems = new ArrayList<>();
   private final Drivetrain mDrive = Drivetrain.getInstance();
-
-  private UsbCamera mCamera;
+  private final Camera mCamera = Camera.getInstance();
 
   private final Field2d mField = new Field2d();
 
@@ -35,11 +31,7 @@ public class Robot extends TimedRobot {
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", mField);
 
-    // Camera server
-    mCamera = CameraServer.startAutomaticCapture();
-    mCamera.setFPS(30);
-    mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-
+    mAllSubsystems.add(mCamera);
     mAllSubsystems.add(mDrive);
   }
 
