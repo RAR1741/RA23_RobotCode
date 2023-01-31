@@ -1,7 +1,10 @@
 package frc.robot;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -9,6 +12,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
+import frc.robot.controls.controllers.FilteredController;
+import frc.robot.logging.Logger;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
@@ -26,10 +31,16 @@ public class Robot extends TimedRobot {
 
   private UsbCamera mCamera;
 
+  Logger logger;
+  Timer runTimer;
+
   private final Field2d mField = new Field2d();
 
   @Override
   public void robotInit() {
+    logger = new Logger();
+    runTimer = new Timer("Timer");
+
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", mField);
 
@@ -43,6 +54,34 @@ public class Robot extends TimedRobot {
      */
 
     mAllSubsystems.add(m_swerve);
+
+    try {
+      logger.createLog();
+    } catch (IOException io) {
+      io.printStackTrace();
+    }
+
+    logger.collectHeaders();
+		try {
+      logger.writeData("Initiation");
+		} catch (IOException io) {
+			io.printStackTrace();
+		}
+
+    runTimer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+          logger.collectData();
+          try {
+              logger.writeData(null);
+          } catch (IOException io) {
+              io.printStackTrace();
+          }
+      }
+    }, 0, 33);
+
+    logger.addLoggable(mDriverController);
+    // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
   }
 
   @Override
