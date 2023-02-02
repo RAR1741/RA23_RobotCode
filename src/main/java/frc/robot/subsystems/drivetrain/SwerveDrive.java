@@ -97,6 +97,19 @@ public class SwerveDrive extends Subsystem {
     return m_odometry.getPoseMeters();
   }
 
+  /**
+   * Returns the position of the center of the robot
+   * 
+   * @return The center position of the robot in meters
+   */
+  public double getEncoder() {
+    return (m_frontLeft.getPosition().distanceMeters + m_backRight.getPosition().distanceMeters) / 2; 
+  }
+
+  public AHRS getGyro() {
+    return m_gyro;
+  }
+
   @Override
   public void periodic() {
   }

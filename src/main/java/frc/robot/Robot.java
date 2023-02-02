@@ -11,14 +11,16 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.autonomous.Autonomous;
 import frc.robot.controls.controllers.DriverController;
-import frc.robot.controls.controllers.FilteredController;
 import frc.robot.logging.Logger;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class Robot extends TimedRobot {
   private final DriverController mDriverController = new DriverController(0, true, true);
+
+  private Autonomous auto;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter mXSpeedLimiter = new SlewRateLimiter(3);
@@ -55,13 +57,17 @@ public class Robot extends TimedRobot {
 
     mAllSubsystems.add(m_swerve);
 
+    // Logger
     try {
       logger.createLog();
     } catch (IOException io) {
       io.printStackTrace();
     }
 
+    logger.addLoggable(mDriverController);
+    // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
     logger.collectHeaders();
+
 		try {
       logger.writeData("Initiation");
 		} catch (IOException io) {
@@ -79,9 +85,6 @@ public class Robot extends TimedRobot {
           }
       }
     }, 0, 33);
-
-    logger.addLoggable(mDriverController);
-    // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
   }
 
   @Override
@@ -91,10 +94,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    auto = new Autonomous(Autonomous.getAutoPath("auto-test.auto"), m_swerve.getGyro(), m_swerve);
   }
 
   @Override
   public void autonomousPeriodic() {
+    auto.run();
   }
 
   @Override
