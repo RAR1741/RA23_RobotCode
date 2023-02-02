@@ -1,13 +1,13 @@
 {
   "MainWindow": {
     "GLOBAL": {
-      "height": "727",
-      "maximized": "0",
+      "height": "699",
+      "maximized": "1",
       "style": "0",
       "userScale": "2",
-      "width": "1273",
-      "xpos": "282",
-      "ypos": "205"
+      "width": "1366",
+      "xpos": "93",
+      "ypos": "69"
     }
   },
   "Window": {
@@ -93,7 +93,7 @@
     },
     "Robot State": {
       "Collapsed": "0",
-      "Pos": "5,20",
+      "Pos": "5,21",
       "Size": "92,99"
     }
   }

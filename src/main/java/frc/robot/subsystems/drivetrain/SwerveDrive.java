@@ -12,9 +12,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.logging.Loggable;
+import frc.robot.logging.Logger;
 import frc.robot.subsystems.Subsystem;
 
-public class SwerveDrive extends Subsystem {
+public class SwerveDrive extends Subsystem implements Loggable {
 
   private static SwerveDrive swerve = null;
 
@@ -129,5 +131,15 @@ public class SwerveDrive extends Subsystem {
     m_backRight.outputTelemetry();
 
     SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
+  }
+
+  @Override
+  public void logHeaders(Logger logger) {
+    logger.addHeader("Gyro/Angle");
+  }
+
+  @Override
+  public void logData(Logger logger) {
+    logger.addData("Gyro/Angle", m_gyro.getRotation2d().getDegrees());
   }
 }

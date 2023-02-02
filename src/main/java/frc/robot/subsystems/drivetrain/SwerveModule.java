@@ -15,8 +15,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.logging.Loggable;
+import frc.robot.logging.Logger;
 
-public class SwerveModule {
+public class SwerveModule implements Loggable {
   private static final double kWheelRadiusIn = 2; // 2in
   private static final double kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
   private static final double kDriveEncPerSec = 204.8;
@@ -57,6 +59,13 @@ public class SwerveModule {
   // robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+
+  SwerveModuleState desiredState;
+  double driveOutput;
+  double driveFeedforward;
+  double turnTarget;
+  double turnOutput;
+  double turnFeedforward;
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
@@ -140,16 +149,16 @@ public class SwerveModule {
     desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRotations(getTurnPosition()));
 
     // Calculate the drive output from the drive PID controller.
-    double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
+    driveOutput = m_drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
 
-    double driveFeedforward = m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
+    driveFeedforward = m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    double turnTarget = desiredState.angle.getRotations();
+    turnTarget = desiredState.angle.getRotations();
 
-    double turnOutput = m_turningPIDController.calculate(getTurnPosition(), turnTarget);
+    turnOutput = m_turningPIDController.calculate(getTurnPosition(), turnTarget);
 
-    double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
     SmartDashboard.putNumber(m_smartDashboardKey + "TurnTarget", turnTarget);
     SmartDashboard.putNumber(m_smartDashboardKey + "TurnOutput", turnOutput + turnFeedforward);
@@ -164,5 +173,27 @@ public class SwerveModule {
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveMotorPos", m_driveEncoder.getIntegratedSensorPosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveMotorVelocity", getDriveVelocity());
     SmartDashboard.putNumber(m_smartDashboardKey + "TurnMotorPosition", getTurnPosition());
+  }
+
+  @Override
+  public void logHeaders(Logger logger) {
+    logger.addHeader(m_moduleName + "/DriveMotorPosition");
+    logger.addHeader(m_moduleName + "/DriveMotorVelocity");
+    logger.addHeader(m_moduleName + "/TurnMotorPosition");
+    logger.addHeader(m_moduleName + "/TurnTarget");
+    logger.addHeader(m_moduleName + "/TurnOutput");
+    logger.addHeader(m_moduleName + "/DriveTargetVelocity");
+    logger.addHeader(m_moduleName + "/DriveOutput");
+  }
+
+  @Override
+  public void logData(Logger logger) {
+    logger.addData(m_moduleName + "/DriveMotorPosition", m_driveEncoder.getIntegratedSensorPosition());
+    logger.addData(m_moduleName + "/DriveMotorVelocity", getDriveVelocity());
+    logger.addData(m_moduleName + "/TurnMotorPosition", getTurnPosition());
+    logger.addData(m_moduleName + "/TurnTarget", turnTarget);
+    logger.addData(m_moduleName + "/TurnOutput", turnOutput + turnFeedforward);
+    logger.addData(m_moduleName + "/DriveTargetVelocity", desiredState.speedMetersPerSecond);
+    logger.addData(m_moduleName + "/DriveOutput", driveOutput + driveFeedforward);
   }
 }

@@ -29,7 +29,7 @@ public class Logger {
 	*/
 	public void createLog() throws IOException {
         Calendar calendar = Calendar.getInstance();
-        String dir = (System.getProperty("os.name").equals("Linux")) ? "./src/main/java/frc/robot/logging/logs/" : "\\home\\lvuser\\logs\\";
+        String dir = "\\home\\lvuser\\logs\\";
 		Path path = Paths.get(
             dir + calendar.get(Calendar.YEAR) + "-" +
             (calendar.get(Calendar.MONTH) + 1) + "-" +
@@ -100,17 +100,18 @@ public class Logger {
             }
         }
         else {
-            String output = "========================================= Current Stage: " + stage + " =========================================";
+            String output = "========================================= Current Stage: " + stage + " =========================================,";
             
             logger.newLine();
-            for (int i = 0; i < output.length(); i++) {
-                logger.write("=");
-            }
-            logger.newLine(); logger.write(output); logger.newLine();
-            for (int i = 0; i < output.length(); i++) {
+            for (int i = 0; i < output.length()-1; i++) {
                 logger.write("=");
             }
             logger.newLine();
+			logger.write(output);
+			logger.newLine();
+            for (int i = 0; i < output.length(); i++) {
+                logger.write("=");
+            }
         }
 
 		logger.newLine();

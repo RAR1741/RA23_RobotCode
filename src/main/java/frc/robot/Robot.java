@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.FilteredController;
+import frc.robot.logging.LoggableTimer;
 import frc.robot.logging.Logger;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -31,6 +32,8 @@ public class Robot extends TimedRobot {
 
   private UsbCamera mCamera;
 
+  LoggableTimer timer;
+
   Logger logger;
   Timer runTimer;
 
@@ -40,6 +43,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     logger = new Logger();
     runTimer = new Timer("Timer");
+
+    timer = new LoggableTimer();
+    timer.start();
 
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", mField);
@@ -61,12 +67,18 @@ public class Robot extends TimedRobot {
       io.printStackTrace();
     }
 
+    logger.addLoggable(mDriverController);
+    // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
+    logger.addLoggable(timer);
+
     logger.collectHeaders();
+
 		try {
       logger.writeData("Initiation");
+      logger.writeHeaders();
 		} catch (IOException io) {
 			io.printStackTrace();
-		}
+    }
 
     runTimer.schedule(new TimerTask() {
       @Override
@@ -79,9 +91,6 @@ public class Robot extends TimedRobot {
           }
       }
     }, 0, 33);
-
-    logger.addLoggable(mDriverController);
-    // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
   }
 
   @Override
