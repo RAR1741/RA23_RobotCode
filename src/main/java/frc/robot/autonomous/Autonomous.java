@@ -39,17 +39,17 @@ public class Autonomous implements Loggable {
         step = -1;
         timer = new LoggableTimer();
         parser = new AutoParser(file);
-        // for(AutoInstruction ai : parser.INSTRUCTIONS) { //Debug prints
-        //     System.out.println("Block " + (parser.INSTRUCTIONS.indexOf(ai) + 1));
-        //     System.out.println("Type: " + ai.type);
-        //     System.out.println("Unit: " + ai.unit);
-        //     System.out.println("Amount: " + ai.amount);
-        //     System.out.println("Args:");
-        //     for(double i : ai.args) {
-        //         System.out.println("\t" + i);
-        //     }
-        //     System.out.println();
-        // }
+        for(AutoInstruction ai : parser.INSTRUCTIONS) { //Debug prints
+            System.out.println("Block " + (parser.INSTRUCTIONS.indexOf(ai) + 1));
+            System.out.println("Type: " + ai.type);
+            System.out.println("Unit: " + ai.unit);
+            System.out.println("Amount: " + ai.amount);
+            System.out.println("Args:");
+            for(double i : ai.args) {
+                System.out.println("\t" + i);
+            }
+            System.out.println();
+        }
     }
 
     public static AutoInstruction.Unit parseUnit(String in) {
@@ -91,38 +91,40 @@ public class Autonomous implements Loggable {
     private void drive(AutoInstruction ai) {
         AutoInstruction.Unit u = ai.unit;
         // ai args:
-        // 0: leftPower
-        // 1: rightPower
+        // 0: xPower
+        // 1: yPower
+        // 2: rotation Power
+        // 3: field oriented (1 if true, 0 if false)
         if (u.equals(AutoInstruction.Unit.SECONDS) || u.equals(AutoInstruction.Unit.MILLISECONDS)) {
             // amount: (milli)seconds to drive
-            if (driveTime(ai.args.get(0), ai.args.get(1), ai.args.get(2), (u.equals(AutoInstruction.Unit.SECONDS) ? ai.amount : ai.amount / 1000.0))) {
+            if (driveTime(ai.args.get(0), ai.args.get(1), ai.args.get(2), (u.equals(AutoInstruction.Unit.SECONDS) ? ai.amount : ai.amount / 1000.0), ai.args.get(3) == 1)) {
                 reset();
             }
         } else if (u.equals(AutoInstruction.Unit.ENCODER_TICKS) || u.equals(AutoInstruction.Unit.ROTATIONS)) {
             // amount: rotations/encoder ticks to drive
-            if (driveDistance(ai.args.get(0), ai.args.get(1), ai.args.get(2), (u.equals(AutoInstruction.Unit.ENCODER_TICKS) ? ai.amount : ai.amount * TICKS_PER_ROTATION))) {
+            if (driveDistance(ai.args.get(0), ai.args.get(1), ai.args.get(2), (u.equals(AutoInstruction.Unit.ENCODER_TICKS) ? ai.amount : ai.amount * TICKS_PER_ROTATION), ai.args.get(3) == 1)) {
                 reset();
             }
         } else if (u.equals(AutoInstruction.Unit.FEET) || u.equals(AutoInstruction.Unit.INCHES)) {
             // amount: feet/inches to drive
-            if (driveDistance(ai.args.get(0), ai.args.get(0), ai.args.get(2), (u.equals(AutoInstruction.Unit.INCHES) ? ai.amount * TICKS_PER_INCH : (ai.amount * TICKS_PER_INCH) * 12))) {
+            if (driveDistance(ai.args.get(0), ai.args.get(0), ai.args.get(2), (u.equals(AutoInstruction.Unit.INCHES) ? ai.amount * TICKS_PER_INCH : (ai.amount * TICKS_PER_INCH) * 12), ai.args.get(3) == 1)) {
                 reset();
             }
         }
     }
 
-    private boolean driveDistance(double leftPower, double rightPower, double turnPower, double distance) {
+    private boolean driveDistance(double leftPower, double rightPower, double turnPower, double distance, boolean field) {
         if (Math.abs(drive.getEncoder() - start) < distance) {
-            drive.drive(leftPower, rightPower, turnPower, false);
+            drive.drive(leftPower, rightPower, turnPower, field);
         } else {
             return true;
         }
         return false;
     }
 
-    private boolean driveTime(double leftPower, double rightPower, double turnPower, double time) {
+    private boolean driveTime(double leftPower, double rightPower, double turnPower, double time, boolean field) {
         if (timer.get() < time) {
-            drive.drive(leftPower, rightPower, turnPower, false);
+            drive.drive(leftPower, rightPower, turnPower, field);
         } else {
             return true;
         }
