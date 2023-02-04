@@ -75,10 +75,13 @@ public class Robot extends TimedRobot {
 
     // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
-    // m_swerve.drive(xSpeed, ySpeed, rot, true);
+    // m_swerve.drive(xSpeed, ySpeed, 0, true);
+    m_swerve.drive(xSpeed, ySpeed, rot, true);
 
-    m_swerve.drive(1, 0, 0, false);
-    // m_swerve.drive(0, 6, 0, false);
+    // m_swerve.drive(0.3, 0, 0, false);
+    // m_swerve.drive(0, 0.1, 0, false);
+    // m_swerve.drive(0, 0, 0.1, false);
+    // m_swerve.drive(0.1, 0, 0.1, false);
 
     // // Intake controls
     /*
@@ -92,6 +95,8 @@ public class Robot extends TimedRobot {
     mAllSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     mAllSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     mAllSubsystems.forEach(subsystem -> subsystem.writeToLog());
+
+    mDriverController.outputTelemetry();
   }
 
   @Override

@@ -3,8 +3,8 @@ package frc.robot;
 public final class Constants {
   public class Drivetrain {
     // Drivetrain wheel offsets
-    public static final double kXDistance = 0.62865; //24.75 inches TODO: Change for final robot
-    public static final double kYDistance = 0.62865; //in meters!
+    public static final double kXDistance = 0.62865; // 24.75 inches TODO: Change for final robot
+    public static final double kYDistance = 0.62865; // in meters!
 
     // Drivetrain drive motor constants
     public class Drive {
@@ -17,10 +17,10 @@ public final class Constants {
     // Drivetrain (turn) constants
     public class Turn {
       // Drivetrain turning offset constants
-      public static final double kFLTurnOffset = 0.140546;
-      public static final double kFRTurnOffset = 0.708437;
-      public static final double kBLTurnOffset = 0.702795;
-      public static final double kBRTurnOffset = 0.410868;
+      public static final double kFLTurnOffset = 0.131512;
+      public static final double kFRTurnOffset = 0.221304;
+      public static final double kBLTurnOffset = 0.203980;
+      public static final double kBRTurnOffset = 0.915076;
 
       public static final int kFLTurnMotorId = 9;
       public static final int kFRTurnMotorId = 10;

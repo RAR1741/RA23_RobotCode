@@ -32,16 +32,16 @@ public class SwerveDrive extends Subsystem {
 
   private final SwerveModule m_frontLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId,
-      Constants.Drivetrain.Turn.kFLTurnOffset, "FL", true);
+      Constants.Drivetrain.Turn.kFLTurnOffset, "FL", false);
   private final SwerveModule m_frontRight = new SwerveModule(
       Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId,
-      Constants.Drivetrain.Turn.kFRTurnOffset, "FR", false);
+      Constants.Drivetrain.Turn.kFRTurnOffset, "FR", true);
   private final SwerveModule m_backLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId,
-      Constants.Drivetrain.Turn.kBLTurnOffset, "BL", true);
+      Constants.Drivetrain.Turn.kBLTurnOffset, "BL", false);
   private final SwerveModule m_backRight = new SwerveModule(
       Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId,
-      Constants.Drivetrain.Turn.kBRTurnOffset, "BR", false);
+      Constants.Drivetrain.Turn.kBRTurnOffset, "BR", true);
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -80,6 +80,9 @@ public class SwerveDrive extends Subsystem {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    // WIP: rotation locking
+    // rot = -m_gyro.getRotation2d().getRadians() / 2;
+
     SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
