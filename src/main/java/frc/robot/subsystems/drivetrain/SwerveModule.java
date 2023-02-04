@@ -99,11 +99,15 @@ public class SwerveModule {
   }
 
   public double getTurnPosition() {
-    double tempPos = m_turningEncoder.getPosition() - m_turningOffset;
-    if (tempPos < 0) {
-      tempPos += 1;
+    return modRotations(m_turningEncoder.getPosition() - m_turningOffset);
+  }
+
+  public double modRotations(double input) {
+    input %= 1.0;
+    if (input < 0.0) {
+      input += 1.0;
     }
-    return tempPos;
+    return input;
   }
 
   // Returns the drive velocity in meters per second.
