@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Subsystem;
@@ -32,6 +33,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    // Initialize on-board logging
+    DataLogManager.start();
+    DataLogManager.log("Logging initialized. Fard.");
+
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", mField);
 
