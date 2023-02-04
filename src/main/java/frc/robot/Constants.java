@@ -3,8 +3,9 @@ package frc.robot;
 public final class Constants {
   public class Drivetrain {
     // Drivetrain wheel offsets
-    public static final double kXDistance = 0.62865; // 24.75 inches TODO: Change for final robot
-    public static final double kYDistance = 0.62865; // in meters!
+    // TODO: Change for final robot
+    public static final double kXDistance = 0.762; // 30 inches
+    public static final double kYDistance = 0.762; // in meters!
 
     // Drivetrain drive motor constants
     public class Drive {
