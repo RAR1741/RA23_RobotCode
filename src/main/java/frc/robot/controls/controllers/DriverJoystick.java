@@ -2,14 +2,14 @@ package frc.robot.controls.controllers;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriverController extends FilteredController {
+public class DriverJoystick extends FilteredController {
   private String m_smartDashboardKey = "DriverInput/";
 
-  public DriverController(int port) {
+  public DriverJoystick(int port) {
     super(port, false, false);
   }
 
-  public DriverController(int port, boolean useDeadband, boolean useSquaredInput) {
+  public DriverJoystick(int port, boolean useDeadband, boolean useSquaredInput) {
     super(port, useDeadband, useSquaredInput);
   }
 
@@ -25,15 +25,11 @@ public class DriverController extends FilteredController {
   }
 
   public double getTurnAxis() {
-    return -this.getFilteredAxis(4);
+    return -this.getFilteredAxis(2);
   }
 
   public boolean getWantsSlowMode() {
     return this.getFilteredAxis(3) > kTriggerActivationThreshold;
-  }
-
-  public boolean getWantsResetGyro() {
-    return this.getRawButton(4);
   }
 
   // Intake
