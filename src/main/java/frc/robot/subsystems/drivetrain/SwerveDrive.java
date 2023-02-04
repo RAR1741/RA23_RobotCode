@@ -66,7 +66,10 @@ public class SwerveDrive extends Subsystem {
   }
 
   private SwerveDrive() {
-    // TODO: Make a separate method for this
+    resetGyro();
+  }
+
+  public void resetGyro() {
     m_gyro.reset();
   }
 

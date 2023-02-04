@@ -92,6 +92,10 @@ public class Robot extends TimedRobot {
      * }
      */
 
+    if (mDriverController.getWantsResetGyro()) {
+      m_swerve.resetGyro();
+    }
+
     mAllSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     mAllSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     mAllSubsystems.forEach(subsystem -> subsystem.writeToLog());
