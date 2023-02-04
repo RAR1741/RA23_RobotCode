@@ -75,9 +75,9 @@ public class Robot extends TimedRobot {
 
     // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
-    m_swerve.drive(xSpeed, ySpeed, rot, true);
+    // m_swerve.drive(xSpeed, ySpeed, rot, true);
 
-    // m_swerve.drive(1, 0, 0, false);
+    m_swerve.drive(1, 0, 0, false);
     // m_swerve.drive(0, 6, 0, false);
 
     // // Intake controls
