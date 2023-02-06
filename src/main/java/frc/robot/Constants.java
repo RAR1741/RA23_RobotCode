@@ -7,6 +7,9 @@ public final class Constants {
     public static final double kXDistance = 0.762; // 30 inches
     public static final double kYDistance = 0.762; // in meters!
 
+    public static final double kXCenterDistance = kXDistance/2.0;
+    public static final double kYCenterDistance = kYDistance/2.0;
+
     // Drivetrain drive motor constants
     public class Drive {
       public static final int kFLDriveMotorId = 5;

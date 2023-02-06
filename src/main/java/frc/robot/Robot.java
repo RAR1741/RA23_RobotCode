@@ -52,10 +52,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    m_swerve.resetKinematics();
   }
 
   @Override
   public void autonomousPeriodic() {
+  }
+
+  @Override
+  public void teleopInit() {
+    m_swerve.resetKinematics();
   }
 
   @Override

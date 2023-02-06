@@ -21,14 +21,14 @@ public class SwerveDrive extends Subsystem {
   public static final double kMaxSpeed = 3.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.kXDistance,
-      Constants.Drivetrain.kYDistance);
-  private final Translation2d m_frontRightLocation = new Translation2d(Constants.Drivetrain.kXDistance,
-      -Constants.Drivetrain.kYDistance);
-  private final Translation2d m_backLeftLocation = new Translation2d(-Constants.Drivetrain.kXDistance,
-      Constants.Drivetrain.kYDistance);
-  private final Translation2d m_backRightLocation = new Translation2d(-Constants.Drivetrain.kXDistance,
-      -Constants.Drivetrain.kYDistance);
+  private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.kXCenterDistance,
+      Constants.Drivetrain.kYCenterDistance);
+  private final Translation2d m_frontRightLocation = new Translation2d(Constants.Drivetrain.kXCenterDistance,
+      -Constants.Drivetrain.kYCenterDistance);
+  private final Translation2d m_backLeftLocation = new Translation2d(-Constants.Drivetrain.kXCenterDistance,
+      Constants.Drivetrain.kYCenterDistance);
+  private final Translation2d m_backRightLocation = new Translation2d(-Constants.Drivetrain.kXCenterDistance,
+      -Constants.Drivetrain.kYCenterDistance);
 
   private final SwerveModule m_frontLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId,
@@ -45,7 +45,7 @@ public class SwerveDrive extends Subsystem {
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+  private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -71,6 +71,16 @@ public class SwerveDrive extends Subsystem {
 
   public void resetGyro() {
     m_gyro.reset();
+  }
+
+  public void resetKinematics() {
+    m_kinematics = new SwerveDriveKinematics(
+      m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+  }
+
+  public void reset() {
+    resetGyro();
+    resetKinematics();
   }
 
   /**
