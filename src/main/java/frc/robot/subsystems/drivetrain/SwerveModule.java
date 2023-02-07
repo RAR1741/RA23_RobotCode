@@ -86,6 +86,7 @@ public class SwerveModule {
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
     m_turningPIDController.enableContinuousInput(0, 1);
+    m_turningPIDController.setTolerance(0.05);
   }
 
   /**
@@ -108,6 +109,10 @@ public class SwerveModule {
       input += 1.0;
     }
     return input;
+  }
+
+  public void resetTurnPIDState() {
+    m_turningPIDController.reset(getTurnPosition());
   }
 
   // Returns the drive velocity in meters per second.
@@ -155,8 +160,11 @@ public class SwerveModule {
 
     double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
+    boolean turnAtGoal = m_turningPIDController.atGoal();
+
     SmartDashboard.putNumber(m_smartDashboardKey + "TurnTarget", turnTarget);
     SmartDashboard.putNumber(m_smartDashboardKey + "TurnOutput", turnOutput + turnFeedforward);
+    SmartDashboard.putBoolean(m_smartDashboardKey + "TurnAtGoal", turnAtGoal);
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
 

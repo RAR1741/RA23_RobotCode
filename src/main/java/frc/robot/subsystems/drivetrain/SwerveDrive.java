@@ -74,6 +74,10 @@ public class SwerveDrive extends Subsystem {
   }
 
   public void resetKinematics() {
+    m_frontLeft.resetTurnPIDState();
+    m_frontRight.resetTurnPIDState();
+    m_backLeft.resetTurnPIDState();
+    m_backRight.resetTurnPIDState();
     m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
   }
