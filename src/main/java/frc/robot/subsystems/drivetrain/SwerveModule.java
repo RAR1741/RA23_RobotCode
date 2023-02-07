@@ -86,7 +86,7 @@ public class SwerveModule {
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
     m_turningPIDController.enableContinuousInput(0, 1);
-    m_turningPIDController.setTolerance(0.05);
+    m_turningPIDController.setTolerance(0.0025);
   }
 
   /**
