@@ -113,6 +113,23 @@ public class SwerveDrive extends Subsystem {
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  public void pointDirection(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
+        fieldRelative
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+            : new ChassisSpeeds(xSpeed, ySpeed, rot));
+
+    // Zero out the speed component of each swerve module state
+    for(SwerveModuleState moduleState : swerveModuleStates) {
+      moduleState.speedMetersPerSecond = 0.0;
+    }
+
+    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    m_frontRight.setDesiredState(swerveModuleStates[1]);
+    m_backLeft.setDesiredState(swerveModuleStates[2]);
+    m_backRight.setDesiredState(swerveModuleStates[3]);
+  }
+
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
