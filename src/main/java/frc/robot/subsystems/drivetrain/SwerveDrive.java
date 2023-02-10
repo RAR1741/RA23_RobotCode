@@ -32,16 +32,16 @@ public class SwerveDrive extends Subsystem {
 
   private final SwerveModule m_frontLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId,
-      Constants.Drivetrain.Turn.kFLTurnOffset, "FL", false);
+      Constants.Drivetrain.Turn.kFLTurnOffset, "FL");
   private final SwerveModule m_frontRight = new SwerveModule(
       Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId,
-      Constants.Drivetrain.Turn.kFRTurnOffset, "FR", true);
+      Constants.Drivetrain.Turn.kFRTurnOffset, "FR");
   private final SwerveModule m_backLeft = new SwerveModule(
       Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId,
-      Constants.Drivetrain.Turn.kBLTurnOffset, "BL", false);
+      Constants.Drivetrain.Turn.kBLTurnOffset, "BL");
   private final SwerveModule m_backRight = new SwerveModule(
       Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId,
-      Constants.Drivetrain.Turn.kBRTurnOffset, "BR", true);
+      Constants.Drivetrain.Turn.kBRTurnOffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -79,7 +79,7 @@ public class SwerveDrive extends Subsystem {
     m_backLeft.resetTurnPIDState();
     m_backRight.resetTurnPIDState();
     m_kinematics = new SwerveDriveKinematics(
-      m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+        m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
   }
 
   public void reset() {
@@ -120,7 +120,7 @@ public class SwerveDrive extends Subsystem {
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
     // Zero out the speed component of each swerve module state
-    for(SwerveModuleState moduleState : swerveModuleStates) {
+    for (SwerveModuleState moduleState : swerveModuleStates) {
       moduleState.speedMetersPerSecond = 0.0;
     }
 

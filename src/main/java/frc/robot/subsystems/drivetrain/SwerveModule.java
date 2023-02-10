@@ -39,7 +39,6 @@ public class SwerveModule {
   private final double m_turningOffset;
   private final String m_moduleName;
   private final String m_smartDashboardKey;
-  private final boolean m_DriveMotorInverted;
 
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -65,16 +64,13 @@ public class SwerveModule {
    * @param driveMotorChannel   CAN output for the drive motor.
    * @param turningMotorChannel CAN output for the turning motor.
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset, String moduleName,
-      boolean inverted) {
+  public SwerveModule(int driveMotorChannel, int turningMotorChannel, double turningOffset, String moduleName) {
     m_turningOffset = turningOffset;
     m_moduleName = moduleName;
-    m_DriveMotorInverted = inverted;
 
     m_smartDashboardKey = "Drivetrain/" + m_moduleName + "/";
 
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
-    m_driveMotor.setInverted(m_DriveMotorInverted);
     m_driveEncoder = m_driveMotor.getSensorCollection();
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
@@ -152,6 +148,7 @@ public class SwerveModule {
     double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
 
     double driveFeedforward = m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
+    driveFeedforward = 0.0;
 
     // Calculate the turning motor output from the turning PID controller.
     double turnTarget = desiredState.angle.getRotations();
