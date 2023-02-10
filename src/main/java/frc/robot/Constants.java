@@ -7,8 +7,8 @@ public final class Constants {
     public static final double kXDistance = 0.762; // 30 inches
     public static final double kYDistance = 0.762; // in meters!
 
-    public static final double kXCenterDistance = kXDistance/2.0;
-    public static final double kYCenterDistance = kYDistance/2.0;
+    public static final double kXCenterDistance = kXDistance / 2.0;
+    public static final double kYCenterDistance = kYDistance / 2.0;
 
     // Drivetrain drive motor constants
     public class Drive {
@@ -22,9 +22,9 @@ public final class Constants {
     public class Turn {
       // Drivetrain turning offset constants
       public static final double kFLTurnOffset = 0.130769;
-      public static final double kFRTurnOffset = 0.220806;
+      public static final double kFRTurnOffset = 0.720806;
       public static final double kBLTurnOffset = 0.198625;
-      public static final double kBRTurnOffset = 0.925397;
+      public static final double kBRTurnOffset = 0.425397;
 
       public static final int kFLTurnMotorId = 9;
       public static final int kFRTurnMotorId = 10;

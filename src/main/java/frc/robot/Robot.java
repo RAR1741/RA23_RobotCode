@@ -72,8 +72,6 @@ public class Robot extends TimedRobot {
     double xSpeed = mXSpeedLimiter.calculate(mDriverController.getForwardAxis())
         * SwerveDrive.kMaxSpeed;
 
-    // xSpeed = 0.1;
-
     double ySpeed = mYSpeedLimiter.calculate(mDriverController.getStrafeAxis())
         * SwerveDrive.kMaxSpeed;
 
@@ -87,14 +85,14 @@ public class Robot extends TimedRobot {
     // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
     // m_swerve.drive(xSpeed, ySpeed, 0, true);
-    if(xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
+    if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
       m_stoppedTimer.start();
     } else {
       m_stoppedTimer.reset();
       m_stoppedTimer.stop();
     }
-    
-    if(m_stoppedTimer.hasElapsed(1.0)) {
+
+    if (m_stoppedTimer.hasElapsed(1.0)) {
       m_swerve.pointDirection(1.0, 0.0, 0.0, false);
     } else {
       m_swerve.drive(xSpeed, ySpeed, rot, true);
