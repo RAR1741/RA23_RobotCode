@@ -107,6 +107,11 @@ public class SwerveDrive extends Subsystem {
 
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
 
+    SmartDashboard.putNumber("fL state", swerveModuleStates[0].speedMetersPerSecond);
+    SmartDashboard.putNumber("fR state", swerveModuleStates[1].speedMetersPerSecond);
+    SmartDashboard.putNumber("bL state", swerveModuleStates[2].speedMetersPerSecond);
+    SmartDashboard.putNumber("bR state", swerveModuleStates[3].speedMetersPerSecond);
+
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_backLeft.setDesiredState(swerveModuleStates[2]);

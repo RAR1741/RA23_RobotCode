@@ -168,6 +168,8 @@ public class SwerveModule {
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
 
+    SmartDashboard.putNumber(m_moduleName, driveOutput + driveFeedforward);
+
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
   }
