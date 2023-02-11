@@ -13,7 +13,7 @@ public class DriverJoystick extends FilteredController {
     super(port, useDeadband, useSquaredInput);
   }
 
-  private final double kTriggerActivationThreshold = 0.5;
+  private final double k_triggerActivationThreshold = 0.5;
 
   // Drive
   public double getForwardAxis() {
@@ -29,7 +29,7 @@ public class DriverJoystick extends FilteredController {
   }
 
   public boolean getWantsSlowMode() {
-    return this.getFilteredAxis(3) > kTriggerActivationThreshold;
+    return this.getFilteredAxis(3) > k_triggerActivationThreshold;
   }
 
   // Intake

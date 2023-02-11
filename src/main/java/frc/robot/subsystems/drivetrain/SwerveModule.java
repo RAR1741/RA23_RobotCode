@@ -18,25 +18,25 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
-  private static final double kWheelRadiusIn = 2; // 2in
-  private static final double kDriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
-  private static final double kDriveEncPerSec = 204.8;
+  private static final double k_WheelRadiusIn = 2; // 2in
+  private static final double k_DriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+  private static final double k_DriveEncPerSec = 204.8;
 
-  private static final double kTurningP = 8.0;
-  private static final double kTurningI = 0.1;
-  private static final double kTurningD = 0.0;
+  private static final double k_TurningP = 8.0;
+  private static final double k_TurningI = 0.1;
+  private static final double k_TurningD = 0.0;
 
   // These values were obtained via SysId
-  private static final double kDriveP = 0.80566;
-  private static final double kDriveI = 0.0;
-  private static final double kDriveD = 0.0;
-  private static final double kDriveFeedForwardS = 0.19882;
-  private static final double kDriveFeedForwardV = 2.21080;
-  private static final double kDriveFeedForwardA = 0.11641;
+  private static final double k_DriveP = 0.80566;
+  private static final double k_DriveI = 0.0;
+  private static final double k_DriveD = 0.0;
+  private static final double k_DriveFeedForwardS = 0.19882;
+  private static final double k_DriveFeedForwardV = 2.21080;
+  private static final double k_DriveFeedForwardA = 0.11641;
 
   // TODO: Make sure these are right
-  private static final double kModuleMaxAngularVelocity = Constants.Drivetrain.kMaxAngularSpeed;
-  private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
+  private static final double k_ModuleMaxAngularVelocity = Constants.Drivetrain.k_maxAngularSpeed;
+  private static final double k_ModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final WPI_TalonFX m_driveMotor;
   private final CANSparkMax m_turningMotor;
@@ -48,19 +48,19 @@ public class SwerveModule {
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
 
-  private final PIDController m_drivePIDController = new PIDController(kDriveP, kDriveI, kDriveD);
+  private final PIDController m_drivePIDController = new PIDController(k_DriveP, k_DriveI, k_DriveD);
 
   private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
-      kTurningP,
-      kTurningI,
-      kTurningD,
+      k_TurningP,
+      k_TurningI,
+      k_TurningD,
       new TrapezoidProfile.Constraints(
-          kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+          k_ModuleMaxAngularVelocity, k_ModuleMaxAngularAcceleration));
 
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(
-      kDriveFeedForwardS,
-      kDriveFeedForwardV,
-      kDriveFeedForwardA);
+      k_DriveFeedForwardS,
+      k_DriveFeedForwardV,
+      k_DriveFeedForwardA);
 
   // TODO: Gains are for example purposes only - must be determined for your own
   // robot!
@@ -122,10 +122,10 @@ public class SwerveModule {
   // Returns the drive velocity in meters per second.
   public double getDriveVelocity() {
     // In revs per second
-    double velocity = m_driveEncoder.getIntegratedSensorVelocity() / kDriveEncPerSec;
+    double velocity = m_driveEncoder.getIntegratedSensorVelocity() / k_DriveEncPerSec;
 
     // Convert to in per second
-    velocity *= ((2 * kWheelRadiusIn * Math.PI) / kDriveGearRatio);
+    velocity *= ((2 * k_WheelRadiusIn * Math.PI) / k_DriveGearRatio);
 
     // Convert to m per second
     velocity *= 0.0254;

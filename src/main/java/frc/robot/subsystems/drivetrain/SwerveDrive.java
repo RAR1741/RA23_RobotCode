@@ -18,27 +18,27 @@ public class SwerveDrive extends Subsystem {
 
   private static SwerveDrive m_swerve = null;
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.kXCenterDistance,
-      Constants.Drivetrain.kYCenterDistance);
-  private final Translation2d m_frontRightLocation = new Translation2d(Constants.Drivetrain.kXCenterDistance,
-      -Constants.Drivetrain.kYCenterDistance);
-  private final Translation2d m_backLeftLocation = new Translation2d(-Constants.Drivetrain.kXCenterDistance,
-      Constants.Drivetrain.kYCenterDistance);
-  private final Translation2d m_backRightLocation = new Translation2d(-Constants.Drivetrain.kXCenterDistance,
-      -Constants.Drivetrain.kYCenterDistance);
+  private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.k_xCenterDistance,
+      Constants.Drivetrain.k_yCenterDistance);
+  private final Translation2d m_frontRightLocation = new Translation2d(Constants.Drivetrain.k_xCenterDistance,
+      -Constants.Drivetrain.k_yCenterDistance);
+  private final Translation2d m_backLeftLocation = new Translation2d(-Constants.Drivetrain.k_xCenterDistance,
+      Constants.Drivetrain.k_yCenterDistance);
+  private final Translation2d m_backRightLocation = new Translation2d(-Constants.Drivetrain.k_xCenterDistance,
+      -Constants.Drivetrain.k_yCenterDistance);
 
   private final SwerveModule m_frontLeft = new SwerveModule(
-      Constants.Drivetrain.Drive.kFLMotorId, Constants.Drivetrain.Turn.kFLMotorId,
-      Constants.Drivetrain.Turn.kFLOffset, "FL");
+      Constants.Drivetrain.Drive.k_FLMotorId, Constants.Drivetrain.Turn.k_FLMotorId,
+      Constants.Drivetrain.Turn.k_FLOffset, "FL");
   private final SwerveModule m_frontRight = new SwerveModule(
-      Constants.Drivetrain.Drive.kFRMotorId, Constants.Drivetrain.Turn.kFRMotorId,
-      Constants.Drivetrain.Turn.kFROffset, "FR");
+      Constants.Drivetrain.Drive.k_FRMotorId, Constants.Drivetrain.Turn.k_FRMotorId,
+      Constants.Drivetrain.Turn.k_FROffset, "FR");
   private final SwerveModule m_backLeft = new SwerveModule(
-      Constants.Drivetrain.Drive.kBLMotorId, Constants.Drivetrain.Turn.kBLMotorId,
-      Constants.Drivetrain.Turn.kBLOffset, "BL");
+      Constants.Drivetrain.Drive.k_BLMotorId, Constants.Drivetrain.Turn.k_BLMotorId,
+      Constants.Drivetrain.Turn.k_BLOffset, "BL");
   private final SwerveModule m_backRight = new SwerveModule(
-      Constants.Drivetrain.Drive.kBRMotorId, Constants.Drivetrain.Turn.kBRMotorId,
-      Constants.Drivetrain.Turn.kBROffset, "BR");
+      Constants.Drivetrain.Drive.k_BRMotorId, Constants.Drivetrain.Turn.k_BRMotorId,
+      Constants.Drivetrain.Turn.k_BROffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -88,7 +88,7 @@ public class SwerveDrive extends Subsystem {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Drivetrain.kMaxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Drivetrain.k_maxSpeed);
 
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);

@@ -68,13 +68,13 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     double xSpeed = m_xRateLimiter.calculate(m_driverController.getForwardAxis())
-        * Constants.Drivetrain.kMaxSpeed;
+        * Constants.Drivetrain.k_maxSpeed;
 
     double ySpeed = m_yRateLimiter.calculate(m_driverController.getStrafeAxis())
-        * Constants.Drivetrain.kMaxSpeed;
+        * Constants.Drivetrain.k_maxSpeed;
 
     double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis())
-        * Constants.Drivetrain.kMaxAngularSpeed;
+        * Constants.Drivetrain.k_maxAngularSpeed;
 
     // if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
     // m_stoppedTimer.start();
