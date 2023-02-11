@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class SwerveModule {
   private static final double kWheelRadiusIn = 2; // 2in
@@ -34,7 +35,7 @@ public class SwerveModule {
   private static final double kDriveFeedForwardA = 0.11641;
 
   // TODO: Make sure these are right
-  private static final double kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed;
+  private static final double kModuleMaxAngularVelocity = Constants.Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final WPI_TalonFX m_driveMotor;

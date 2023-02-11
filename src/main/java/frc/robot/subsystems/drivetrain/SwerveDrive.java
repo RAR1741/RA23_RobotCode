@@ -18,9 +18,6 @@ public class SwerveDrive extends Subsystem {
 
   private static SwerveDrive swerve = null;
 
-  public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-
   private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.kXCenterDistance,
       Constants.Drivetrain.kYCenterDistance);
   private final Translation2d m_frontRightLocation = new Translation2d(Constants.Drivetrain.kXCenterDistance,
@@ -31,17 +28,17 @@ public class SwerveDrive extends Subsystem {
       -Constants.Drivetrain.kYCenterDistance);
 
   private final SwerveModule m_frontLeft = new SwerveModule(
-      Constants.Drivetrain.Drive.kFLDriveMotorId, Constants.Drivetrain.Turn.kFLTurnMotorId,
-      Constants.Drivetrain.Turn.kFLTurnOffset, "FL");
+      Constants.Drivetrain.Drive.kFLMotorId, Constants.Drivetrain.Turn.kFLMotorId,
+      Constants.Drivetrain.Turn.kFLOffset, "FL");
   private final SwerveModule m_frontRight = new SwerveModule(
-      Constants.Drivetrain.Drive.kFRDriveMotorId, Constants.Drivetrain.Turn.kFRTurnMotorId,
-      Constants.Drivetrain.Turn.kFRTurnOffset, "FR");
+      Constants.Drivetrain.Drive.kFRMotorId, Constants.Drivetrain.Turn.kFRMotorId,
+      Constants.Drivetrain.Turn.kFROffset, "FR");
   private final SwerveModule m_backLeft = new SwerveModule(
-      Constants.Drivetrain.Drive.kBLDriveMotorId, Constants.Drivetrain.Turn.kBLTurnMotorId,
-      Constants.Drivetrain.Turn.kBLTurnOffset, "BL");
+      Constants.Drivetrain.Drive.kBLMotorId, Constants.Drivetrain.Turn.kBLMotorId,
+      Constants.Drivetrain.Turn.kBLOffset, "BL");
   private final SwerveModule m_backRight = new SwerveModule(
-      Constants.Drivetrain.Drive.kBRDriveMotorId, Constants.Drivetrain.Turn.kBRTurnMotorId,
-      Constants.Drivetrain.Turn.kBRTurnOffset, "BR");
+      Constants.Drivetrain.Drive.kBRMotorId, Constants.Drivetrain.Turn.kBRMotorId,
+      Constants.Drivetrain.Turn.kBROffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -91,7 +88,7 @@ public class SwerveDrive extends Subsystem {
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Drivetrain.kMaxSpeed);
 
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);

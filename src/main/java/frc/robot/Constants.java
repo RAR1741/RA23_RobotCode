@@ -10,38 +10,29 @@ public final class Constants {
     public static final double kXCenterDistance = kXDistance / 2.0;
     public static final double kYCenterDistance = kYDistance / 2.0;
 
+    public static final double kMaxSpeed = 3.0; // 3 meters per second
+    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+
     // Drivetrain drive motor constants
     public class Drive {
-      public static final int kFLDriveMotorId = 5;
-      public static final int kFRDriveMotorId = 6;
-      public static final int kBLDriveMotorId = 7;
-      public static final int kBRDriveMotorId = 8;
+      public static final int kFLMotorId = 5;
+      public static final int kFRMotorId = 6;
+      public static final int kBLMotorId = 7;
+      public static final int kBRMotorId = 8;
     }
 
     // Drivetrain (turn) constants
     public class Turn {
       // Drivetrain turning offset constants
-      public static final double kFLTurnOffset = 0.130769;
-      public static final double kFRTurnOffset = 0.720806;
-      public static final double kBLTurnOffset = 0.198625;
-      public static final double kBRTurnOffset = 0.425397;
+      public static final double kFLOffset = 0.130769;
+      public static final double kFROffset = 0.720806;
+      public static final double kBLOffset = 0.198625;
+      public static final double kBROffset = 0.425397;
 
-      public static final int kFLTurnMotorId = 9;
-      public static final int kFRTurnMotorId = 10;
-      public static final int kBLTurnMotorId = 11;
-      public static final int kBRTurnMotorId = 12;
-
-      public static final int kFLTurnEncoderChannelA = 0;
-      public static final int kFLTurnEncoderChannelB = 1;
-
-      public static final int kFRTurnEncoderChannelA = 4;
-      public static final int kFRTurnEncoderChannelB = 5;
-
-      public static final int kBLTurnEncoderChannelA = 2;
-      public static final int kBLTurnEncoderChannelB = 3;
-
-      public static final int kBRTurnEncoderChannelA = 6;
-      public static final int kBRTurnEncoderChannelB = 7;
+      public static final int kFLMotorId = 9;
+      public static final int kFRMotorId = 10;
+      public static final int kBLMotorId = 11;
+      public static final int kBRMotorId = 12;
     }
   }
 }
