@@ -16,7 +16,7 @@ import frc.robot.subsystems.Subsystem;
 
 public class SwerveDrive extends Subsystem {
 
-  private static SwerveDrive swerve = null;
+  private static SwerveDrive m_swerve = null;
 
   private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.kXCenterDistance,
       Constants.Drivetrain.kYCenterDistance);
@@ -56,10 +56,10 @@ public class SwerveDrive extends Subsystem {
       });
 
   public static SwerveDrive getInstance() {
-    if (swerve == null) {
-      swerve = new SwerveDrive();
+    if (m_swerve == null) {
+      m_swerve = new SwerveDrive();
     }
-    return swerve;
+    return m_swerve;
   }
 
   private SwerveDrive() {
