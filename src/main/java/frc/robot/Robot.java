@@ -75,6 +75,11 @@ public class Robot extends TimedRobot {
 
     double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis())
         * Constants.Drivetrain.k_maxAngularSpeed;
+    
+    if(m_driverController.getWantsSlowMode()) {
+      xSpeed *= Constants.Drivetrain.k_slowScaler;
+      ySpeed *= Constants.Drivetrain.k_slowScaler;
+    }
 
     // if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
     // m_stoppedTimer.start();
@@ -84,7 +89,7 @@ public class Robot extends TimedRobot {
     // }
 
     // if (m_stoppedTimer.hasElapsed(1.0)) {
-    // m_swerve.pointDirection(1.0, 0.0, 0.0, false);
+    // m_swerve.pointModules(1.0, 0.0, 0.0, false);
     // } else {
     m_swerve.drive(xSpeed, ySpeed, rot, true);
     // }
@@ -125,9 +130,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    // Stop the robot when disabled.
-    m_swerve.drive(0.0, 0.0, 0.0, true);
-
     updateSim();
   }
 

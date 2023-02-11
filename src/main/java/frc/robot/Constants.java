@@ -6,12 +6,13 @@ public final class Constants {
     // TODO: Change for final robot
     public static final double k_xDistance = 0.762; // 30 inches
     public static final double k_yDistance = 0.762; // in meters!
-
+    
     public static final double k_xCenterDistance = k_xDistance / 2.0;
     public static final double k_yCenterDistance = k_yDistance / 2.0;
-
+    
     public static final double k_maxSpeed = 3.0; // 3 meters per second
     public static final double k_maxAngularSpeed = Math.PI; // 1/2 rotation per second
+    public static final double k_slowScaler = 0.2;
 
     // Drivetrain drive motor constants
     public class Drive {

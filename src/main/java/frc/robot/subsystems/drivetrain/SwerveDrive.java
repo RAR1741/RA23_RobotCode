@@ -18,6 +18,9 @@ public class SwerveDrive extends Subsystem {
 
   private static SwerveDrive m_swerve = null;
 
+  // Robot "forward" is +x
+  // Robot "left" is +y
+  // Robot "clockwise" is -z
   private final Translation2d m_frontLeftLocation = new Translation2d(Constants.Drivetrain.k_xCenterDistance,
       Constants.Drivetrain.k_yCenterDistance);
   private final Translation2d m_frontRightLocation = new Translation2d(Constants.Drivetrain.k_xCenterDistance,
@@ -66,6 +69,9 @@ public class SwerveDrive extends Subsystem {
     resetGyro();
   }
 
+  /**
+   * Calls the NavX reset function, resetting the Z angle to 0
+   */
   public void resetGyro() {
     m_gyro.reset();
   }
@@ -80,9 +86,6 @@ public class SwerveDrive extends Subsystem {
    *                      field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
-    // WIP: rotation locking
-    // rot = -m_gyro.getRotation2d().getRadians() / 2;
-
     SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
@@ -96,7 +99,7 @@ public class SwerveDrive extends Subsystem {
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
-  public void pointDirection(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void pointModules(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     SwerveModuleState[] swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
@@ -123,7 +126,7 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void stop() {
-    // TODO Auto-generated method stub
+    drive(0.0, 0.0, 0.0, true);
   }
 
   @Override
