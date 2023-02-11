@@ -25,9 +25,13 @@ public class SwerveModule {
   private static final double kTurningI = 0.1;
   private static final double kTurningD = 0.0;
 
-  private static final double kDriveP = 1.0;
+  // These values were obtained via SysId
+  private static final double kDriveP = 0.80566;
   private static final double kDriveI = 0.0;
   private static final double kDriveD = 0.0;
+  private static final double kDriveFeedForwardS = 0.19882;
+  private static final double kDriveFeedForwardV = 2.21080;
+  private static final double kDriveFeedForwardA = 0.11641;
 
   // TODO: Make sure these are right
   private static final double kModuleMaxAngularVelocity = SwerveDrive.kMaxAngularSpeed;
@@ -52,9 +56,13 @@ public class SwerveModule {
       new TrapezoidProfile.Constraints(
           kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(
+      kDriveFeedForwardS,
+      kDriveFeedForwardV,
+      kDriveFeedForwardA);
+
   // TODO: Gains are for example purposes only - must be determined for your own
   // robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
 
   /**
@@ -82,7 +90,6 @@ public class SwerveModule {
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
     m_turningPIDController.enableContinuousInput(0, 1);
-    m_turningPIDController.setTolerance(0.0025);
   }
 
   /**
@@ -148,7 +155,6 @@ public class SwerveModule {
     double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
 
     double driveFeedforward = m_driveFeedforward.calculate(desiredState.speedMetersPerSecond);
-    driveFeedforward = 0.0;
 
     // Calculate the turning motor output from the turning PID controller.
     double turnTarget = desiredState.angle.getRotations();
