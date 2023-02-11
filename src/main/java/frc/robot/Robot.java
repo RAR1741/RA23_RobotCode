@@ -3,10 +3,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
@@ -17,17 +15,17 @@ public class Robot extends TimedRobot {
   private final DriverController mDriverController = new DriverController(0, true, true);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter mXSpeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter mYSpeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter mRotLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter mXRateLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter mYRateLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter mRotRateLimiter = new SlewRateLimiter(3);
 
   // Robot subsystems
   private List<Subsystem> mAllSubsystems = new ArrayList<>();
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
 
-  private UsbCamera mCamera;
+  // private UsbCamera mCamera;
 
-  private final Timer m_stoppedTimer = new Timer();
+  // private final Timer m_stoppedTimer = new Timer();
 
   private final Field2d mField = new Field2d();
 
@@ -69,41 +67,33 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double xSpeed = mXSpeedLimiter.calculate(mDriverController.getForwardAxis())
+    double xSpeed = mXRateLimiter.calculate(mDriverController.getForwardAxis())
         * SwerveDrive.kMaxSpeed;
 
-    double ySpeed = mYSpeedLimiter.calculate(mDriverController.getStrafeAxis())
+    double ySpeed = mYRateLimiter.calculate(mDriverController.getStrafeAxis())
         * SwerveDrive.kMaxSpeed;
 
-    double rot = mRotLimiter.calculate(mDriverController.getTurnAxis()) *
+    double rot = mRotRateLimiter.calculate(mDriverController.getTurnAxis()) *
         SwerveDrive.kMaxAngularSpeed;
+    
+    // if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
+    //   m_stoppedTimer.start();
+    // } else {
+    //   m_stoppedTimer.reset();
+    //   m_stoppedTimer.stop();
+    // }
 
-    // m_swerve.drive(mDriverController.getForwardAxis(),
-    // mDriverController.getStrafeAxis(),
-    // 0, true);
-
-    // mDrive.slowMode(mDriverController.getWantsSlowMode());
-
-    // m_swerve.drive(xSpeed, ySpeed, 0, true);
-    if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
-      m_stoppedTimer.start();
-    } else {
-      m_stoppedTimer.reset();
-      m_stoppedTimer.stop();
-    }
-
-    if (m_stoppedTimer.hasElapsed(1.0)) {
-      m_swerve.pointDirection(1.0, 0.0, 0.0, false);
-    } else {
-      m_swerve.drive(xSpeed, ySpeed, rot, true);
-    }
+    // if (m_stoppedTimer.hasElapsed(1.0)) {
+    //   m_swerve.pointDirection(1.0, 0.0, 0.0, false);
+    // } else {
+    m_swerve.drive(xSpeed, ySpeed, rot, true);
+    // }
 
     // m_swerve.drive(0.3, 0, 0, false);
     // m_swerve.drive(0, 0.1, 0, false);
     // m_swerve.drive(0, 0, 0.1, false);
-    // m_swerve.drive(0.1, 0, 0.1, false);
 
-    // // Intake controls
+    // Intake controls
     /*
      * if (mDriverController.getWantsIntakeOpen()) {
      * // m_intake.open();
