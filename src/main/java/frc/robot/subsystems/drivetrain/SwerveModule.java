@@ -18,25 +18,29 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
-  private static final double k_WheelRadiusIn = 2; // 2in
-  private static final double k_DriveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
-  private static final double k_DriveEncPerSec = 204.8;
+  private static final double k_wheelRadiusIn = 2; // 2 inches
+  private static final double k_driveGearRatio = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+  private static final double k_driveEncPerRot = 2048.0;
+  private static final double k_driveEncPerSec = 2048.0 / 10.0; // Encoder reports 2048 Encoder counter per 100 ms
 
-  private static final double k_TurningP = 8.0;
-  private static final double k_TurningI = 0.1;
-  private static final double k_TurningD = 0.0;
+  private static final double k_turningP = 8.0;
+  private static final double k_turningI = 0.1;
+  private static final double k_turningD = 0.0;
+  private static final double k_turnFeedForwardS = 1;
+  private static final double k_turnFeedForwardV = 0.5;
+  private static final double k_turnFeedForwardA = 0.0;
 
   // These values were obtained via SysId
-  private static final double k_DriveP = 0.80566;
-  private static final double k_DriveI = 0.0;
-  private static final double k_DriveD = 0.0;
-  private static final double k_DriveFeedForwardS = 0.19882;
-  private static final double k_DriveFeedForwardV = 2.21080;
-  private static final double k_DriveFeedForwardA = 0.11641;
+  private static final double k_driveP = 0.80566;
+  private static final double k_driveI = 0.0;
+  private static final double k_driveD = 0.0;
+  private static final double k_driveFeedForwardS = 0.19882;
+  private static final double k_driveFeedForwardV = 2.21080;
+  private static final double k_driveFeedForwardA = 0.11641;
 
   // TODO: Make sure these are right
-  private static final double k_ModuleMaxAngularVelocity = Constants.Drivetrain.k_maxAngularSpeed;
-  private static final double k_ModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
+  private static final double k_moduleMaxAngularVelocity = Math.PI;
+  private static final double k_moduleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final WPI_TalonFX m_driveMotor;
   private final CANSparkMax m_turningMotor;
@@ -48,23 +52,24 @@ public class SwerveModule {
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
 
-  private final PIDController m_drivePIDController = new PIDController(k_DriveP, k_DriveI, k_DriveD);
+  private final PIDController m_drivePIDController = new PIDController(k_driveP, k_driveI, k_driveD);
 
   private final ProfiledPIDController m_turningPIDController = new ProfiledPIDController(
-      k_TurningP,
-      k_TurningI,
-      k_TurningD,
+      k_turningP,
+      k_turningI,
+      k_turningD,
       new TrapezoidProfile.Constraints(
-          k_ModuleMaxAngularVelocity, k_ModuleMaxAngularAcceleration));
+          k_moduleMaxAngularVelocity, k_moduleMaxAngularAcceleration));
 
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(
-      k_DriveFeedForwardS,
-      k_DriveFeedForwardV,
-      k_DriveFeedForwardA);
+      k_driveFeedForwardS,
+      k_driveFeedForwardV,
+      k_driveFeedForwardA);
 
   // TODO: Gains are for example purposes only - must be determined for your own
   // robot!
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(k_turnFeedForwardS,
+      k_turnFeedForwardV, k_turnFeedForwardA);
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder
@@ -80,13 +85,13 @@ public class SwerveModule {
     m_smartDashboardKey = "Drivetrain/" + m_moduleName + "/";
 
     m_driveMotor = new WPI_TalonFX(driveMotorChannel);
+    m_driveMotor.configFactoryDefault();
     m_driveEncoder = m_driveMotor.getSensorCollection();
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
+    m_turningMotor.restoreFactoryDefaults();
     m_turningEncoder = m_turningMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     m_turningMotor.setInverted(true);
-    // TODO: maybe we should be doing this too?
-    // m_turningMotor.restoreFactoryDefaults();
 
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
@@ -115,17 +120,13 @@ public class SwerveModule {
     return input;
   }
 
-  public void resetTurnPIDState() {
-    m_turningPIDController.reset(getTurnPosition());
-  }
-
   // Returns the drive velocity in meters per second.
   public double getDriveVelocity() {
     // In revs per second
-    double velocity = m_driveEncoder.getIntegratedSensorVelocity() / k_DriveEncPerSec;
+    double velocity = m_driveEncoder.getIntegratedSensorVelocity() / k_driveEncPerSec;
 
     // Convert to in per second
-    velocity *= ((2 * k_WheelRadiusIn * Math.PI) / k_DriveGearRatio);
+    velocity *= ((2 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio);
 
     // Convert to m per second
     velocity *= 0.0254;
@@ -134,13 +135,18 @@ public class SwerveModule {
   }
 
   /**
-   * Returns the current position of the module.
+   * Returns the current position of the module (Meters, Angle).
    *
-   * @return The current position of the module.
+   * @return The current position of the module (Meters, Angle).
    */
   public SwerveModulePosition getPosition() {
+    double drivePosition = m_driveEncoder.getIntegratedSensorPosition();
+    drivePosition /= k_driveEncPerRot; // Convert to # of rotations
+    drivePosition *= ((2 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio); // Convert to inches
+    drivePosition *= 0.0254; // Convert to meters
+
     return new SwerveModulePosition(
-        m_driveEncoder.getIntegratedSensorPosition(), Rotation2d.fromRotations(getTurnPosition()));
+        drivePosition, Rotation2d.fromRotations(getTurnPosition()));
   }
 
   /**
