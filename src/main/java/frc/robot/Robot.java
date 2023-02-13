@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
@@ -23,7 +24,8 @@ public class Robot extends TimedRobot {
 
   // Robot subsystems
   private List<Subsystem> mAllSubsystems = new ArrayList<>();
-  private final SwerveDrive m_swerve = SwerveDrive.getInstance();
+  // private final SwerveDrive m_swerve = SwerveDrive.getInstance();
+  private final Arm m_arm = Arm.getInstance();
 
   private UsbCamera mCamera;
 
@@ -45,7 +47,8 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    mAllSubsystems.add(m_swerve);
+    // mAllSubsystems.add(m_swerve);
+    mAllSubsystems.add(m_arm);
   }
 
   @Override
@@ -55,7 +58,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_swerve.resetKinematics();
+    // m_swerve.resetKinematics();
   }
 
   @Override
@@ -64,7 +67,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    m_swerve.resetKinematics();
+    // m_swerve.resetKinematics();
   }
 
   @Override
@@ -85,18 +88,18 @@ public class Robot extends TimedRobot {
     // mDrive.slowMode(mDriverController.getWantsSlowMode());
 
     // m_swerve.drive(xSpeed, ySpeed, 0, true);
-    if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
-      m_stoppedTimer.start();
-    } else {
-      m_stoppedTimer.reset();
-      m_stoppedTimer.stop();
-    }
+    // if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
+    // m_stoppedTimer.start();
+    // } else {
+    // m_stoppedTimer.reset();
+    // m_stoppedTimer.stop();
+    // }
 
-    if (m_stoppedTimer.hasElapsed(1.0)) {
-      m_swerve.pointDirection(1.0, 0.0, 0.0, false);
-    } else {
-      m_swerve.drive(xSpeed, ySpeed, rot, true);
-    }
+    // if (m_stoppedTimer.hasElapsed(1.0)) {
+    // m_swerve.pointDirection(1.0, 0.0, 0.0, false);
+    // } else {
+    // m_swerve.drive(xSpeed, ySpeed, rot, true);
+    // }
 
     // m_swerve.drive(0.3, 0, 0, false);
     // m_swerve.drive(0, 0.1, 0, false);
@@ -112,9 +115,9 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    if (mDriverController.getWantsResetGyro()) {
-      m_swerve.resetGyro();
-    }
+    // if (mDriverController.getWantsResetGyro()) {
+    // m_swerve.resetGyro();
+    // }
 
     mAllSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     mAllSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
@@ -136,7 +139,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     // Stop the robot when disabled.
-    m_swerve.drive(0.0, 0.0, 0.0, true);
+    // m_swerve.drive(0.0, 0.0, 0.0, true);
 
     updateSim();
   }
@@ -144,6 +147,6 @@ public class Robot extends TimedRobot {
   private void updateSim() {
     // Update the odometry in the sim.
     // mDrive.simulationPeriodic();
-    mField.setRobotPose(m_swerve.getPose());
+    // mField.setRobotPose(m_swerve.getPose());
   }
 }
