@@ -1,22 +1,23 @@
 package frc.robot.simulation;
 
 import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 
 public class SimulatableCANSparkMax extends CANSparkMax {
-  SimDeviceSim mCANSparkMaxSim;
+  SimDeviceSim m_CANSparkMaxSim;
 
-  SimDouble mCANSparkMaxSimAppliedOutput;
-  SimDouble mCANSparkMaxSimAnalogVoltage;
+  SimDouble m_CANSparkMaxSimAppliedOutput;
+  SimDouble m_CANSparkMaxSimAnalogVoltage;
 
   public SimulatableCANSparkMax(int deviceId, MotorType type) {
     super(deviceId, type);
 
-    mCANSparkMaxSim = new SimDeviceSim("SPARK MAX ", deviceId);
-    mCANSparkMaxSimAppliedOutput = mCANSparkMaxSim.getDouble("Applied Output");
-    mCANSparkMaxSimAnalogVoltage = mCANSparkMaxSim.getDouble("Analog Voltage");
+    m_CANSparkMaxSim = new SimDeviceSim("SPARK MAX ", deviceId);
+    m_CANSparkMaxSimAppliedOutput = m_CANSparkMaxSim.getDouble("Applied Output");
+    m_CANSparkMaxSimAnalogVoltage = m_CANSparkMaxSim.getDouble("Analog Voltage");
 
     // TODO: Add other simulation fields
   }
@@ -26,7 +27,7 @@ public class SimulatableCANSparkMax extends CANSparkMax {
     super.set(speed);
 
     // TODO: Figure out why this is mad when running on a real robot
-    mCANSparkMaxSimAppliedOutput.set(speed);
+    m_CANSparkMaxSimAppliedOutput.set(speed);
   }
 
   @Override
@@ -35,7 +36,7 @@ public class SimulatableCANSparkMax extends CANSparkMax {
       return super.get();
     } else {
       // TODO: figure out speed from voltage
-      return mCANSparkMaxSimAppliedOutput.get();
+      return m_CANSparkMaxSimAppliedOutput.get();
     }
   }
 
@@ -43,6 +44,6 @@ public class SimulatableCANSparkMax extends CANSparkMax {
   public void setVoltage(double voltage) {
     super.setVoltage(voltage);
 
-    mCANSparkMaxSimAnalogVoltage.set(voltage);
+    m_CANSparkMaxSimAnalogVoltage.set(voltage);
   }
 }

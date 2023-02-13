@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -69,6 +68,7 @@ public class Arm extends Subsystem {
       kShoulderLength,
       Constants.Arm.Shoulder.kMinAngle,
       Constants.Arm.Shoulder.kMaxAngle,
+      kShoulderMass,
       true);
 
   // This isn't a real encoder...
