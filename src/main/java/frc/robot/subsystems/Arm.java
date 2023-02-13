@@ -54,10 +54,10 @@ public class Arm extends Subsystem {
   // private final PIDController mElbowPID = new PIDController(kElbowMotorP,
   // kElbowMotorI, kElbowMotorD);
 
-  private final PWMSparkMax mShoulderMotor = new PWMSparkMax(1);
-  // private final SimulatableCANSparkMax mShoulderMotor = new
-  // SimulatableCANSparkMax(Constants.Arm.Shoulder.kMotorId,
-  // MotorType.kBrushless);
+  // TOOD: figure out how to use the SparkMax
+  private final PWMSparkMax mShoulderMotor2 = new PWMSparkMax(1);
+  private final SimulatableCANSparkMax mShoulderMotor = new SimulatableCANSparkMax(Constants.Arm.Shoulder.kMotorId,
+      MotorType.kBrushless);
   // private final SimulatableCANSparkMax mElbowMotor = new
   // SimulatableCANSparkMax(Constants.Arm.Elbow.kMotorId,
   // MotorType.kBrushless);
@@ -65,7 +65,7 @@ public class Arm extends Subsystem {
   private final SingleJointedArmSim mShoulderSim = new SingleJointedArmSim(
       mShoulderGearbox,
       kShoulderGearRatio,
-      SingleJointedArmSim.estimateMOI(kShoulderMass, kShoulderLength),
+      SingleJointedArmSim.estimateMOI(kShoulderLength, kShoulderMass),
       kShoulderLength,
       Constants.Arm.Shoulder.kMinAngle,
       Constants.Arm.Shoulder.kMaxAngle,
