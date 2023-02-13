@@ -1,0 +1,10 @@
+[
+  {
+    "name": "/Preferences/shoulderAngle",
+    "type": "double",
+    "value": 45.0,
+    "properties": {
+      "persistent": true
+    }
+  }
+]
