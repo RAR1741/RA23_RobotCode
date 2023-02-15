@@ -58,12 +58,12 @@
     "###FMS": {
       "Collapsed": "1",
       "Pos": "3,465",
-      "Size": "283,146"
+      "Size": "32,35"
     },
     "###Joysticks": {
       "Collapsed": "1",
       "Pos": "209,40",
-      "Size": "796,206"
+      "Size": "32,35"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -78,7 +78,7 @@
     "###PWM Outputs": {
       "Collapsed": "0",
       "Pos": "31,547",
-      "Size": "110,54"
+      "Size": "32,35"
     },
     "###Plot <0>": {
       "Collapsed": "0",
@@ -93,12 +93,12 @@
     "###System Joysticks": {
       "Collapsed": "0",
       "Pos": "6,285",
-      "Size": "192,218"
+      "Size": "32,35"
     },
     "###Timing": {
       "Collapsed": "0",
       "Pos": "5,126",
-      "Size": "135,127"
+      "Size": "32,35"
     },
     "Debug##Default": {
       "Collapsed": "0",
@@ -108,7 +108,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "5,20",
-      "Size": "92,99"
+      "Size": "32,35"
     }
   }
 }

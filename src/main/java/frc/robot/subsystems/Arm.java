@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
-import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -23,7 +22,7 @@ public class Arm extends Subsystem {
 
   private static Arm arm = null;
 
-  private static final double kShoulderMotorP = 0.1;
+  private static final double kShoulderMotorP = 50.0;
   private static final double kShoulderMotorI = 0.01;
   private static final double kShoulderMotorD = 0.0;
 
@@ -35,7 +34,8 @@ public class Arm extends Subsystem {
   // private static final double kElbowGearRatio = 24.0;
 
   // distance per pulse = (angle per revolution) / (pulses per revolution)
-  private static final double kShoulderDegreesPerPulse = 2 * Math.PI / 4096;
+  private static final double kShoulderDegreesPerPulse = 2.0 * Math.PI / 4096.0;
+  // private static final double kShoulderDegreesPerPulse = 360.0 / 4096.0;
   // private static final double kElbowDegreesPerPulse = 2.0 * Math.PI / 4096;
 
   // private static final double kElbowMass = Units.lbsToKilograms(10.0);
@@ -109,7 +109,7 @@ public class Arm extends Subsystem {
   }
 
   private Arm() {
-    mShoulderEncoderSim.setDistancePerPulse(kShoulderDegreesPerPulse);
+    mShoulderEncoder.setDistancePerPulse(kShoulderDegreesPerPulse);
 
     SmartDashboard.putData("Arm Sim", mMech2d);
 
@@ -140,9 +140,12 @@ public class Arm extends Subsystem {
 
     // System.out.println("Shoulder Angle: " + mPeriodicIO.shoulderAngle);
 
-    var pidOutput = mShoulderPID.calculate(mShoulderEncoder.getDistance(), mPeriodicIO.shoulderAngle);
+    var pidOutput = mShoulderPID.calculate(mShoulderEncoder.getDistance(),
+        Units.degreesToRadians(mPeriodicIO.shoulderAngle));
 
-    SmartDashboard.putNumber("Arm Diff", mShoulderEncoder.getDistance() - mPeriodicIO.shoulderAngle);
+    SmartDashboard.putNumber("Distance Diff", mShoulderSim.getAngleRads() - mShoulderEncoder.getDistance());
+    SmartDashboard.putNumber("Arm Diff",
+        mShoulderEncoder.getDistance() - Units.degreesToRadians(mPeriodicIO.shoulderAngle));
 
     mShoulderMotor.setVoltage(pidOutput);
 
