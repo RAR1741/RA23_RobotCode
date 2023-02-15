@@ -2,6 +2,14 @@
   {
     "name": "/Preferences/shoulderAngle",
     "type": "double",
+    "value": 90.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/elbowAngle",
+    "type": "double",
     "value": 180.0,
     "properties": {
       "persistent": true

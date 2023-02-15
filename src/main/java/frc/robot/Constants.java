@@ -65,8 +65,10 @@ public final class Constants {
 
     public static class Elbow {
       public static final int kMotorId = 14;
-      public static final double kMinAngle = Units.degreesToRadians(-45.0);
-      public static final double kMaxAngle = Units.degreesToRadians(45.0);
+      public static final double kLength = 30; // Inches
+      public static final double kMass = Units.lbsToKilograms(100); // Kg
+      public static final double kMinAngle = Units.degreesToRadians(-360.0);
+      public static final double kMaxAngle = Units.degreesToRadians(360.0);
     }
   }
 
