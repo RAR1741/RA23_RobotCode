@@ -38,7 +38,7 @@
     "###/SmartDashboard/Arm Sim": {
       "Collapsed": "0",
       "Pos": "1022,68",
-      "Size": "805,361"
+      "Size": "808,466"
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "1",
@@ -82,7 +82,7 @@
     },
     "###Plot <0>": {
       "Collapsed": "0",
-      "Pos": "1022,435",
+      "Pos": "1024,537",
       "Size": "806,400"
     },
     "###RoboRIO": {

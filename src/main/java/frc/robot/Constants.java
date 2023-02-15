@@ -3,6 +3,19 @@ package frc.robot;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
+  public static class Robot {
+    public static final double kWidth = 27; // Inches
+    public static final double kLength = 30; // Inches
+
+    public static final double kBumperStart = 1; // Inches
+    public static final double kBumperHeight = 5; // Inches
+  }
+
+  public static class Simulation {
+    public static final double kWidth = 150; // Inches
+    public static final double kHeight = 80; // Inches
+  }
+
   public static class Drivetrain {
     // Drivetrain wheel offsets
     // TODO: Change for final robot
@@ -40,10 +53,6 @@ public final class Constants {
   }
 
   public static class Arm {
-
-    public static final double kSimulationWidth = 300; // Inches
-    public static final double kSimulationHeight = 120; // Inches
-
     public static final double kShoulderPivotHeight = 18; // Inches
 
     public static class Shoulder {
@@ -59,5 +68,14 @@ public final class Constants {
       public static final double kMinAngle = Units.degreesToRadians(-45.0);
       public static final double kMaxAngle = Units.degreesToRadians(45.0);
     }
+  }
+
+  public static class Field {
+    // All dimensions from Figure 5-16 in the manual
+    public static final double kLowGoalX = 22.75; // Inches
+    public static final double kLowGoalHeight = 34; // Inches
+
+    public static final double kHighGoalX = 39.75; // Inches
+    public static final double kHighGoalHeight = 46; // Inches
   }
 }

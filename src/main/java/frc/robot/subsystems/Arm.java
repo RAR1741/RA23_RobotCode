@@ -72,20 +72,25 @@ public class Arm extends Subsystem {
   private final EncoderSim mShoulderEncoderSim = new EncoderSim(mShoulderEncoder);
 
   // Create a Mechanism2d display of an Arm with a fixed ArmBase and moving Arm.
-  private final Mechanism2d mMech2d = new Mechanism2d(Constants.Arm.kSimulationWidth, Constants.Arm.kSimulationHeight);
+  private final Mechanism2d mMech2d = new Mechanism2d(Constants.Simulation.kWidth, Constants.Simulation.kHeight);
 
-  private final MechanismRoot2d mShoulderPivot = mMech2d.getRoot("ArmShoulderPivot", Constants.Arm.kSimulationWidth / 2,
+  private final MechanismRoot2d mShoulderPivot = mMech2d.getRoot("ArmShoulderPivot", Constants.Simulation.kWidth / 2,
       Constants.Arm.kShoulderPivotHeight);
 
   private final MechanismLigament2d mArmBase = mShoulderPivot.append(
-      new MechanismLigament2d("ArmBase", Constants.Arm.kShoulderPivotHeight, -90));
+      new MechanismLigament2d(
+          "ArmBase",
+          Constants.Arm.kShoulderPivotHeight,
+          -90,
+          4,
+          new Color8Bit(Color.kBlue)));
 
   private final MechanismLigament2d mArm = mShoulderPivot.append(
       new MechanismLigament2d(
           "Arm",
           30,
           Units.radiansToDegrees(mShoulderSim.getAngleRads()),
-          6,
+          4,
           new Color8Bit(Color.kYellow)));
 
   private static class PeriodicIO {
@@ -110,6 +115,8 @@ public class Arm extends Subsystem {
   private Arm() {
     mShoulderEncoder.setDistancePerPulse(kShoulderDegreesPerPulse);
 
+    addAdditionalDrawings();
+
     SmartDashboard.putData("Arm Sim", mMech2d);
 
     mArmBase.setColor(new Color8Bit(Color.kBlue));
@@ -117,6 +124,46 @@ public class Arm extends Subsystem {
     if (!Preferences.containsKey("shoulderAngle")) {
       Preferences.setDouble("shoulderAngle", mPeriodicIO.shoulderAngle);
     }
+  }
+
+  private void addAdditionalDrawings() {
+    // Draw the robot's bumpers
+    double bumperPosition = Constants.Simulation.kWidth / 2 - Constants.Robot.kLength / 2;
+    mMech2d.getRoot("Robot", bumperPosition, Constants.Robot.kBumperStart).append(
+        new MechanismLigament2d(
+            "RobotBase",
+            Constants.Robot.kLength,
+            0,
+            Constants.Robot.kBumperHeight,
+            new Color8Bit(Color.kRed)));
+
+    // Draw the scoring grid base
+    double gridStartPosition = Constants.Simulation.kWidth / 2 + Constants.Robot.kLength / 2;
+    mMech2d.getRoot("GridGround", gridStartPosition, 0).append(
+        new MechanismLigament2d(
+            "RobotBase",
+            Constants.Field.kHighGoalX,
+            0,
+            5,
+            new Color8Bit(Color.kWhite)));
+
+    // Draw the low goal
+    mMech2d.getRoot("GridLowGoal", gridStartPosition + Constants.Field.kLowGoalX, 0).append(
+        new MechanismLigament2d(
+            "RobotBase",
+            Constants.Field.kLowGoalHeight,
+            90,
+            5,
+            new Color8Bit(Color.kWhite)));
+
+    // Draw the high goal
+    mMech2d.getRoot("GridHighGoal", gridStartPosition + Constants.Field.kHighGoalX, 0).append(
+        new MechanismLigament2d(
+            "RobotBase",
+            Constants.Field.kHighGoalHeight,
+            90,
+            5,
+            new Color8Bit(Color.kWhite)));
   }
 
   @Override
