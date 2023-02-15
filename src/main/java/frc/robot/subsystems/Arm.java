@@ -23,19 +23,18 @@ public class Arm extends Subsystem {
   private static Arm arm = null;
 
   private static final double kShoulderMotorP = 50.0;
-  private static final double kShoulderMotorI = 0.01;
-  private static final double kShoulderMotorD = 0.0;
+  private static final double kShoulderMotorI = 2.0;
+  private static final double kShoulderMotorD = 5.0;
 
   // private static final double kElbowMotorP = 1.0;
   // private static final double kElbowMotorI = 0.0;
   // private static final double kElbowMotorD = 0.0;
 
-  private static final double kShoulderGearRatio = 100.0;
+  private static final double kShoulderGearRatio = 54.0;
   // private static final double kElbowGearRatio = 24.0;
 
   // distance per pulse = (angle per revolution) / (pulses per revolution)
   private static final double kShoulderDegreesPerPulse = 2.0 * Math.PI / 4096.0;
-  // private static final double kShoulderDegreesPerPulse = 360.0 / 4096.0;
   // private static final double kElbowDegreesPerPulse = 2.0 * Math.PI / 4096;
 
   // private static final double kElbowMass = Units.lbsToKilograms(10.0);
@@ -143,9 +142,8 @@ public class Arm extends Subsystem {
     var pidOutput = mShoulderPID.calculate(mShoulderEncoder.getDistance(),
         Units.degreesToRadians(mPeriodicIO.shoulderAngle));
 
-    SmartDashboard.putNumber("Distance Diff", mShoulderSim.getAngleRads() - mShoulderEncoder.getDistance());
     SmartDashboard.putNumber("Arm Diff",
-        mShoulderEncoder.getDistance() - Units.degreesToRadians(mPeriodicIO.shoulderAngle));
+        Units.radiansToDegrees(mShoulderEncoder.getDistance() - Units.degreesToRadians(mPeriodicIO.shoulderAngle)));
 
     mShoulderMotor.setVoltage(pidOutput);
 
