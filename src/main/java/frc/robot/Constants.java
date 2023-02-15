@@ -40,10 +40,18 @@ public final class Constants {
   }
 
   public static class Arm {
+
+    public static final double kSimulationWidth = 300; // Inches
+    public static final double kSimulationHeight = 120; // Inches
+
+    public static final double kShoulderPivotHeight = 18; // Inches
+
     public static class Shoulder {
       public static final int kMotorId = 13;
+      public static final double kLength = 30; // Inches
+      public static final double kMass = Units.lbsToKilograms(15); // Kg
       public static final double kMinAngle = Units.degreesToRadians(-45.0);
-      public static final double kMaxAngle = Units.degreesToRadians(45.0);
+      public static final double kMaxAngle = Units.degreesToRadians(225.0);
     }
 
     public static class Elbow {

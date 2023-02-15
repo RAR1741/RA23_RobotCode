@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -20,30 +18,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
-import frc.robot.simulation.SimulatableCANSparkMax;
 
 public class Arm extends Subsystem {
 
   private static Arm arm = null;
 
-  private static final double kShoulderMotorP = 1.0;
-  private static final double kShoulderMotorI = 0.0;
+  private static final double kShoulderMotorP = 0.1;
+  private static final double kShoulderMotorI = 0.01;
   private static final double kShoulderMotorD = 0.0;
 
   // private static final double kElbowMotorP = 1.0;
   // private static final double kElbowMotorI = 0.0;
   // private static final double kElbowMotorD = 0.0;
 
-  // distance per pulse = (angle per revolution) / (pulses per revolution)
-  private static final double kShoulderDegreesPerPulse = 2.0 * Math.PI / 4096;
-  // private static final double kElbowDegreesPerPulse = 2.0 * Math.PI / 4096;
-
-  private static final double kShoulderGearRatio = 24.0;
+  private static final double kShoulderGearRatio = 100.0;
   // private static final double kElbowGearRatio = 24.0;
 
-  private static final double kShoulderMass = Units.lbsToKilograms(15.0);
+  // distance per pulse = (angle per revolution) / (pulses per revolution)
+  private static final double kShoulderDegreesPerPulse = 2 * Math.PI / 4096;
+  // private static final double kElbowDegreesPerPulse = 2.0 * Math.PI / 4096;
+
   // private static final double kElbowMass = Units.lbsToKilograms(10.0);
-  private static final double kShoulderLength = Units.inchesToMeters(30);
   // private static final double kElbowLength = Units.inchesToMeters(20);
 
   private final DCMotor mShoulderGearbox = DCMotor.getNEO(1);
@@ -54,9 +49,11 @@ public class Arm extends Subsystem {
   // kElbowMotorI, kElbowMotorD);
 
   // TOOD: figure out how to use the SparkMax
-  private final PWMSparkMax mShoulderMotor2 = new PWMSparkMax(1);
-  private final SimulatableCANSparkMax mShoulderMotor = new SimulatableCANSparkMax(Constants.Arm.Shoulder.kMotorId,
-      MotorType.kBrushless);
+  private final PWMSparkMax mShoulderMotor = new PWMSparkMax(1);
+  // private final SimulatableCANSparkMax mShoulderMotor = new
+  // SimulatableCANSparkMax(Constants.Arm.Shoulder.kMotorId,
+  // MotorType.kBrushless);
+
   // private final SimulatableCANSparkMax mElbowMotor = new
   // SimulatableCANSparkMax(Constants.Arm.Elbow.kMotorId,
   // MotorType.kBrushless);
@@ -64,22 +61,25 @@ public class Arm extends Subsystem {
   private final SingleJointedArmSim mShoulderSim = new SingleJointedArmSim(
       mShoulderGearbox,
       kShoulderGearRatio,
-      SingleJointedArmSim.estimateMOI(kShoulderLength, kShoulderMass),
-      kShoulderLength,
+      SingleJointedArmSim.estimateMOI(Units.inchesToMeters(Constants.Arm.Shoulder.kLength),
+          Constants.Arm.Shoulder.kMass),
+      Units.inchesToMeters(Constants.Arm.Shoulder.kLength),
       Constants.Arm.Shoulder.kMinAngle,
       Constants.Arm.Shoulder.kMaxAngle,
-      kShoulderMass,
       true);
 
   // This isn't a real encoder...
   private final Encoder mShoulderEncoder = new Encoder(20, 21);
   private final EncoderSim mShoulderEncoderSim = new EncoderSim(mShoulderEncoder);
 
-  // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
-  private final Mechanism2d mMech2d = new Mechanism2d(60, 60);
-  private final MechanismRoot2d mShoulderPivot = mMech2d.getRoot("ArmShoulderPivot", 30, 30);
-  private final MechanismLigament2d mArmTower = mShoulderPivot.append(
-      new MechanismLigament2d("ArmTower", 30, -90));
+  // Create a Mechanism2d display of an Arm with a fixed ArmBase and moving Arm.
+  private final Mechanism2d mMech2d = new Mechanism2d(Constants.Arm.kSimulationWidth, Constants.Arm.kSimulationHeight);
+
+  private final MechanismRoot2d mShoulderPivot = mMech2d.getRoot("ArmShoulderPivot", Constants.Arm.kSimulationWidth / 2,
+      Constants.Arm.kShoulderPivotHeight);
+
+  private final MechanismLigament2d mArmBase = mShoulderPivot.append(
+      new MechanismLigament2d("ArmBase", Constants.Arm.kShoulderPivotHeight, -90));
 
   private final MechanismLigament2d mArm = mShoulderPivot.append(
       new MechanismLigament2d(
@@ -113,7 +113,7 @@ public class Arm extends Subsystem {
 
     SmartDashboard.putData("Arm Sim", mMech2d);
 
-    mArmTower.setColor(new Color8Bit(Color.kBlue));
+    mArmBase.setColor(new Color8Bit(Color.kBlue));
 
     if (!Preferences.containsKey("shoulderAngle")) {
       Preferences.setDouble("shoulderAngle", mPeriodicIO.shoulderAngle);
@@ -133,16 +133,16 @@ public class Arm extends Subsystem {
     // voltage
     mShoulderEncoderSim.setDistance(mShoulderSim.getAngleRads());
 
-    // SimBattery estimates loaded battery voltages
-    RoboRioSim.setVInVoltage(
-        BatterySim.calculateDefaultBatteryLoadedVoltage(mShoulderSim.getCurrentDrawAmps()));
+    // SimBattery estimates loaded battery voltages RoboRioSim.setVInVoltage(
+    BatterySim.calculateDefaultBatteryLoadedVoltage(mShoulderSim.getCurrentDrawAmps());
 
     mPeriodicIO.shoulderAngle = Preferences.getDouble("shoulderAngle", mPeriodicIO.shoulderAngle);
 
     // System.out.println("Shoulder Angle: " + mPeriodicIO.shoulderAngle);
 
-    var pidOutput = mShoulderPID.calculate(mShoulderEncoder.getDistance(),
-        Units.degreesToRadians(mPeriodicIO.shoulderAngle));
+    var pidOutput = mShoulderPID.calculate(mShoulderEncoder.getDistance(), mPeriodicIO.shoulderAngle);
+
+    SmartDashboard.putNumber("Arm Diff", mShoulderEncoder.getDistance() - mPeriodicIO.shoulderAngle);
 
     mShoulderMotor.setVoltage(pidOutput);
 
