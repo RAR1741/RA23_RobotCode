@@ -9,11 +9,14 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
+import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Subsystem;
+import frc.robot.subsystems.Arm.State;
 
 public class Robot extends TimedRobot {
   private final DriverController m_driverController = new DriverController(0, true, true);
+  private final OperatorController m_operatorController = new OperatorController(1, true, true);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xRateLimiter = new SlewRateLimiter(3);
@@ -113,6 +116,21 @@ public class Robot extends TimedRobot {
     // if (mDriverController.getWantsResetGyro()) {
     // m_swerve.resetGyro();
     // }
+
+    if (m_operatorController.getWantsDefaultState()) {
+      m_arm.setState(State.DEFAULT);
+      System.out.println("Going to default");
+    }
+
+    if(m_operatorController.getHatState(0)) {
+      m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
+      System.out.println("Lowering");
+    }
+
+    if(m_operatorController.getHatState(180)) {
+      m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
+      System.out.println("Raising");
+    }
 
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
