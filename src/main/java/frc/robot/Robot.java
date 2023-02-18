@@ -122,12 +122,12 @@ public class Robot extends TimedRobot {
       System.out.println("Going to default");
     }
 
-    if(m_operatorController.getHatState(0)) {
+    if(m_operatorController.getHatUp()) {
       m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
       System.out.println("Lowering");
     }
-
-    if(m_operatorController.getHatState(180)) {
+    
+    if(m_operatorController.getHatDown()) {
       m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
       System.out.println("Raising");
     }

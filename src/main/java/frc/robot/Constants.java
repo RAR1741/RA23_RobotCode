@@ -91,7 +91,7 @@ public final class Constants {
     public static class Wrist {
       public static final int k_motorId = 14;
       public static final double k_length = 30; // Inches
-      public static final double k_mass = Units.lbsToKilograms(0); // Kg
+      public static final double k_mass = Units.lbsToKilograms(5); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 

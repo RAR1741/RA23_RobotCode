@@ -143,14 +143,6 @@ public class Arm extends Subsystem {
           4,
           new Color8Bit(Color.kGreen)));
 
-  private final MechanismLigament2d m_arm3 = m_arm2.append(
-    new MechanismLigament2d(
-        "Arm3",
-        Constants.Arm.Wrist.k_length,
-        Units.radiansToDegrees(m_wristSim.getAngleRads()),
-        4,
-        new Color8Bit(Color.kRed)));
-
   private static class PeriodicIO {
     // Automated control
     public double shoulderAngle;
@@ -275,7 +267,7 @@ public class Arm extends Subsystem {
           setState(State.LOW);
           break;
         case LOW:
-          setState(State.MEDIUM);
+          setState(State.HIGH);
           break;
         case MEDIUM:
           setState(State.HIGH);
@@ -457,7 +449,6 @@ public class Arm extends Subsystem {
 
     m_arm1.setAngle(Units.radiansToDegrees(m_shoulderSim.getAngleRads()));
     m_arm2.setAngle(Units.radiansToDegrees(m_elbowSim.getAngleRads()));
-    m_arm3.setAngle(Units.radiansToDegrees(m_wristSim.getAngleRads()));
   }
 
   @Override
@@ -474,6 +465,6 @@ public class Arm extends Subsystem {
   @Override
   public void outputTelemetry() {
     // TODO Auto-generated method stub
-
+    SmartDashboard.putString("Arm State", m_state.toString());
   }
 }
