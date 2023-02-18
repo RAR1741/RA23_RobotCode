@@ -257,7 +257,6 @@ public class Arm extends Subsystem {
 
   public void setState(State state) {
     m_state = state;
-    System.out.println(state.toString());
   }
 
   public void raiseStates(boolean max) {
@@ -409,6 +408,24 @@ public class Arm extends Subsystem {
     m_arm1.setAngle(Units.radiansToDegrees(m_shoulderSim.getAngleRads()));
     m_arm2.setAngle(Units.radiansToDegrees(m_elbowSim.getAngleRads()));
   }*/
+
+  //TODO Add wrist limit
+  public void rotWrist(double addedAngle) {
+    m_periodicIO.wristAngle += addedAngle;
+
+    double wristPIDOutput = m_wristPID.calculate(m_shoulderEncoder.getDistance(),
+        Units.degreesToRadians(m_periodicIO.wristAngle));
+
+    m_wristMotor.setVoltage(wristPIDOutput);
+  }
+  
+  private void setAngle(double shoulderAngle) {
+    setAngle(shoulderAngle, m_periodicIO.elbowAngle, m_periodicIO.wristAngle);
+  }
+
+  private void setAngle(double shoulderAngle, double elbowAngle) {
+    setAngle(shoulderAngle, elbowAngle, m_periodicIO.wristAngle);
+  }
 
   private void setAngle(double shoulderAngle, double elbowAngle, double wristAngle) {
     //-- Misunderstood block --//

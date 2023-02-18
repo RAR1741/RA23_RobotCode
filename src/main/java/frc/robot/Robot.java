@@ -124,17 +124,14 @@ public class Robot extends TimedRobot {
 
     if (m_operatorController.getWantsDefaultState()) {
       m_arm.setState(State.DEFAULT);
-      System.out.println("Going to default");
     }
 
     if(m_operatorController.getHatUp()) {
       m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
-      System.out.println("Lowering");
     }
     
     if(m_operatorController.getHatDown()) {
       m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
-      System.out.println("Raising");
     }
 
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
