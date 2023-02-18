@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -157,13 +156,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (m_driverController.getRawButtonPressed(3)) {
-      Preferences.setDouble("shoulderAngle", 0);
-    } else if (m_driverController.getRawButtonPressed(4)) {
-      Preferences.setDouble("shoulderAngle", 90);
-    } else if (m_driverController.getRawButtonPressed(1)) {
-      Preferences.setDouble("shoulderAngle", 180);
-    }
+    // if (m_driverController.getRawButtonPressed(3)) {
+    //   Preferences.setDouble("shoulderAngle", 0);
+    // } else if (m_driverController.getRawButtonPressed(4)) {
+    //   Preferences.setDouble("shoulderAngle", 90);
+    // } else if (m_driverController.getRawButtonPressed(1)) {
+    //   Preferences.setDouble("shoulderAngle", 180);
+    // }
     updateSim();
   }
 
