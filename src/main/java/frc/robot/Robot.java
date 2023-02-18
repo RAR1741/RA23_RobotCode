@@ -13,6 +13,7 @@ import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.Arm.State;
+import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class Robot extends TimedRobot {
   private final DriverController m_driverController = new DriverController(0, true, true);
@@ -25,7 +26,7 @@ public class Robot extends TimedRobot {
 
   // Robot subsystems
   private List<Subsystem> m_allSubsystems = new ArrayList<>();
-  // private final SwerveDrive m_swerve = SwerveDrive.getInstance();
+  private final SwerveDrive m_swerve = SwerveDrive.getInstance();
   private final Arm m_arm = Arm.getInstance();
 
   // private UsbCamera mCamera;
@@ -48,7 +49,7 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    // m_allSubsystems.add(m_swerve);
+    m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
   }
 
@@ -80,6 +81,11 @@ public class Robot extends TimedRobot {
     double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis()) *
         Constants.Drivetrain.k_maxAngularSpeed;
 
+    if(m_driverController.getWantsSlowMode()) {
+      xSpeed *= Constants.Drivetrain.k_slowScaler;
+      ySpeed *= Constants.Drivetrain.k_slowScaler;
+    }
+
     // m_swerve.drive(mDriverController.getForwardAxis(),
     // mDriverController.getStrafeAxis(),
     // 0, true);
@@ -97,7 +103,7 @@ public class Robot extends TimedRobot {
     // if (m_stoppedTimer.hasElapsed(1.0)) {
     // m_swerve.pointDirection(1.0, 0.0, 0.0, false);
     // } else {
-    // m_swerve.drive(xSpeed, ySpeed, rot, true);
+    m_swerve.drive(xSpeed, ySpeed, rot, true);
     // }
 
     // m_swerve.drive(0.3, 0, 0, false);
@@ -113,9 +119,9 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    // if (mDriverController.getWantsResetGyro()) {
-    // m_swerve.resetGyro();
-    // }
+    if (m_driverController.getWantsResetGyro()) {
+    m_swerve.resetGyro();
+    }
 
     if (m_operatorController.getWantsDefaultState()) {
       m_arm.setState(State.DEFAULT);

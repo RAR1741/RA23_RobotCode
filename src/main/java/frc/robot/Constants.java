@@ -16,15 +16,15 @@ public final class Constants {
     public static final double k_height = 80; // Inches
   }
 
-  public static class Drivetrain {
+  public class Drivetrain {
     // Drivetrain wheel offsets
     // TODO: Change for final robot
     public static final double k_xDistance = 0.762; // 30 inches
     public static final double k_yDistance = 0.762; // in meters!
-
+    
     public static final double k_xCenterDistance = k_xDistance / 2.0;
     public static final double k_yCenterDistance = k_yDistance / 2.0;
-
+    
     public static final double k_maxSpeed = 3.0; // 3 meters per second
     public static final double k_maxAngularSpeed = Math.PI; // 1/2 rotation per second
     public static final double k_slowScaler = 0.2;
@@ -38,7 +38,7 @@ public final class Constants {
     }
 
     // Drivetrain (turn) constants
-    public static class Turn {
+    public class Turn {
       // Drivetrain turning offset constants
       public static final double k_FLOffset = 0.130769;
       public static final double k_FROffset = 0.720806;
