@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    m_logger = new Logger();
+    // m_logger = new Logger(); TODO: Replace with WPILib logging
     m_runTimer = new Timer("Timer");
 
     // Set up the Field2d object for simulation
@@ -57,21 +57,21 @@ public class Robot extends TimedRobot {
     m_allSubsystems.add(m_swerve);
 
     // Logger
-    try {
-      m_logger.createLog();
-    } catch (IOException io) {
-      io.printStackTrace();
-    }
+    // try {
+    //   m_logger.createLog();
+    // } catch (IOException io) {
+    //   io.printStackTrace();
+    // }
 
-    m_logger.addLoggable(m_driverController);
-    // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
-    m_logger.collectHeaders();
+    // m_logger.addLoggable(m_driverController);
+    // // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
+    // m_logger.collectHeaders();
 
-		try {
-      m_logger.writeData("Initiation");
-		} catch (IOException io) {
-			io.printStackTrace();
-		}
+		// try {
+    //   m_logger.writeData("Initiation");
+		// } catch (IOException io) {
+		// 	io.printStackTrace();
+		// }
 
     m_runTimer.schedule(new TimerTask() {
       @Override
