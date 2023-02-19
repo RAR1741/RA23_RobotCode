@@ -1,41 +1,41 @@
 package frc.robot.controls.controllers;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.controls.Deadband;
 import frc.robot.controls.SquaredInput;
 
-public class FilteredController extends Joystick {
+public class FilteredController extends GenericHID {
   private static final double DEADBAND_LIMIT = 0.03;
 
-  private boolean useDeadband;
-  private boolean useSquaredInput;
+  private boolean m_useDeadband;
+  private boolean m_useSquaredInput;
 
-  private Deadband deadband = new Deadband(DEADBAND_LIMIT);
-  private SquaredInput squaredInput = new SquaredInput(DEADBAND_LIMIT);
+  private Deadband m_deadband = new Deadband(DEADBAND_LIMIT);
+  private SquaredInput m_squaredInput = new SquaredInput(DEADBAND_LIMIT);
 
   public FilteredController(int port) {
     super(port);
-    useDeadband = false;
-    useSquaredInput = false;
+    m_useDeadband = false;
+    m_useSquaredInput = false;
   }
 
   public FilteredController(int port, boolean useDeadband, boolean useSquaredInput) {
     this(port);
-    this.useDeadband = useDeadband;
-    this.useSquaredInput = useSquaredInput;
+    this.m_useDeadband = useDeadband;
+    this.m_useSquaredInput = useSquaredInput;
   }
 
   public double getFilteredAxis(int axis) {
     double value = this.getRawAxis(axis);
 
     // Apply squared input, if requested
-    if (useSquaredInput) {
-      value = squaredInput.scale(value);
+    if (m_useSquaredInput) {
+      value = m_squaredInput.scale(value);
     }
 
     // Apply deadband, if requested
-    if (useDeadband) {
-      value = deadband.scale(value);
+    if (m_useDeadband) {
+      value = m_deadband.scale(value);
     }
 
     return value;

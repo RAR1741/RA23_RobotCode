@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -18,33 +17,33 @@ import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class Robot extends TimedRobot {
-  private final DriverController mDriverController = new DriverController(0, true, true);
+  private final DriverController m_driverController = new DriverController(0, true, true);
 
   private Autonomous auto;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter mXSpeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter mYSpeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter mRotLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_xRateLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_yRateLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_rotRateLimiter = new SlewRateLimiter(3);
 
   // Robot subsystems
-  private List<Subsystem> mAllSubsystems = new ArrayList<>();
+  private List<Subsystem> m_allSubsystems = new ArrayList<>();
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
 
-  private UsbCamera mCamera;
+  // private UsbCamera mCamera;
 
-  Logger logger;
-  Timer runTimer;
+  Logger m_logger;
+  Timer m_runTimer;
 
-  private final Field2d mField = new Field2d();
+  private final Field2d m_field = new Field2d();
 
   @Override
   public void robotInit() {
-    logger = new Logger();
-    runTimer = new Timer("Timer");
+    m_logger = new Logger();
+    m_runTimer = new Timer("Timer");
 
     // Set up the Field2d object for simulation
-    SmartDashboard.putData("Field", mField);
+    SmartDashboard.putData("Field", m_field);
 
     // Camera server
     /*
@@ -55,31 +54,31 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    mAllSubsystems.add(m_swerve);
+    m_allSubsystems.add(m_swerve);
 
     // Logger
     try {
-      logger.createLog();
+      m_logger.createLog();
     } catch (IOException io) {
       io.printStackTrace();
     }
 
-    logger.addLoggable(mDriverController);
+    m_logger.addLoggable(m_driverController);
     // logger.addLoggable(mOperatorController); // TODO: Uncomment once operator controller is created
-    logger.collectHeaders();
+    m_logger.collectHeaders();
 
 		try {
-      logger.writeData("Initiation");
+      m_logger.writeData("Initiation");
 		} catch (IOException io) {
 			io.printStackTrace();
 		}
 
-    runTimer.schedule(new TimerTask() {
+    m_runTimer.schedule(new TimerTask() {
       @Override
       public void run() {
-          logger.collectData();
+          m_logger.collectData();
           try {
-              logger.writeData(null);
+              m_logger.writeData(null);
           } catch (IOException io) {
               io.printStackTrace();
           }
@@ -89,7 +88,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    mAllSubsystems.forEach(subsystem -> subsystem.periodic());
+    m_allSubsystems.forEach(subsystem -> subsystem.periodic());
   }
 
   @Override
@@ -103,28 +102,44 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void teleopInit() {
+
+  }
+
+  @Override
   public void teleopPeriodic() {
-    double xSpeed = mXSpeedLimiter.calculate(mDriverController.getForwardAxis())
-        * SwerveDrive.kMaxSpeed;
+    double xSpeed = m_xRateLimiter.calculate(m_driverController.getForwardAxis())
+        * Constants.Drivetrain.k_maxSpeed;
 
-    double ySpeed = mYSpeedLimiter.calculate(mDriverController.getStrafeAxis())
-        * SwerveDrive.kMaxSpeed;
+    double ySpeed = m_yRateLimiter.calculate(m_driverController.getStrafeAxis())
+        * Constants.Drivetrain.k_maxSpeed;
 
-    double rot = mRotLimiter.calculate(mDriverController.getTurnAxis()) *
-        SwerveDrive.kMaxAngularSpeed;
+    double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis())
+        * Constants.Drivetrain.k_maxAngularSpeed;
+    
+    if(m_driverController.getWantsSlowMode()) {
+      xSpeed *= Constants.Drivetrain.k_slowScaler;
+      ySpeed *= Constants.Drivetrain.k_slowScaler;
+    }
 
-    // m_swerve.drive(mDriverController.getForwardAxis(),
-    // mDriverController.getStrafeAxis(),
-    // 0, true);
+    // if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
+    // m_stoppedTimer.start();
+    // } else {
+    // m_stoppedTimer.reset();
+    // m_stoppedTimer.stop();
+    // }
 
-    // mDrive.slowMode(mDriverController.getWantsSlowMode());
-
+    // if (m_stoppedTimer.hasElapsed(1.0)) {
+    // m_swerve.pointModules(1.0, 0.0, 0.0, false);
+    // } else {
     m_swerve.drive(xSpeed, ySpeed, rot, true);
+    // }
 
-    // m_swerve.drive(1, 0, 0, false);
-    // m_swerve.drive(0, 6, 0, false);
+    // m_swerve.drive(0.3, 0, 0, false);
+    // m_swerve.drive(0, 0.1, 0, false);
+    // m_swerve.drive(0, 0, 0.1, false);
 
-    // // Intake controls
+    // Intake controls
     /*
      * if (mDriverController.getWantsIntakeOpen()) {
      * // m_intake.open();
@@ -133,9 +148,15 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    mAllSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
-    mAllSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
-    mAllSubsystems.forEach(subsystem -> subsystem.writeToLog());
+    if (m_driverController.getWantsResetGyro()) {
+      m_swerve.resetGyro();
+    }
+
+    m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
+    m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
+    m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
+
+    m_driverController.outputTelemetry();
   }
 
   @Override
@@ -145,20 +166,17 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    mAllSubsystems.forEach(subsystem -> subsystem.stop());
+    m_allSubsystems.forEach(subsystem -> subsystem.stop());
   }
 
   @Override
   public void disabledPeriodic() {
-    // Stop the robot when disabled.
-    m_swerve.drive(0.0, 0.0, 0.0, true);
-
     updateSim();
   }
 
   private void updateSim() {
     // Update the odometry in the sim.
     // mDrive.simulationPeriodic();
-    mField.setRobotPose(m_swerve.getPose());
+    m_field.setRobotPose(m_swerve.getPose());
   }
 }

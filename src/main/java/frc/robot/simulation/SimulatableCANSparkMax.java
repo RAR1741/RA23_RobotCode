@@ -5,15 +5,15 @@ import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 
 public class SimulatableCANSparkMax extends CANSparkMax {
-  SimDeviceSim mCANSparkMaxSim;
+  SimDeviceSim m_CANSparkMaxSim;
 
-  SimDouble mCANSparkMaxSimAppliedOutput;
+  SimDouble m_CANSparkMaxSimAppliedOutput;
 
   public SimulatableCANSparkMax(int deviceId, MotorType type) {
     super(deviceId, type);
 
-    mCANSparkMaxSim = new SimDeviceSim("SPARK MAX ", deviceId);
-    mCANSparkMaxSimAppliedOutput = mCANSparkMaxSim.getDouble("Applied Output");
+    m_CANSparkMaxSim = new SimDeviceSim("SPARK MAX ", deviceId);
+    m_CANSparkMaxSimAppliedOutput = m_CANSparkMaxSim.getDouble("Applied Output");
 
     // TODO: Add other simulation fields
   }

@@ -11,11 +11,19 @@
     },
     "transitory": {
       "SmartDashboard": {
+        "DriverController": {
+          "open": false
+        },
+        "DriverInput": {
+          "open": false
+        },
         "Drivetrain": {
           "BR": {
             "open": true
           },
-          "open": true
+          "Gyro": {
+            "open": false
+          }
         },
         "gyro": {
           "open": true
@@ -52,7 +60,7 @@
               "min": -1.0
             }
           ],
-          "height": 185,
+          "height": 168,
           "name": "FL",
           "series": [
             {
@@ -96,7 +104,7 @@
               "min": -1.0
             }
           ],
-          "height": 185,
+          "height": 168,
           "name": "FR",
           "series": [
             {
@@ -140,7 +148,7 @@
               "min": -1.0
             }
           ],
-          "height": 185,
+          "height": 168,
           "name": "BL",
           "series": [
             {
@@ -188,7 +196,7 @@
               "min": -1.0
             }
           ],
-          "height": 185,
+          "height": 168,
           "name": "BR",
           "series": [
             {
