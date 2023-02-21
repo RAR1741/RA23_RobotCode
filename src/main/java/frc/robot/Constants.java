@@ -19,8 +19,8 @@ public final class Constants {
   public class Drivetrain {
     // Drivetrain wheel offsets
     // TODO: Change for final robot
-    public static final double k_xDistance = 0.762; // 30 inches
-    public static final double k_yDistance = 0.762; // in meters!
+    public static final double k_xDistance = 0.762; // 30 inches Forward/Backward
+    public static final double k_yDistance = 0.762; // in meters! Side-to-Side
     
     public static final double k_xCenterDistance = k_xDistance / 2.0;
     public static final double k_yCenterDistance = k_yDistance / 2.0;
@@ -74,6 +74,7 @@ public final class Constants {
 
     public static class Elbow {
       public static final int k_motorId = 14;
+      public static final int k_encoderId = 1; // DIO
       public static final double k_length = 30; // Inches
       public static final double k_mass = Units.lbsToKilograms(100); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
@@ -90,6 +91,7 @@ public final class Constants {
 
     public static class Wrist {
       public static final int k_motorId = 14;
+      public static final int k_encoderId = 0; // DIO
       public static final double k_length = 30; // Inches
       public static final double k_mass = Units.lbsToKilograms(5); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
