@@ -86,6 +86,7 @@ public final class Constants {
       public static final double k_highPrimeState = 0.000;
       public static final double k_mediumPrimeState = 0.000;
       public static final double k_lowPrimeState = 0.000;
+      public static final int k_encoder = 1;
     }
 
     public static class Wrist {
@@ -102,6 +103,7 @@ public final class Constants {
       public static final double k_highPrimeState = 0.000;
       public static final double k_mediumPrimeState = 0.000;
       public static final double k_lowPrimeState = 0.000;
+      public static final int k_encoder = 0;
     }
   }
 

@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
   private final Arm m_arm = Arm.getInstance();
 
+  private int test_state = 2;
+
   // private UsbCamera mCamera;
 
   // private final Timer m_stoppedTimer = new Timer();
@@ -54,7 +56,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    m_allSubsystems.forEach(subsystem -> subsystem.periodic());
+    // m_allSubsystems.forEach(subsystem -> subsystem.periodic());
   }
 
   @Override
@@ -161,6 +163,27 @@ public class Robot extends TimedRobot {
     //   Preferences.setDouble("shoulderAngle", 180);
     // }
     updateSim();
+  }
+
+  @Override
+  public void testPeriodic() {
+    switch(test_state) {
+      case 0:    
+        m_arm.manual(m_operatorController.getRawAxis(5), 0, 0);
+        break;
+      case 1:
+        m_arm.manual(0, m_operatorController.getRawAxis(5), 0);
+        break;
+      case 2:
+        m_arm.manual(0, 0, m_operatorController.getRawAxis(5));
+        break;
+      default:
+        break;
+    }
+
+    if(m_operatorController.getRawButtonPressed(3)) {
+      test_state = test_state == 2 ? 0 : test_state + 1;
+    }
   }
 
   private void updateSim() {
