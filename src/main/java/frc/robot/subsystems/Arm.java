@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -57,22 +61,13 @@ public class Arm extends Subsystem {
   private final PIDController m_elbowPID = new PIDController(k_elbowMotorP, k_elbowMotorI, k_elbowMotorD);
   private final PIDController m_wristPID = new PIDController(k_wristMotorP, k_wristMotorI, k_wristMotorD);
 
-  // TOOD: figure out how to use the SparkMax
-  private final PWMSparkMax m_shoulderMotor = new PWMSparkMax(1);
-  // private final SimulatableCANSparkMax mShoulderMotor = new
-  // SimulatableCANSparkMax(Constants.Arm.Shoulder.kMotorId,
-  // MotorType.kBrushless);
+  private final CANSparkMax m_shoulderMotor = new CANSparkMax(Constants.Arm.Shoulder.k_motorId, MotorType.kBrushless);
+  private final CANSparkMax m_elbowMotor = new CANSparkMax(Constants.Arm.Elbow.k_motorId, MotorType.kBrushless);
+  private final CANSparkMax m_wristMotor = new CANSparkMax(Constants.Arm.Wrist.k_motorId, MotorType.kBrushless);
 
-  private final PWMSparkMax m_elbowMotor = new PWMSparkMax(2);
-  // private final SimulatableCANSparkMax mElbowMotor = new
-  // SimulatableCANSparkMax(Constants.Arm.Elbow.kMotorId,
-  // MotorType.kBrushless);
-
-  private final PWMSparkMax m_wristMotor = new PWMSparkMax(3);
-  // private final SimulatableCANSparkMax mElbowMotor = new
-  // SimulatableCANSparkMax(Constants.Arm.Elbow.kMotorId,
-  // MotorType.kBrushless);
-
+  // private final PWMSparkMax m_shoulderMotor = new PWMSparkMax(1); //ew pwm
+  // private final PWMSparkMax m_elbowMotor = new PWMSparkMax(2);
+  // private final PWMSparkMax m_wristMotor = new PWMSparkMax(3);
   private final SingleJointedArmSim m_shoulderSim = new SingleJointedArmSim(
       m_shoulderGearbox,
       k_shoulderGearRatio,
@@ -169,11 +164,15 @@ public class Arm extends Subsystem {
     m_elbowEncoder.setDistancePerPulse(k_elbowDegreesPerPulse);
     m_wristEncoder.setDistancePerPulse(k_wristDegreesPerPulse);
 
+    m_shoulderMotor.setIdleMode(IdleMode.kBrake);
+    m_elbowMotor.setIdleMode(IdleMode.kBrake);
+    m_wristMotor.setIdleMode(IdleMode.kBrake);
+
     addAdditionalDrawings();
 
     SmartDashboard.putData("Arm Sim", m_mech2d);
 
-    System.out.println("Hey, I just met you\nAnd this is CRAZY\nBut here's my number\nSo call me maybe");
+    System.out.println("Hey, I just met you,\nAnd this is CRAZY\nBut here's my number,\nSo call me, maybe");
 
     if (!Preferences.containsKey("shoulderAngle")) {
       Preferences.setDouble("shoulderAngle", m_periodicIO.shoulderAngle);
@@ -367,6 +366,12 @@ public class Arm extends Subsystem {
     }
   }
 
+  public void manual(double shoulder, double elbow, double wrist) {
+    m_shoulderMotor.set(shoulder);
+    m_elbowMotor.set(elbow);
+    m_wristMotor.set(wrist);
+  }
+
   //TODO I don't really understand this and didn't want to break anything, so I just disabled it
   /*@Override
   public void periodic() {
@@ -408,7 +413,7 @@ public class Arm extends Subsystem {
     m_arm1.setAngle(Units.radiansToDegrees(m_shoulderSim.getAngleRads()));
     m_arm2.setAngle(Units.radiansToDegrees(m_elbowSim.getAngleRads()));
   }*/
-
+  
   //TODO Add wrist limit
   public void rotWrist(double addedAngle) {
     m_periodicIO.wristAngle += addedAngle;
@@ -471,6 +476,8 @@ public class Arm extends Subsystem {
   @Override
   public void stop() {
     m_shoulderMotor.set(0);
+    m_elbowMotor.set(0);
+    m_wristMotor.set(0);
   }
 
   @Override
@@ -481,7 +488,7 @@ public class Arm extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    // TODO Auto-generated method stub
     SmartDashboard.putString("Arm State", m_state.toString());
+
   }
 }
