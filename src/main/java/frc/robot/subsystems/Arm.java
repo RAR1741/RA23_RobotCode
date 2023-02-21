@@ -433,27 +433,6 @@ public class Arm extends Subsystem {
   }
 
   private void setAngle(double shoulderAngle, double elbowAngle, double wristAngle) {
-    //-- Misunderstood block --//
-    m_shoulderSim.setInput(m_shoulderMotor.get() * RobotController.getBatteryVoltage());
-    m_elbowSim.setInput(m_elbowMotor.get() * RobotController.getBatteryVoltage());
-    m_wristSim.setInput(m_wristMotor.get() * RobotController.getBatteryVoltage());
-
-    m_shoulderSim.update(0.020);
-    m_elbowSim.update(0.020);
-    m_wristSim.update(0.020);
-
-    m_shoulderEncoderSim.setDistance(m_shoulderSim.getAngleRads());
-    m_elbowEncoderSim.setDistance(m_elbowSim.getAngleRads());
-    m_wristEncoderSim.setDistance(m_wristSim.getAngleRads());
-
-    BatterySim.calculateDefaultBatteryLoadedVoltage(
-        m_shoulderSim.getCurrentDrawAmps() + m_elbowSim.getCurrentDrawAmps() + m_wristSim.getCurrentDrawAmps());
-
-    m_periodicIO.shoulderAngle = Preferences.getDouble("shoulderAngle", m_periodicIO.shoulderAngle);
-    m_periodicIO.elbowAngle = Preferences.getDouble("elbowAngle", m_periodicIO.elbowAngle);
-    m_periodicIO.wristAngle = Preferences.getDouble("wristAngle", m_periodicIO.wristAngle);
-    //-- --//
-
     m_periodicIO.shoulderAngle = shoulderAngle;
     m_periodicIO.elbowAngle = elbowAngle;
     m_periodicIO.wristAngle = wristAngle;
@@ -468,9 +447,6 @@ public class Arm extends Subsystem {
     m_shoulderMotor.setVoltage(shoulderPIDOutput);
     m_elbowMotor.setVoltage(elbowPIDOutput);
     m_wristMotor.setVoltage(wristPIDOutput);
-
-    m_arm1.setAngle(Units.radiansToDegrees(m_shoulderSim.getAngleRads()));
-    m_arm2.setAngle(Units.radiansToDegrees(m_elbowSim.getAngleRads()));
   }
 
   @Override
@@ -482,7 +458,6 @@ public class Arm extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    // TODO Auto-generated method stub
 
   }
 
