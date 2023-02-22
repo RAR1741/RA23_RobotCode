@@ -76,4 +76,8 @@ public class OperatorController extends FilteredController {
   public boolean getWantsGroundPosition() {
     return this.getRawButton(1);
   }
+
+public boolean getWantsGripToggle() {
+    return this.getRawButton(5);
+}
 }

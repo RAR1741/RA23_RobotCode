@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.RobotController;
@@ -99,14 +100,14 @@ public class Arm extends Subsystem {
       true);
 
   // This isn't a real encoder...
-  private final Encoder m_shoulderEncoder = new Encoder(20, 21);
-  private final EncoderSim m_shoulderEncoderSim = new EncoderSim(m_shoulderEncoder);
+  // private final Encoder m_shoulderEncoder = new Encoder(20, 21);
+  // private final EncoderSim m_shoulderEncoderSim = new EncoderSim(m_shoulderEncoder);
 
-  private final Encoder m_elbowEncoder = new Encoder(22, 23);
-  private final EncoderSim m_elbowEncoderSim = new EncoderSim(m_elbowEncoder);
+  private final DutyCycleEncoder m_elbowEncoder = new DutyCycleEncoder(Constants.Arm.Elbow.k_encoderId);
+  // private final EncoderSim m_elbowEncoderSim = new EncoderSim(m_elbowEncoder);
 
-  private final Encoder m_wristEncoder = new Encoder(24, 25);
-  private final EncoderSim m_wristEncoderSim = new EncoderSim(m_wristEncoder);
+  private final DutyCycleEncoder m_wristEncoder = new DutyCycleEncoder(Constants.Arm.Wrist.k_encoderId);
+  // private final EncoderSim m_wristEncoderSim = new EncoderSim(m_wristEncoder);
 
   // Create a Mechanism2d display of an Arm with a fixed ArmBase and moving Arm.
   private final Mechanism2d m_mech2d = new Mechanism2d(Constants.Simulation.k_width, Constants.Simulation.k_height);
@@ -160,9 +161,9 @@ public class Arm extends Subsystem {
   }
 
   private Arm() {
-    m_shoulderEncoder.setDistancePerPulse(k_shoulderDegreesPerPulse);
-    m_elbowEncoder.setDistancePerPulse(k_elbowDegreesPerPulse);
-    m_wristEncoder.setDistancePerPulse(k_wristDegreesPerPulse);
+    // m_shoulderEncoder.setDistancePerPulse(k_shoulderDegreesPerPulse);
+    m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
+    m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
 
     m_shoulderMotor.setIdleMode(IdleMode.kBrake);
     m_elbowMotor.setIdleMode(IdleMode.kBrake);
@@ -415,11 +416,11 @@ public class Arm extends Subsystem {
   }*/
   
   //TODO Add wrist limit
-  public void rotWrist(double addedAngle) {
+  public void rotWrist(double addedAngle) { //This should work (always needs to be positive)
     m_periodicIO.wristAngle += addedAngle;
 
-    double wristPIDOutput = m_wristPID.calculate(m_shoulderEncoder.getDistance(),
-        Units.degreesToRadians(m_periodicIO.wristAngle));
+    double wristPIDOutput = Math.abs(m_wristPID.calculate(m_wristEncoder.getDistance(),
+        Units.degreesToRadians(m_periodicIO.wristAngle)));
 
     m_wristMotor.setVoltage(wristPIDOutput);
   }
@@ -437,11 +438,11 @@ public class Arm extends Subsystem {
     m_periodicIO.elbowAngle = elbowAngle;
     m_periodicIO.wristAngle = wristAngle;
 
-    double shoulderPIDOutput = m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
-        Units.degreesToRadians(m_periodicIO.shoulderAngle));
+    double shoulderPIDOutput = 0; /*m_shoulderPID.calculate(m_shoulderEncoder.getDistance(), // TODO: Fix this
+        Units.degreesToRadians(m_periodicIO.shoulderAngle));*/
     double elbowPIDOutput = m_elbowPID.calculate(m_elbowEncoder.getDistance(),
         Units.degreesToRadians(m_periodicIO.elbowAngle));
-    double wristPIDOutput = m_wristPID.calculate(m_shoulderEncoder.getDistance(),
+    double wristPIDOutput = m_wristPID.calculate(m_wristEncoder.getDistance(),
         Units.degreesToRadians(m_periodicIO.wristAngle));
 
     m_shoulderMotor.setVoltage(shoulderPIDOutput);
@@ -463,7 +464,9 @@ public class Arm extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    SmartDashboard.putString("Arm State", m_state.toString());
+    SmartDashboard.putString("Arm/State", m_state.toString());
 
+    SmartDashboard.putNumber("Arm/Wrist Position",m_wristEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm/Elbow Position",m_elbowEncoder.getAbsolutePosition());
   }
 }

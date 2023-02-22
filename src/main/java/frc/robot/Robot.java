@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +30,9 @@ public class Robot extends TimedRobot {
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
   private final Arm m_arm = Arm.getInstance();
 
-  private int test_state = 2;
+  private Compressor m_compressor;
+
+  private int test_state = 1;
 
   // private UsbCamera mCamera;
 
@@ -41,6 +45,8 @@ public class Robot extends TimedRobot {
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
 
+    m_compressor = new Compressor(PneumaticsModuleType.REVPH);
+
     // Camera server
     /*
      * if (RobotBase.isReal()) {
@@ -51,12 +57,12 @@ public class Robot extends TimedRobot {
      */
 
     m_allSubsystems.add(m_swerve);
-    m_allSubsystems.add(m_arm);
+    // m_allSubsystems.add(m_arm);
   }
 
   @Override
   public void robotPeriodic() {
-    // m_allSubsystems.forEach(subsystem -> subsystem.periodic());
+    m_allSubsystems.forEach(subsystem -> subsystem.periodic());
   }
 
   @Override
@@ -121,7 +127,7 @@ public class Robot extends TimedRobot {
      */
 
     if (m_driverController.getWantsResetGyro()) {
-    m_swerve.resetGyro();
+      m_swerve.resetGyro();
     }
 
     if (m_operatorController.getWantsDefaultState()) {
@@ -134,6 +140,10 @@ public class Robot extends TimedRobot {
     
     if(m_operatorController.getHatDown()) {
       m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
+    }
+
+    if(m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
+
     }
 
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
@@ -167,15 +177,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+    m_swerve.drive(0,0,0,false);
     switch(test_state) {
       case 0:    
-        m_arm.manual(m_operatorController.getRawAxis(5), 0, 0);
+        m_arm.manual(m_operatorController.getRawAxis(5) * 0.2, 0, 0);
         break;
       case 1:
-        m_arm.manual(0, m_operatorController.getRawAxis(5), 0);
+        m_arm.manual(0, m_operatorController.getRawAxis(5) * 0.5, 0);
         break;
       case 2:
-        m_arm.manual(0, 0, m_operatorController.getRawAxis(5));
+        m_arm.manual(0, 0, m_operatorController.getRawAxis(5) * 0.2);
         break;
       default:
         break;
@@ -184,6 +195,8 @@ public class Robot extends TimedRobot {
     if(m_operatorController.getRawButtonPressed(3)) {
       test_state = test_state == 2 ? 0 : test_state + 1;
     }
+
+    m_arm.outputTelemetry();
   }
 
   private void updateSim() {
