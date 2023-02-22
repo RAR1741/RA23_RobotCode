@@ -20,7 +20,7 @@ public final class Constants {
     // Drivetrain wheel offsets
     // TODO: Change for final robot
     public static final double k_xDistance = 0.762; // 30 inches Forward/Backward
-    public static final double k_yDistance = 0.762; // in meters! Side-to-Side
+    public static final double k_yDistance = 0.6858; // in meters! Side-to-Side
     
     public static final double k_xCenterDistance = k_xDistance / 2.0;
     public static final double k_yCenterDistance = k_yDistance / 2.0;
@@ -40,10 +40,10 @@ public final class Constants {
     // Drivetrain (turn) constants
     public class Turn {
       // Drivetrain turning offset constants
-      public static final double k_FLOffset = 0.130769;
-      public static final double k_FROffset = 0.720806;
-      public static final double k_BLOffset = 0.198625;
-      public static final double k_BROffset = 0.425397;
+      public static final double k_FLOffset = 0.129074;
+      public static final double k_FROffset = 0.722532;
+      public static final double k_BLOffset = 0.205462;
+      public static final double k_BROffset = 0.412673;
 
       public static final int k_FLMotorId = 9;
       public static final int k_FRMotorId = 10;
@@ -87,11 +87,10 @@ public final class Constants {
       public static final double k_highPrimeState = 0.000;
       public static final double k_mediumPrimeState = 0.000;
       public static final double k_lowPrimeState = 0.000;
-      public static final int k_encoder = 1;
     }
 
     public static class Wrist {
-      public static final int k_motorId = 14;
+      public static final int k_motorId = 15;
       public static final int k_encoderId = 0; // DIO
       public static final double k_length = 30; // Inches
       public static final double k_mass = Units.lbsToKilograms(5); // Kg
@@ -105,7 +104,6 @@ public final class Constants {
       public static final double k_highPrimeState = 0.000;
       public static final double k_mediumPrimeState = 0.000;
       public static final double k_lowPrimeState = 0.000;
-      public static final int k_encoder = 0;
     }
   }
 
