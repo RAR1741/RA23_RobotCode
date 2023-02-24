@@ -183,7 +183,7 @@ public class Robot extends TimedRobot {
         m_arm.manual(m_operatorController.getRawAxis(5) * 0.2, 0, 0);
         break;
       case 1:
-        m_arm.manual(0, m_operatorController.getRawAxis(5) * 0.5, 0);
+        m_arm.manual(0, m_operatorController.getRawAxis(5) * 0.2, 0);
         break;
       case 2:
         m_arm.manual(0, 0, m_operatorController.getRawAxis(5) * 0.2);
