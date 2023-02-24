@@ -134,11 +134,11 @@ public class Robot extends TimedRobot {
       m_arm.setState(State.DEFAULT);
     }
 
-    if(m_operatorController.getHatUp()) {
+    if(m_operatorController.getWantsCycleStateDown()) {
       m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
     }
     
-    if(m_operatorController.getHatDown()) {
+    if(m_operatorController.getWantsCycleStateUp()) {
       m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
     }
 
