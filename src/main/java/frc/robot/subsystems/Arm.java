@@ -467,6 +467,9 @@ public class Arm extends Subsystem {
     SmartDashboard.putString("Arm/State", m_state.toString());
 
     SmartDashboard.putNumber("Arm/Wrist Position",m_wristEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Arm/Elbow Position",m_elbowEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm/Elbow/Position",m_elbowEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm/Elbow/Velocity", m_elbowMotor.get());
+    SmartDashboard.putNumber("Arm/Elbow/Temperature", m_elbowMotor.getMotorTemperature());
+    SmartDashboard.putNumber("Arm/Elbow/Current", m_elbowMotor.getOutputCurrent());
   }
 }

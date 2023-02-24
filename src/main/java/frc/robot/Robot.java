@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
 
-    m_compressor = new Compressor(PneumaticsModuleType.REVPH);
+    // m_compressor = new Compressor(PneumaticsModuleType.REVPH);
 
     // Camera server
     /*
@@ -56,8 +56,8 @@ public class Robot extends TimedRobot {
      * }
      */
 
-    m_allSubsystems.add(m_swerve);
-    // m_allSubsystems.add(m_arm);
+    // m_allSubsystems.add(m_swerve);
+    m_allSubsystems.add(m_arm);
   }
 
   @Override
