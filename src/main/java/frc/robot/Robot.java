@@ -13,7 +13,6 @@ import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Subsystem;
-import frc.robot.subsystems.Arm.State;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class Robot extends TimedRobot {
@@ -131,15 +130,15 @@ public class Robot extends TimedRobot {
     }
 
     if (m_operatorController.getWantsDefaultState()) {
-      m_arm.setState(State.DEFAULT);
+      // m_arm.setState(State.DEFAULT);
     }
 
     if(m_operatorController.getWantsCycleStateDown()) {
-      m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
+      // m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
     }
     
     if(m_operatorController.getWantsCycleStateUp()) {
-      m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
+      // m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
     }
 
     if(m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {

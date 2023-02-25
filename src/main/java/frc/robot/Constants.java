@@ -54,56 +54,33 @@ public final class Constants {
 
   public static class Arm {
     //TODO Update for actual robot
-    public static final double k_shoulderPivotHeight = 18; // Inches
+    public static final double k_shoulderPivotHeight = 19; // Inches
 
     public static class Shoulder {
       public static final int k_motorId = 13;
-      public static final double k_length = 30; // Inches
+      public static final int k_encoderId = 2; // DIO
+      public static final double k_length = 30.5; // Inches
       public static final double k_mass = Units.lbsToKilograms(15); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
-
-      public static final double k_defaultState = 0.000;
-      public static final double k_lowState = 0.000;
-      public static final double k_mediumState = 0.000;
-      public static final double k_highState = 0.000;
-      public static final double k_highPrimeState = 0.000;
-      public static final double k_mediumPrimeState = 0.000;
-      public static final double k_lowPrimeState = 0.000;
     }
 
     public static class Elbow {
       public static final int k_motorId = 14;
       public static final int k_encoderId = 1; // DIO
-      public static final double k_length = 30; // Inches
+      public static final double k_length = 39; // Inches
       public static final double k_mass = Units.lbsToKilograms(100); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
-
-      public static final double k_defaultState = 0.000;
-      public static final double k_lowState = 0.000;
-      public static final double k_mediumState = 0.000;
-      public static final double k_highState = 0.000;
-      public static final double k_highPrimeState = 0.000;
-      public static final double k_mediumPrimeState = 0.000;
-      public static final double k_lowPrimeState = 0.000;
     }
 
     public static class Wrist {
       public static final int k_motorId = 15;
       public static final int k_encoderId = 0; // DIO
-      public static final double k_length = 30; // Inches
+      public static final double k_length = 0; // Inches TODO: May remove
       public static final double k_mass = Units.lbsToKilograms(5); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
-
-      public static final double k_defaultState = 0.000;
-      public static final double k_lowState = 0.000;
-      public static final double k_mediumState = 0.000;
-      public static final double k_highState = 0.000;
-      public static final double k_highPrimeState = 0.000;
-      public static final double k_mediumPrimeState = 0.000;
-      public static final double k_lowPrimeState = 0.000;
     }
   }
 

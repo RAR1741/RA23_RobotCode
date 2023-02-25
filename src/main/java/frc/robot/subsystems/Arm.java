@@ -8,10 +8,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
@@ -24,14 +22,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
 
 public class Arm extends Subsystem {
-
-  public enum State {
-    DEFAULT, LOW, MEDIUM, HIGH, HIGH_PRIME, MEDIUM_PRIME, LOW_PRIME
-  }
-
   private static Arm m_arm = null;
-
-  private State m_state = State.DEFAULT;
 
   private static final double k_shoulderMotorP = 1.0;
   private static final double k_shoulderMotorI = 0.0;
@@ -228,143 +219,6 @@ public class Arm extends Subsystem {
 
   @Override
   public void periodic() {
-    switch(m_state) {
-      case DEFAULT:
-        setAngle(Constants.Arm.Shoulder.k_defaultState, Constants.Arm.Elbow.k_defaultState, Constants.Arm.Wrist.k_defaultState);
-        break;
-      case LOW:
-        setAngle(Constants.Arm.Shoulder.k_lowState, Constants.Arm.Elbow.k_lowState, Constants.Arm.Wrist.k_lowState);
-        break;
-      case MEDIUM:
-      setAngle(Constants.Arm.Shoulder.k_mediumState, Constants.Arm.Elbow.k_mediumState, Constants.Arm.Wrist.k_mediumState);
-        break;
-      case HIGH:
-      setAngle(Constants.Arm.Shoulder.k_highState, Constants.Arm.Elbow.k_highState, Constants.Arm.Wrist.k_highState);
-        break;
-      case HIGH_PRIME:
-      setAngle(Constants.Arm.Shoulder.k_highPrimeState, Constants.Arm.Elbow.k_highPrimeState, Constants.Arm.Wrist.k_highPrimeState);
-        break;
-      case MEDIUM_PRIME:
-      setAngle(Constants.Arm.Shoulder.k_mediumPrimeState, Constants.Arm.Elbow.k_mediumPrimeState, Constants.Arm.Wrist.k_mediumPrimeState);
-        break;
-      case LOW_PRIME:
-      setAngle(Constants.Arm.Shoulder.k_lowPrimeState, Constants.Arm.Elbow.k_lowPrimeState, Constants.Arm.Wrist.k_lowPrimeState);
-        break;
-      default:
-        break;
-    }
-  }
-
-  public void setState(State state) {
-    m_state = state;
-  }
-
-  public void raiseStates(boolean max) {
-    if(max) {
-      switch(m_state) {
-        case DEFAULT:
-          setState(State.LOW);
-          break;
-        case LOW:
-          setState(State.HIGH);
-          break;
-        case MEDIUM:
-          setState(State.HIGH);
-          break;
-        case HIGH:
-          setState(State.HIGH_PRIME);
-          break;
-        case HIGH_PRIME:
-          setState(State.LOW_PRIME);
-          break;
-        case MEDIUM_PRIME:
-          setState(State.LOW_PRIME);
-          break;
-        case LOW_PRIME:
-          break;
-        default:
-          break;
-      }
-    } else {
-      switch(m_state) {
-        case DEFAULT:
-          setState(State.LOW);
-          break;
-        case LOW:
-          setState(State.MEDIUM);
-          break;
-        case MEDIUM:
-          setState(State.HIGH);
-          break;
-        case HIGH:
-          setState(State.HIGH_PRIME);
-          break;
-        case HIGH_PRIME:
-          setState(State.MEDIUM_PRIME);
-          break;
-        case MEDIUM_PRIME:
-          setState(State.LOW_PRIME);
-          break;
-        case LOW_PRIME:
-          break;
-        default:
-          break;
-      }
-    }
-  }
-
-  public void lowerStates(boolean max) {
-    if(max) {
-      switch(m_state) {
-        case DEFAULT:
-          setState(State.LOW_PRIME);
-          break;
-        case LOW:
-          break;
-        case MEDIUM:
-          setState(State.LOW);
-          break;
-        case HIGH:
-          setState(State.LOW);
-          break;
-        case HIGH_PRIME:
-          setState(State.HIGH);
-          break;
-        case MEDIUM_PRIME:
-          setState(State.HIGH_PRIME);
-          break;
-        case LOW_PRIME:
-          setState(State.HIGH_PRIME);
-          break;
-        default:
-          break;
-      }
-    } else {
-      switch(m_state) {
-        case DEFAULT:
-          setState(State.LOW_PRIME);
-          break;
-        case LOW:
-          break;
-        case MEDIUM:
-          setState(State.LOW);
-          break;
-        case HIGH:
-          setState(State.MEDIUM);
-          break;
-        case HIGH_PRIME:
-          setState(State.HIGH);
-          break;
-        case MEDIUM_PRIME:
-          setState(State.HIGH_PRIME);
-          break;
-        case LOW_PRIME:
-          setState(State.MEDIUM_PRIME);
-          break;
-        default:
-          break;
-      }
-    }
   }
 
   public void manual(double shoulder, double elbow, double wrist) {
@@ -415,6 +269,25 @@ public class Arm extends Subsystem {
     m_arm2.setAngle(Units.radiansToDegrees(m_elbowSim.getAngleRads()));
   }*/
   
+  /**
+   * 
+   * @param x Horizontal distance from the center of the robot
+   * @param y Vertical distance from the floor
+   * @return An array containing the shoulder and elbow target angles
+   */
+  public double[] calcAngles(double x, double y) {
+    double L3 = Math.sqrt(Math.pow(x, 2) + Math.pow(y - Constants.Arm.k_shoulderPivotHeight, 2));
+    
+    double alpha = Math.acos((Math.pow(Constants.Arm.Shoulder.k_length, 2) + Math.pow(L3, 2) - Math.pow(Constants.Arm.Elbow.k_length, 2)) 
+    / (2 * Constants.Arm.Shoulder.k_length * L3));
+
+    double shoulderTargetAngle = Math.atan2(y - Constants.Arm.k_shoulderPivotHeight, x) - alpha;
+
+    double elbowTargetAngle = Math.asin((L3 * Math.sin(alpha)) / Constants.Arm.Elbow.k_length);
+
+    return new double[] {shoulderTargetAngle, elbowTargetAngle};
+  }
+
   //TODO Add wrist limit
   public void rotWrist(double addedAngle) { //This should work (always needs to be positive)
     m_periodicIO.wristAngle += addedAngle;
@@ -464,8 +337,6 @@ public class Arm extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    SmartDashboard.putString("Arm/State", m_state.toString());
-
     SmartDashboard.putNumber("Arm/Wrist Position",m_wristEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Arm/Elbow/Position",m_elbowEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Arm/Elbow/Velocity", m_elbowMotor.get());
