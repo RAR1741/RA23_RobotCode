@@ -30,6 +30,10 @@ public class Robot extends TimedRobot {
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
   private final Arm m_arm = Arm.getInstance();
 
+  // The mere instantiation of this object will cause the compressor to start
+  // running. We don't need to do anything else with it, so we'll suppress the
+  // warning.
+  @SuppressWarnings("unused")
   private Compressor m_compressor;
 
   private int test_state = 1;
