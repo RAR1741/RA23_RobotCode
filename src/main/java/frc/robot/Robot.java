@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
     double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis()) *
         Constants.Drivetrain.k_maxAngularSpeed;
 
-    if(m_driverController.getWantsSlowMode()) {
+    if (m_driverController.getWantsSlowMode()) {
       xSpeed *= Constants.Drivetrain.k_slowScaler;
       ySpeed *= Constants.Drivetrain.k_slowScaler;
     }
@@ -138,15 +138,15 @@ public class Robot extends TimedRobot {
       // m_arm.setState(State.DEFAULT);
     }
 
-    if(m_operatorController.getWantsCycleStateDown()) {
+    if (m_operatorController.getWantsCycleStateDown()) {
       // m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
     }
-    
-    if(m_operatorController.getWantsCycleStateUp()) {
+
+    if (m_operatorController.getWantsCycleStateUp()) {
       // m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
     }
 
-    if(m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
+    if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
 
     }
 
@@ -170,11 +170,11 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     // if (m_driverController.getRawButtonPressed(3)) {
-    //   Preferences.setDouble("shoulderAngle", 0);
+    // Preferences.setDouble("shoulderAngle", 0);
     // } else if (m_driverController.getRawButtonPressed(4)) {
-    //   Preferences.setDouble("shoulderAngle", 90);
+    // Preferences.setDouble("shoulderAngle", 90);
     // } else if (m_driverController.getRawButtonPressed(1)) {
-    //   Preferences.setDouble("shoulderAngle", 180);
+    // Preferences.setDouble("shoulderAngle", 180);
     // }
     updateSim();
   }
@@ -194,29 +194,29 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
-    m_swerve.drive(0,0,0,false);
+    m_swerve.drive(0, 0, 0, false);
     posX -= m_operatorController.getRawAxis(0);
     posY -= m_operatorController.getRawAxis(5);
 
     // SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(posX, posY));
-    SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(Preferences.getDouble("targetX", 20), Preferences.getDouble("targetY", 20)));
-
+    SmartDashboard.putNumberArray("Arm Values",
+        m_arm.setArmPosition(Preferences.getDouble("targetX", 20), Preferences.getDouble("targetY", 20), 0));
 
     // switch(test_state) {
-    //   case 0:    
-    //     m_arm.manual(m_operatorController.getRawAxis(5) * 0.2, 0, 0);
-    //     break;
-    //   case 1:
-    //     m_arm.manual(0, m_operatorController.getRawAxis(5) * 0.2, 0);
-    //     break;
-    //   case 2:
-    //     m_arm.manual(0, 0, m_operatorController.getRawAxis(5) * 0.2);
-    //     break;
-    //   default:
-    //     break;
+    // case 0:
+    // m_arm.manual(m_operatorController.getRawAxis(5) * 0.2, 0, 0);
+    // break;
+    // case 1:
+    // m_arm.manual(0, m_operatorController.getRawAxis(5) * 0.2, 0);
+    // break;
+    // case 2:
+    // m_arm.manual(0, 0, m_operatorController.getRawAxis(5) * 0.2);
+    // break;
+    // default:
+    // break;
     // }
 
-    if(m_operatorController.getRawButtonPressed(3)) {
+    if (m_operatorController.getRawButtonPressed(3)) {
       test_state = test_state == 2 ? 0 : test_state + 1;
     }
 
