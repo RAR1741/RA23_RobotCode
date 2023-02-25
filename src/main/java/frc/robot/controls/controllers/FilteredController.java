@@ -48,7 +48,7 @@ public class FilteredController extends GenericHID {
     return value;
   }
 
-  public boolean getHatUp() {
+  public boolean getHatUp() { //TODO: We hate this
     if(this.getPOV() != -1) {
       if(!m_hatLock) {
         m_hatLock = m_up.get();

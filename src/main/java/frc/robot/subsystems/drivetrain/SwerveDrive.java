@@ -122,6 +122,10 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void periodic() {
+    m_frontLeft.periodic();
+    m_frontRight.periodic();
+    m_backLeft.periodic();
+    m_backRight.periodic();
   }
 
   @Override

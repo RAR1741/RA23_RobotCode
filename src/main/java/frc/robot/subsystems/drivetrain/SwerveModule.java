@@ -48,6 +48,8 @@ public class SwerveModule {
   private final String m_moduleName;
   private final String m_smartDashboardKey;
 
+  private final PeriodicIO m_periodicIO = new PeriodicIO();
+
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
 
@@ -95,6 +97,11 @@ public class SwerveModule {
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
     m_turningPIDController.enableContinuousInput(0, 1);
+  }
+
+  private static class PeriodicIO {
+    double turnMotorVoltage = 0.0;
+    double driveMotorVoltage = 0.0;
   }
 
   /**
@@ -177,8 +184,13 @@ public class SwerveModule {
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
 
-    m_turningMotor.setVoltage(turnOutput + turnFeedforward);
-    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
+    m_periodicIO.turnMotorVoltage = turnOutput + turnFeedforward;
+    m_periodicIO.driveMotorVoltage = driveOutput + driveFeedforward;
+  }
+
+  public void periodic() {
+    m_turningMotor.setVoltage(m_periodicIO.turnMotorVoltage);
+    m_driveMotor.setVoltage(m_periodicIO.driveMotorVoltage);
   }
 
   public void outputTelemetry() {
