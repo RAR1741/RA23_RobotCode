@@ -280,13 +280,21 @@ public class Arm extends Subsystem {
    */
   public double[] calcAngles(double x, double y) {
     double L3 = Math.sqrt(Math.pow(x, 2) + Math.pow(y - Constants.Arm.k_shoulderPivotHeight, 2));
-    
+
     double alpha = Math.acos((Math.pow(Constants.Arm.Shoulder.k_length, 2) + Math.pow(L3, 2) - Math.pow(Constants.Arm.Elbow.k_length, 2)) 
     / (2 * Constants.Arm.Shoulder.k_length * L3));
 
-    double shoulderTargetAngle = Units.radiansToDegrees(Math.atan2(x, y - Constants.Arm.k_shoulderPivotHeight) - alpha);
+    double psi = Math.atan2(x, y - Constants.Arm.k_shoulderPivotHeight);
 
-    double elbowTargetAngle = Units.radiansToDegrees(Math.asin((L3 * Math.sin(alpha)) / Constants.Arm.Elbow.k_length));
+    double shoulderTargetAngle = x >= 0 ? psi - alpha : psi + alpha;
+
+    double elbowTargetAngle = Math.asin((x - (Constants.Arm.Shoulder.k_length * Math.sin(shoulderTargetAngle))) / 
+      Constants.Arm.Elbow.k_length);
+
+    elbowTargetAngle += shoulderTargetAngle;
+
+    shoulderTargetAngle = Units.radiansToDegrees(shoulderTargetAngle);
+    elbowTargetAngle = Units.radiansToDegrees(elbowTargetAngle);
 
     m_arm1.setAngle(k_shoulderSimOffset - shoulderTargetAngle);
     m_arm2.setAngle(k_elbowSimOffset + elbowTargetAngle);
