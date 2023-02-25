@@ -6,6 +6,7 @@ import java.util.List;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -175,21 +176,41 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void testInit() {
+    if (!Preferences.containsKey("targetX")) {
+      Preferences.setDouble("targetX", 20);
+    }
+    if (!Preferences.containsKey("targetY")) {
+      Preferences.setDouble("targetY", 20);
+    }
+  }
+
+  double posX = 0;
+  double posY = 19;
+
+  @Override
   public void testPeriodic() {
     m_swerve.drive(0,0,0,false);
-    switch(test_state) {
-      case 0:    
-        m_arm.manual(m_operatorController.getRawAxis(5) * 0.2, 0, 0);
-        break;
-      case 1:
-        m_arm.manual(0, m_operatorController.getRawAxis(5) * 0.2, 0);
-        break;
-      case 2:
-        m_arm.manual(0, 0, m_operatorController.getRawAxis(5) * 0.2);
-        break;
-      default:
-        break;
-    }
+    posX -= m_operatorController.getRawAxis(0);
+    posY -= m_operatorController.getRawAxis(5);
+
+    // SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(posX, posY));
+    SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(Preferences.getDouble("targetX", 20), Preferences.getDouble("targetY", 20)));
+
+
+    // switch(test_state) {
+    //   case 0:    
+    //     m_arm.manual(m_operatorController.getRawAxis(5) * 0.2, 0, 0);
+    //     break;
+    //   case 1:
+    //     m_arm.manual(0, m_operatorController.getRawAxis(5) * 0.2, 0);
+    //     break;
+    //   case 2:
+    //     m_arm.manual(0, 0, m_operatorController.getRawAxis(5) * 0.2);
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     if(m_operatorController.getRawButtonPressed(3)) {
       test_state = test_state == 2 ? 0 : test_state + 1;

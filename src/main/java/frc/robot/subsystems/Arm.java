@@ -24,6 +24,9 @@ import frc.robot.Constants;
 public class Arm extends Subsystem {
   private static Arm m_arm = null;
 
+  private static final double k_shoulderSimOffset = 90;
+  private static final double k_elbowSimOffset = 180;
+
   private static final double k_shoulderMotorP = 1.0;
   private static final double k_shoulderMotorI = 0.0;
   private static final double k_shoulderMotorD = 0.0;
@@ -118,7 +121,7 @@ public class Arm extends Subsystem {
       new MechanismLigament2d(
           "Arm1",
           Constants.Arm.Shoulder.k_length,
-          Units.radiansToDegrees(m_shoulderSim.getAngleRads()),
+          k_shoulderSimOffset,
           4,
           new Color8Bit(Color.kYellow)));
 
@@ -126,7 +129,7 @@ public class Arm extends Subsystem {
       new MechanismLigament2d(
           "Arm2",
           Constants.Arm.Elbow.k_length,
-          Units.radiansToDegrees(m_elbowSim.getAngleRads()),
+          k_elbowSimOffset,
           4,
           new Color8Bit(Color.kGreen)));
 
@@ -281,9 +284,12 @@ public class Arm extends Subsystem {
     double alpha = Math.acos((Math.pow(Constants.Arm.Shoulder.k_length, 2) + Math.pow(L3, 2) - Math.pow(Constants.Arm.Elbow.k_length, 2)) 
     / (2 * Constants.Arm.Shoulder.k_length * L3));
 
-    double shoulderTargetAngle = Math.atan2(y - Constants.Arm.k_shoulderPivotHeight, x) - alpha;
+    double shoulderTargetAngle = Units.radiansToDegrees(Math.atan2(x, y - Constants.Arm.k_shoulderPivotHeight) - alpha);
 
-    double elbowTargetAngle = Math.asin((L3 * Math.sin(alpha)) / Constants.Arm.Elbow.k_length);
+    double elbowTargetAngle = Units.radiansToDegrees(Math.asin((L3 * Math.sin(alpha)) / Constants.Arm.Elbow.k_length));
+
+    m_arm1.setAngle(k_shoulderSimOffset - shoulderTargetAngle);
+    m_arm2.setAngle(k_elbowSimOffset + elbowTargetAngle);
 
     return new double[] {shoulderTargetAngle, elbowTargetAngle};
   }

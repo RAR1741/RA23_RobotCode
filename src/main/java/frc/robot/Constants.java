@@ -77,7 +77,7 @@ public final class Constants {
     public static class Wrist {
       public static final int k_motorId = 15;
       public static final int k_encoderId = 0; // DIO
-      public static final double k_length = 0; // Inches TODO: May remove
+      public static final double k_length = 1; // Inches TODO: May remove
       public static final double k_mass = Units.lbsToKilograms(5); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
