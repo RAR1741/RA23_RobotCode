@@ -50,7 +50,7 @@ public class Arm extends Subsystem {
 
   private final DCMotor m_shoulderGearbox = DCMotor.getNEO(1);
   private final DCMotor m_elbowGearbox = DCMotor.getNEO(1);
-  private final DCMotor m_wristGearbox = DCMotor.getNEO(1);
+  private final DCMotor m_wristGearbox = DCMotor.getNeo550(1);
 
   private final PIDController m_shoulderPID = new PIDController(k_shoulderMotorP, k_shoulderMotorI, k_shoulderMotorD);
   private final PIDController m_elbowPID = new PIDController(k_elbowMotorP, k_elbowMotorI, k_elbowMotorD);
