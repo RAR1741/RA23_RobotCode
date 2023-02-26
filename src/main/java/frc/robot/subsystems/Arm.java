@@ -108,7 +108,7 @@ public class Arm extends Subsystem {
     m_periodicIO.elbowAngle = armAngles[1];
     // TODO: Do wrist things here too
 
-    m_armSim.updateArmPosition(armAngles[0], armAngles[1], wristAngle);
+    m_armSim.updateArmPosition(armAngles[0], armAngles[1], wristAngle, x, y);
 
     return armAngles;
   }

@@ -1,5 +1,6 @@
 package frc.robot.simulation;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
@@ -68,7 +69,10 @@ public class ArmSim {
   // Create a Mechanism2d display of an Arm with a fixed ArmBase and moving Arm.
   private final Mechanism2d m_mech2d = new Mechanism2d(Constants.Simulation.k_width, Constants.Simulation.k_height);
 
-  private final MechanismRoot2d m_shoulderPivot = m_mech2d.getRoot("ArmShoulderPivot", Constants.Simulation.k_width / 2,
+  // Center of arm coordinate system
+  private final Translation2d m_origin = new Translation2d(Constants.Simulation.k_width / 2, 0);
+
+  private final MechanismRoot2d m_shoulderPivot = m_mech2d.getRoot("ArmShoulderPivot", m_origin.getX(),
       Constants.Arm.k_shoulderPivotHeight);
 
   private final MechanismLigament2d m_armBase = m_shoulderPivot.append(
@@ -95,6 +99,8 @@ public class ArmSim {
           4,
           new Color8Bit(Color.kGreen)));
 
+  private final MechanismRoot2d m_crosshair = m_mech2d.getRoot("Crosshair", m_origin.getX(), m_origin.getY());
+
   public static ArmSim getInstance() {
     if (m_armSim == null) {
       m_armSim = new ArmSim();
@@ -108,9 +114,13 @@ public class ArmSim {
     SmartDashboard.putData("Arm Sim", m_mech2d);
   }
 
-  public void updateArmPosition(double shoulderAngle, double elbowAngle, double wristAngle) {
+  public void updateArmPosition(double shoulderAngle, double elbowAngle, double wristAngle, double x, double y) {
     m_arm1.setAngle(k_shoulderSimOffset - shoulderAngle);
     m_arm2.setAngle(k_elbowSimOffset + elbowAngle);
+    Translation2d setpoint = m_origin.plus(new Translation2d(x, y));
+
+    m_crosshair.setPosition(setpoint.getX(), setpoint.getY());
+
     // TODO: add wrist display... somehow...
   }
 
@@ -204,5 +214,28 @@ public class ArmSim {
             90,
             5,
             new Color8Bit(Color.kWhite)));
+
+    // Have to draw the crosshair in a weird way because each "ligament" has to be connected
+    //   (i.e. 4 lines radially from the center rather than two crossed lines)
+    // TODO: Factor this out
+
+    final double k_crosshairLength = 2;
+    final double k_crosshairThickness = 1;
+    final Color8Bit crosshairColor = new Color8Bit(Color.kOrange);
+
+    final String[] directions = { "Right", "Top", "Left", "Bottom"};
+    double crosshairAngle = 0;
+    for (String direction : directions) {
+        m_crosshair.append(
+        new MechanismLigament2d(
+            "Crosshair" + direction,
+            k_crosshairLength,
+            crosshairAngle,
+            k_crosshairThickness,
+            crosshairColor
+            )
+        );
+        crosshairAngle += 90;
+    }
   }
 }
