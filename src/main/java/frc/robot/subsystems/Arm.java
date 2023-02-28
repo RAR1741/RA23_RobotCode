@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.simulation.ArmSim;
@@ -15,6 +14,10 @@ import frc.robot.simulation.ArmSim;
 public class Arm extends Subsystem {
   private static Arm m_arm = null;
   private static ArmSim m_armSim = null;
+
+  private static final double k_shoulderOffset = 0.0;
+  private static final double k_elbowOffset = 0.0;
+  private static final double k_wristOffset = 0.0;
 
   private static final double k_shoulderMotorP = 1.0;
   private static final double k_shoulderMotorI = 0.0;
@@ -48,14 +51,14 @@ public class Arm extends Subsystem {
 
   private static class PeriodicIO {
     // Automated control
-    public double shoulderAngle;
-    public double elbowAngle;
-    public double wristAngle;
+    public double shoulderAngle = 0.0;
+    public double elbowAngle = 0.0;
+    public double wristAngle = 0.0;
 
     // Manual control
-    public double shoulderMotorPower;
-    public double elbowMotorPower;
-    public double wristMotorPower;
+    public double shoulderMotorPower = 0.0;
+    public double elbowMotorPower = 0.0;
+    public double wristMotorPower = 0.0;
   }
 
   private PeriodicIO m_periodicIO = new PeriodicIO();
@@ -74,25 +77,24 @@ public class Arm extends Subsystem {
     m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
     m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
 
+    m_shoulderEncoder.setPositionOffset(k_shoulderOffset);
+    m_shoulderEncoder.setPositionOffset(k_elbowOffset);
+    m_shoulderEncoder.setPositionOffset(k_wristOffset);
+
     m_shoulderMotor.setIdleMode(IdleMode.kBrake);
     m_elbowMotor.setIdleMode(IdleMode.kBrake);
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
     System.out.println("Hey, I just met you,\nAnd this is CRAZY\nBut here's my number,\nSo call me, maybe");
-
-    if (!Preferences.containsKey("shoulderAngle")) {
-      Preferences.setDouble("shoulderAngle", m_periodicIO.shoulderAngle);
-    }
-    if (!Preferences.containsKey("elbowAngle")) {
-      Preferences.setDouble("elbowAngle", m_periodicIO.elbowAngle);
-    }
-    if (!Preferences.containsKey("wristAngle")) {
-      Preferences.setDouble("wristAngle", m_periodicIO.wristAngle);
-    }
   }
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("m_elbowEncoder", m_elbowEncoder.getAbsolutePosition());
+
+    // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    // m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
   }
 
   public void manual(double shoulder, double elbow, double wrist) {
@@ -109,6 +111,20 @@ public class Arm extends Subsystem {
     // TODO: Do wrist things here too
 
     m_armSim.updateArmPosition(armAngles[0], armAngles[1], wristAngle, x, y);
+
+    // double shoulderPIDOutput =
+    // m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
+    // Units.degreesToRadians(m_periodicIO.elbowAngle));
+
+    double elbowEncoderDegrees = m_elbowEncoder.getDistance() * k_elbowDegreesPerPulse;
+    double elbowPIDOutput = m_elbowPID.calculate(elbowEncoderDegrees, m_periodicIO.elbowAngle);
+
+    // double wristPIDOutput = m_wristPID.calculate(m_wristEncoder.getDistance(),
+    // Units.degreesToRadians(m_periodicIO.wristAngle));
+
+    // m_periodicIO.shoulderMotorPower = shoulderPIDOutput;
+    m_periodicIO.elbowMotorPower = elbowPIDOutput;
+    // m_periodicIO.wristMotorPower = wristPIDOutput;
 
     return armAngles;
   }
@@ -151,31 +167,8 @@ public class Arm extends Subsystem {
     m_wristMotor.setVoltage(wristPIDOutput);
   }
 
-  private void setAngle(double shoulderAngle) {
-    setAngle(shoulderAngle, m_periodicIO.elbowAngle, m_periodicIO.wristAngle);
-  }
-
-  private void setAngle(double shoulderAngle, double elbowAngle) {
-    setAngle(shoulderAngle, elbowAngle, m_periodicIO.wristAngle);
-  }
-
-  private void setAngle(double shoulderAngle, double elbowAngle, double wristAngle) {
-    m_periodicIO.shoulderAngle = shoulderAngle;
-    m_periodicIO.elbowAngle = elbowAngle;
-    m_periodicIO.wristAngle = wristAngle;
-
-    double shoulderPIDOutput = 0; /*
-                                   * m_shoulderPID.calculate(m_shoulderEncoder.getDistance(), // TODO: Fix this
-                                   * Units.degreesToRadians(m_periodicIO.shoulderAngle));
-                                   */
-    double elbowPIDOutput = m_elbowPID.calculate(m_elbowEncoder.getDistance(),
-        Units.degreesToRadians(m_periodicIO.elbowAngle));
-    double wristPIDOutput = m_wristPID.calculate(m_wristEncoder.getDistance(),
-        Units.degreesToRadians(m_periodicIO.wristAngle));
-
-    // m_shoulderMotor.setVoltage(shoulderPIDOutput);
-    // m_elbowMotor.setVoltage(elbowPIDOutput);
-    // m_wristMotor.setVoltage(wristPIDOutput);
+  public double getElbowAngle() {
+    return m_elbowEncoder.getAbsolutePosition() - k_elbowOffset;
   }
 
   @Override
