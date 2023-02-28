@@ -63,6 +63,8 @@ public final class Constants {
       public static final double k_mass = Units.lbsToKilograms(15); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
+      
+      public static final double k_offset = 0.0;
     }
 
     public static class Elbow {
@@ -72,6 +74,8 @@ public final class Constants {
       public static final double k_mass = Units.lbsToKilograms(100); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
+
+      public static final double k_offset = 0.0;
     }
 
     public static class Wrist {
@@ -81,6 +85,8 @@ public final class Constants {
       public static final double k_mass = Units.lbsToKilograms(5); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
+    
+      public static final double k_offset = 0.690758;
     }
   }
 

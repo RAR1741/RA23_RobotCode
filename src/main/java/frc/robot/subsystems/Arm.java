@@ -18,10 +18,6 @@ public class Arm extends Subsystem {
   private static Arm m_arm = null;
   private static ArmSim m_armSim = null;
 
-  private static final double k_shoulderOffset = 0.0;
-  private static final double k_elbowOffset = 0.0;
-  private static final double k_wristOffset = 0.0;
-
   private static final double k_shoulderMotorP = 1.0;
   private static final double k_shoulderMotorI = 0.0;
   private static final double k_shoulderMotorD = 0.0;
@@ -83,9 +79,9 @@ public class Arm extends Subsystem {
     m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
     m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
 
-    m_shoulderEncoder.setPositionOffset(k_shoulderOffset);
-    m_shoulderEncoder.setPositionOffset(k_elbowOffset);
-    m_shoulderEncoder.setPositionOffset(k_wristOffset);
+    m_shoulderEncoder.setPositionOffset(Constants.Arm.Shoulder.k_offset);
+    m_elbowEncoder.setPositionOffset(Constants.Arm.Elbow.k_offset);
+    m_wristEncoder.setPositionOffset(Constants.Arm.Wrist.k_offset);
 
     m_shoulderMotor.setIdleMode(IdleMode.kBrake);
     m_elbowMotor.setIdleMode(IdleMode.kBrake);
@@ -96,7 +92,9 @@ public class Arm extends Subsystem {
 
   @Override
   public void periodic() {
+    // SmartDashboard.putNumber("m_shoulderEncoder", m_shoulderEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("m_elbowEncoder", m_elbowEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("m_wristEncoder", m_wristEncoder.getAbsolutePosition());
 
     // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
     // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
@@ -171,10 +169,6 @@ public class Arm extends Subsystem {
         Units.degreesToRadians(m_periodicIO.wristAngle)));
 
     m_wristMotor.setVoltage(wristPIDOutput);
-  }
-
-  public double getElbowAngle() {
-    return m_elbowEncoder.getAbsolutePosition() - k_elbowOffset;
   }
 
   public void setGripper(boolean engaged) {
