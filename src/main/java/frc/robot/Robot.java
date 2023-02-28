@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Field", m_field);
 
     m_compressor = new Compressor(PneumaticsModuleType.REVPH);
+    m_arm.setGripper(false);
 
     // Camera server
     /*
@@ -139,20 +140,8 @@ public class Robot extends TimedRobot {
       m_swerve.resetGyro();
     }
 
-    if (m_operatorController.getWantsDefaultState()) {
-      // m_arm.setState(State.DEFAULT);
-    }
-
-    if (m_operatorController.getWantsCycleStateDown()) {
-      // m_arm.lowerStates(m_operatorController.getWantsMaxMovement());
-    }
-
-    if (m_operatorController.getWantsCycleStateUp()) {
-      // m_arm.raiseStates(m_operatorController.getWantsMaxMovement());
-    }
-
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
-
+      m_arm.setGripper(!m_arm.getGripperEngaged());
     }
 
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
@@ -223,6 +212,10 @@ public class Robot extends TimedRobot {
 
     if (m_operatorController.getRawButtonPressed(3)) {
       test_state = test_state == 2 ? 0 : test_state + 1;
+    }
+
+    if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
+      m_arm.setGripper(!m_arm.getGripperEngaged());
     }
 
     m_arm.outputTelemetry();

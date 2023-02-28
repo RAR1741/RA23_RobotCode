@@ -53,7 +53,7 @@ public class DriverController extends FilteredController {
     SmartDashboard.putNumber(m_smartDashboardKey + "Turn", getTurnAxis());
   }
 
-public boolean getWantsGripToggle() {
-    return this.getRawButton(1);
-}
+  public boolean getWantsGripToggle() {
+      return this.getRawButtonPressed(1);
+  }
 }

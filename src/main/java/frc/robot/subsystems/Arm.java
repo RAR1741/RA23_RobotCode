@@ -6,7 +6,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.simulation.ArmSim;
@@ -44,6 +47,9 @@ public class Arm extends Subsystem {
   private final CANSparkMax m_shoulderMotor = new CANSparkMax(Constants.Arm.Shoulder.k_motorId, MotorType.kBrushless);
   private final CANSparkMax m_elbowMotor = new CANSparkMax(Constants.Arm.Elbow.k_motorId, MotorType.kBrushless);
   private final CANSparkMax m_wristMotor = new CANSparkMax(Constants.Arm.Wrist.k_motorId, MotorType.kBrushless);
+
+  private final DoubleSolenoid m_gripper = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 0);
+  private boolean m_gripperEngaged = false;
 
   private final DutyCycleEncoder m_shoulderEncoder = new DutyCycleEncoder(Constants.Arm.Shoulder.k_encoderId);
   private final DutyCycleEncoder m_elbowEncoder = new DutyCycleEncoder(Constants.Arm.Elbow.k_encoderId);
@@ -169,6 +175,15 @@ public class Arm extends Subsystem {
 
   public double getElbowAngle() {
     return m_elbowEncoder.getAbsolutePosition() - k_elbowOffset;
+  }
+
+  public void setGripper(boolean engaged) {
+    m_gripper.set(engaged ? Value.kForward : Value.kReverse);
+    m_gripperEngaged = engaged;
+  }
+
+  public boolean getGripperEngaged() {
+    return m_gripperEngaged;
   }
 
   @Override
