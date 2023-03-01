@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Helpers;
 
 public class SwerveModule {
   private static final double k_wheelRadiusIn = 2; // 2 inches
@@ -115,15 +116,7 @@ public class SwerveModule {
   }
 
   public double getTurnPosition() {
-    return modRotations(m_turningEncoder.getPosition() - m_turningOffset);
-  }
-
-  public double modRotations(double input) {
-    input %= 1.0;
-    if (input < 0.0) {
-      input += 1.0;
-    }
-    return input;
+    return Helpers.modRotations(m_turningEncoder.getPosition() - m_turningOffset);
   }
 
   // Returns the drive velocity in meters per second.

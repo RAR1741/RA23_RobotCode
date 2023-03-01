@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Helpers;
 import frc.robot.simulation.ArmSim;
 
 public class Arm extends Subsystem {
@@ -81,12 +82,11 @@ public class Arm extends Subsystem {
     m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
     m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
 
-    m_shoulderEncoder.setPositionOffset(Constants.Arm.Shoulder.k_offset);
-    m_elbowEncoder.setPositionOffset(Constants.Arm.Elbow.k_offset);
-    m_wristEncoder.setPositionOffset(Constants.Arm.Wrist.k_offset);
+    // TODO: do this for shoulder and wrist as well
+    m_elbowPID.enableContinuousInput(0, 360);
 
     m_shoulderMotor.setIdleMode(IdleMode.kBrake);
-    m_elbowMotor.setIdleMode(IdleMode.kBrake);
+    m_elbowMotor.setIdleMode(IdleMode.kCoast);
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
     System.out.println("Hey, I just met you,\nAnd this is CRAZY\nBut here's my number,\nSo call me, maybe");
@@ -95,7 +95,7 @@ public class Arm extends Subsystem {
   @Override
   public void periodic() {
     // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
-    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
     // m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
   }
 
@@ -118,8 +118,7 @@ public class Arm extends Subsystem {
     // m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
     // Units.degreesToRadians(m_periodicIO.elbowAngle));
 
-    double elbowEncoderDegrees = m_elbowEncoder.getDistance() * k_elbowDegreesPerPulse;
-    double elbowPIDOutput = m_elbowPID.calculate(elbowEncoderDegrees, m_periodicIO.elbowAngle);
+    double elbowPIDOutput = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
 
     // double wristPIDOutput = m_wristPID.calculate(m_wristEncoder.getDistance(),
     // Units.degreesToRadians(m_periodicIO.wristAngle));
@@ -169,6 +168,11 @@ public class Arm extends Subsystem {
     m_wristMotor.setVoltage(wristPIDOutput);
   }
 
+  public double getElbowPositionDegrees() {
+    double value = m_elbowEncoder.getAbsolutePosition() - Constants.Arm.Elbow.k_offset;
+    return Units.rotationsToDegrees(Helpers.modRotations(value));
+  }
+
   public void setGripper(boolean engaged) {
     m_gripper.set(engaged ? Value.kForward : Value.kReverse);
     m_gripperEngaged = engaged;
@@ -195,7 +199,7 @@ public class Arm extends Subsystem {
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", m_shoulderEncoder.getAbsolutePosition());
 
     // Elbow
-    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", m_elbowEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", getElbowPositionDegrees());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Velocity", m_elbowMotor.get());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Temperature", m_elbowMotor.getMotorTemperature());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Current", m_elbowMotor.getOutputCurrent());

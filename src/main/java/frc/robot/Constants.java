@@ -21,10 +21,10 @@ public final class Constants {
     // TODO: Change for final robot
     public static final double k_xDistance = 0.762; // 30 inches Forward/Backward
     public static final double k_yDistance = 0.6858; // in meters! Side-to-Side
-    
+
     public static final double k_xCenterDistance = k_xDistance / 2.0;
     public static final double k_yCenterDistance = k_yDistance / 2.0;
-    
+
     public static final double k_maxSpeed = 3.0; // 3 meters per second
     public static final double k_maxAngularSpeed = Math.PI; // 1/2 rotation per second
     public static final double k_slowScaler = 0.2;
@@ -53,7 +53,7 @@ public final class Constants {
   }
 
   public static class Arm {
-    //TODO Update for actual robot
+    // TODO Update for actual robot
     public static final double k_shoulderPivotHeight = 19; // Inches
 
     public static class Shoulder {
@@ -63,7 +63,7 @@ public final class Constants {
       public static final double k_mass = Units.lbsToKilograms(15); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
-      
+
       public static final double k_offset = 0.0;
     }
 
@@ -75,7 +75,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.0;
+      public static final double k_offset = 0.124901;
     }
 
     public static class Wrist {
@@ -85,7 +85,7 @@ public final class Constants {
       public static final double k_mass = Units.lbsToKilograms(5); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
-    
+
       public static final double k_offset = 0.690758;
     }
   }
