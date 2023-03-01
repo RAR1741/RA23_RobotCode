@@ -7,9 +7,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.simulation.ArmSim;
@@ -17,6 +17,8 @@ import frc.robot.simulation.ArmSim;
 public class Arm extends Subsystem {
   private static Arm m_arm = null;
   private static ArmSim m_armSim = null;
+
+  private final String m_smartDashboardKey = "Arm/";
 
   private static final double k_shoulderMotorP = 1.0;
   private static final double k_shoulderMotorI = 0.0;
@@ -92,10 +94,6 @@ public class Arm extends Subsystem {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("m_shoulderEncoder", m_shoulderEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("m_elbowEncoder", m_elbowEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("m_wristEncoder", m_wristEncoder.getAbsolutePosition());
-
     // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
     // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
     // m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
@@ -193,10 +191,16 @@ public class Arm extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    SmartDashboard.putNumber("Arm/Wrist Position", m_wristEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Arm/Elbow/Position", m_elbowEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Arm/Elbow/Velocity", m_elbowMotor.get());
-    SmartDashboard.putNumber("Arm/Elbow/Temperature", m_elbowMotor.getMotorTemperature());
-    SmartDashboard.putNumber("Arm/Elbow/Current", m_elbowMotor.getOutputCurrent());
+    // Shoulder
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", m_shoulderEncoder.getAbsolutePosition());
+
+    // Elbow
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", m_elbowEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Velocity", m_elbowMotor.get());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Temperature", m_elbowMotor.getMotorTemperature());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Current", m_elbowMotor.getOutputCurrent());
+
+    // Wrist
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Position", m_wristEncoder.getAbsolutePosition());
   }
 }
