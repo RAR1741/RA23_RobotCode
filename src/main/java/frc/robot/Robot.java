@@ -181,20 +181,21 @@ public class Robot extends TimedRobot {
     if (!Preferences.containsKey("targetY")) {
       Preferences.setDouble("targetY", 20);
     }
+    if (!Preferences.containsKey("wristAngle")) {
+      Preferences.setDouble("wristAngle", 20);
+    }
   }
-
-  double posX = 0;
-  double posY = 19;
 
   @Override
   public void testPeriodic() {
     m_swerve.drive(0, 0, 0, false);
-    posX -= m_operatorController.getRawAxis(0);
-    posY -= m_operatorController.getRawAxis(5);
 
     // SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(posX, posY));
-    SmartDashboard.putNumberArray("Arm Values",
-        m_arm.setArmPosition(Preferences.getDouble("targetX", 20), Preferences.getDouble("targetY", 20), 0));
+    double targetX = Preferences.getDouble("targetX", 20);
+    double targetY = Preferences.getDouble("targetY", 20);
+    double wristAngle = Preferences.getDouble("wristAngle", 0);
+
+    SmartDashboard.putNumberArray("Arm Values", m_arm.setArmPosition(targetX, targetY, wristAngle));
 
     // switch(test_state) {
     // case 0:

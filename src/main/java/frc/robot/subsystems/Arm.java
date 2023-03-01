@@ -29,7 +29,7 @@ public class Arm extends Subsystem {
   private static final double k_elbowMotorI = 0.0;
   private static final double k_elbowMotorD = 0.0;
 
-  private static final double k_wristMotorP = 1.0;
+  private static final double k_wristMotorP = 0.0025;
   private static final double k_wristMotorI = 0.0;
   private static final double k_wristMotorD = 0.0;
 
@@ -84,9 +84,10 @@ public class Arm extends Subsystem {
 
     // TODO: do this for shoulder and wrist as well
     m_elbowPID.enableContinuousInput(0, 360);
+    m_wristPID.enableContinuousInput(0, 360);
 
     m_shoulderMotor.setIdleMode(IdleMode.kBrake);
-    m_elbowMotor.setIdleMode(IdleMode.kCoast);
+    m_elbowMotor.setIdleMode(IdleMode.kBrake);
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
     System.out.println("Hey, I just met you,\nAnd this is CRAZY\nBut here's my number,\nSo call me, maybe");
@@ -95,8 +96,8 @@ public class Arm extends Subsystem {
   @Override
   public void periodic() {
     // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
-    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
-    // m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
+    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
   }
 
   public void manual(double shoulder, double elbow, double wrist) {
@@ -110,7 +111,7 @@ public class Arm extends Subsystem {
 
     m_periodicIO.shoulderAngle = armAngles[0];
     m_periodicIO.elbowAngle = armAngles[1];
-    // TODO: Do wrist things here too
+    m_periodicIO.wristAngle = wristAngle;
 
     m_armSim.updateArmPosition(armAngles[0], armAngles[1], wristAngle, x, y);
 
@@ -120,12 +121,11 @@ public class Arm extends Subsystem {
 
     double elbowPIDOutput = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
 
-    // double wristPIDOutput = m_wristPID.calculate(m_wristEncoder.getDistance(),
-    // Units.degreesToRadians(m_periodicIO.wristAngle));
+    double wristPIDOutput = m_wristPID.calculate(getWristPositionDegrees(), m_periodicIO.wristAngle);
 
     // m_periodicIO.shoulderMotorPower = shoulderPIDOutput;
     m_periodicIO.elbowMotorPower = elbowPIDOutput;
-    // m_periodicIO.wristMotorPower = wristPIDOutput;
+    m_periodicIO.wristMotorPower = wristPIDOutput;
 
     return armAngles;
   }
@@ -173,6 +173,11 @@ public class Arm extends Subsystem {
     return Units.rotationsToDegrees(Helpers.modRotations(value));
   }
 
+  public double getWristPositionDegrees() {
+    double value = m_wristEncoder.getAbsolutePosition() - Constants.Arm.Wrist.k_offset;
+    return Units.rotationsToDegrees(Helpers.modRotations(value));
+  }
+
   public void setGripper(boolean engaged) {
     m_gripper.set(engaged ? Value.kForward : Value.kReverse);
     m_gripperEngaged = engaged;
@@ -205,6 +210,6 @@ public class Arm extends Subsystem {
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Current", m_elbowMotor.getOutputCurrent());
 
     // Wrist
-    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Position", m_wristEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Position", getWristPositionDegrees());
   }
 }
