@@ -84,7 +84,7 @@ public class Arm extends Subsystem {
 
     // TODO: do this for shoulder and wrist as well
     m_elbowPID.enableContinuousInput(0, 360);
-    m_wristPID.enableContinuousInput(0, 180);
+    m_wristPID.enableContinuousInput(0, 360);
 
     m_wristMotor.setInverted(true);
 
@@ -99,30 +99,6 @@ public class Arm extends Subsystem {
   public void periodic() {
     // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
     // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
-    m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
-  }
-
-  public void manual(double shoulder, double elbow, double wrist) {
-    m_shoulderMotor.set(shoulder);
-    m_elbowMotor.set(elbow);
-    m_wristMotor.set(wrist);
-  }
-
-  public double[] setArmPosition(double x, double y, double wristAngle) {
-    double[] armAngles = calcAngles(x, y);
-
-    m_periodicIO.shoulderAngle = armAngles[0];
-    m_periodicIO.elbowAngle = armAngles[1];
-    m_periodicIO.wristAngle = wristAngle;
-
-    m_armSim.updateArmPosition(armAngles[0], armAngles[1], wristAngle, x, y);
-
-    // double shoulderPIDOutput =
-    // m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
-    // Units.degreesToRadians(m_periodicIO.elbowAngle));
-    // m_periodicIO.shoulderMotorPower = shoulderPIDOutput;
-
-    m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
 
     // We HAVE to call calculate here, even if we don't use the output, because it's
     // the method that updates the internal position error of the PID controller.
@@ -132,8 +108,40 @@ public class Arm extends Subsystem {
     } else {
       m_periodicIO.wristMotorPower = 0.0;
     }
+    m_periodicIO.wristMotorPower = wristPIDOutput;
+    m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
+  }
+
+  public void manual(double shoulder, double elbow, double wrist) {
+    m_shoulderMotor.set(shoulder);
+    m_elbowMotor.set(elbow);
+    m_wristMotor.set(wrist);
+  }
+
+  public double[] setArmPosition(double x, double y) {
+    double[] armAngles = calcAngles(x, y);
+
+    m_periodicIO.shoulderAngle = armAngles[0];
+    m_periodicIO.elbowAngle = armAngles[1];
+
+    m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
+
+    // double shoulderPIDOutput =
+    // m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
+    // Units.degreesToRadians(m_periodicIO.elbowAngle));
+    // m_periodicIO.shoulderMotorPower = shoulderPIDOutput;
+
+    m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
 
     return armAngles;
+  }
+
+  public void rotateWrist() {
+    m_periodicIO.wristAngle -= 90;
+  }
+
+  public void setWristAngle(double wristAngle) {
+    m_periodicIO.wristAngle = wristAngle;
   }
 
   /**
@@ -162,16 +170,6 @@ public class Arm extends Subsystem {
     elbowTargetAngle = Units.radiansToDegrees(elbowTargetAngle);
 
     return new double[] { shoulderTargetAngle, elbowTargetAngle };
-  }
-
-  // TODO Add wrist limit
-  public void rotWrist(double addedAngle) { // This should work (always needs to be positive)
-    m_periodicIO.wristAngle += addedAngle;
-
-    double wristPIDOutput = Math.abs(m_wristPID.calculate(m_wristEncoder.getDistance(),
-        Units.degreesToRadians(m_periodicIO.wristAngle)));
-
-    m_wristMotor.setVoltage(wristPIDOutput);
   }
 
   public double getElbowPositionDegrees() {

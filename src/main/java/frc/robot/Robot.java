@@ -193,9 +193,10 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(posX, posY));
     double targetX = Preferences.getDouble("targetX", 20);
     double targetY = Preferences.getDouble("targetY", 20);
-    double wristAngle = Preferences.getDouble("wristAngle", 0);
+    // double wristAngle = Preferences.getDouble("wristAngle", 0);
 
-    SmartDashboard.putNumberArray("Arm Values", m_arm.setArmPosition(targetX, targetY, wristAngle));
+    // m_arm.setWristAngle(wristAngle);
+    SmartDashboard.putNumberArray("Arm Values", m_arm.setArmPosition(targetX, targetY));
 
     // switch(test_state) {
     // case 0:
@@ -213,6 +214,10 @@ public class Robot extends TimedRobot {
 
     if (m_operatorController.getRawButtonPressed(3)) {
       test_state = test_state == 2 ? 0 : test_state + 1;
+    }
+
+    if (m_operatorController.getRawButtonPressed(6)) {
+      m_arm.rotateWrist();
     }
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
