@@ -29,8 +29,8 @@ public class Arm extends Subsystem {
   private static final double k_elbowMotorI = 0.0;
   private static final double k_elbowMotorD = 0.0;
 
-  private static final double k_wristMotorP = 0.0025;
-  private static final double k_wristMotorI = 0.0;
+  private static final double k_wristMotorP = 0.05;
+  private static final double k_wristMotorI = 0.025;
   private static final double k_wristMotorD = 0.0;
 
   // TODO: Update for actual robot
@@ -84,7 +84,9 @@ public class Arm extends Subsystem {
 
     // TODO: do this for shoulder and wrist as well
     m_elbowPID.enableContinuousInput(0, 360);
-    m_wristPID.enableContinuousInput(0, 360);
+    m_wristPID.enableContinuousInput(0, 180);
+
+    m_wristMotor.setInverted(true);
 
     m_shoulderMotor.setIdleMode(IdleMode.kBrake);
     m_elbowMotor.setIdleMode(IdleMode.kBrake);
@@ -118,14 +120,18 @@ public class Arm extends Subsystem {
     // double shoulderPIDOutput =
     // m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
     // Units.degreesToRadians(m_periodicIO.elbowAngle));
-
-    double elbowPIDOutput = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
-
-    double wristPIDOutput = m_wristPID.calculate(getWristPositionDegrees(), m_periodicIO.wristAngle);
-
     // m_periodicIO.shoulderMotorPower = shoulderPIDOutput;
-    m_periodicIO.elbowMotorPower = elbowPIDOutput;
-    m_periodicIO.wristMotorPower = wristPIDOutput;
+
+    m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
+
+    // We HAVE to call calculate here, even if we don't use the output, because it's
+    // the method that updates the internal position error of the PID controller.
+    double wristPIDOutput = m_wristPID.calculate(getWristPositionDegrees(), m_periodicIO.wristAngle);
+    if (!m_wristPID.atSetpoint()) {
+      m_periodicIO.wristMotorPower = wristPIDOutput;
+    } else {
+      m_periodicIO.wristMotorPower = 0.0;
+    }
 
     return armAngles;
   }
@@ -211,5 +217,10 @@ public class Arm extends Subsystem {
 
     // Wrist
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Position", getWristPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/PositionError", m_wristPID.getPositionError());
+    SmartDashboard.putBoolean(m_smartDashboardKey + "Wrist/AtTarget", m_wristPID.atSetpoint());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Velocity", m_wristMotor.get());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Temperature", m_wristMotor.getMotorTemperature());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Current", m_wristMotor.getOutputCurrent());
   }
 }
