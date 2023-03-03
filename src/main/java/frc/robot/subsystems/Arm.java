@@ -124,14 +124,7 @@ public class Arm extends Subsystem {
     m_periodicIO.shoulderAngle = armAngles[0];
     m_periodicIO.elbowAngle = armAngles[1];
 
-    m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
-
-    // double shoulderPIDOutput =
-    // m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
-    // Units.degreesToRadians(m_periodicIO.elbowAngle));
-    // m_periodicIO.shoulderMotorPower = shoulderPIDOutput;
-
-    m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
+    m_armSim.updateArmPosition(armAngles[0], armAngles[1] + armAngles[0], m_periodicIO.wristAngle, x, y);
 
     return armAngles;
   }
@@ -161,10 +154,12 @@ public class Arm extends Subsystem {
 
     double shoulderTargetAngle = x >= 0 ? psi - alpha : psi + alpha;
 
-    double elbowTargetAngle = Math.asin((x - (Constants.Arm.Shoulder.k_length * Math.sin(shoulderTargetAngle))) /
-        Constants.Arm.Elbow.k_length);
+    // The position of the end of the first arm
+    double xPrime = Constants.Arm.Shoulder.k_length * Math.sin(shoulderTargetAngle);
+    double yPrime = Constants.Arm.k_shoulderPivotHeight
+        + Constants.Arm.Shoulder.k_length * Math.cos(shoulderTargetAngle);
 
-    elbowTargetAngle += shoulderTargetAngle;
+    double elbowTargetAngle = Math.atan2(x - xPrime, yPrime - y);
 
     shoulderTargetAngle = Units.radiansToDegrees(shoulderTargetAngle);
     elbowTargetAngle = Units.radiansToDegrees(elbowTargetAngle);
