@@ -97,9 +97,21 @@ public class Arm extends Subsystem {
 
   @Override
   public void periodic() {
+    //////////////
+    // SHOULDER //
+    //////////////
+    m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.elbowAngle);
     // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+
+    ///////////
+    // ELBOW //
+    ///////////
+    m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
     // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
+    ///////////
+    // WRIST //
+    ///////////
     // We HAVE to call calculate here, even if we don't use the output, because it's
     // the method that updates the internal position error of the PID controller.
     double wristPIDOutput = m_wristPID.calculate(getWristPositionDegrees(), m_periodicIO.wristAngle);
@@ -200,7 +212,7 @@ public class Arm extends Subsystem {
   @Override
   public void outputTelemetry() {
     // Shoulder
-    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", m_shoulderEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", getShoulderPositionDegrees());
 
     // Elbow
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", getElbowPositionDegrees());

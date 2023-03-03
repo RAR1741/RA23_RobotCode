@@ -34,7 +34,7 @@
   {
     "name": "/Preferences/targetY",
     "type": "double",
-    "value": 0.0,
+    "value": 55.0,
     "properties": {
       "persistent": true
     }

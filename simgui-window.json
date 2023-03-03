@@ -14,6 +14,13 @@
       "ypos": "93"
     }
   },
+  "Table": {
+    "0x542B5671,2": {
+      "Column 0  Width": "163",
+      "Column 1  Width": "243",
+      "RefScale": "13"
+    }
+  },
   "Window": {
     "###/FMSInfo": {
       "Collapsed": "0",
