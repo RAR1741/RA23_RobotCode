@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -21,7 +24,7 @@ public class Arm extends Subsystem {
 
   private final String m_smartDashboardKey = "Arm/";
 
-  private static final double k_shoulderMotorP = 1.0;
+  private static final double k_shoulderMotorP = 0.25;
   private static final double k_shoulderMotorI = 0.0;
   private static final double k_shoulderMotorD = 0.0;
 
@@ -54,6 +57,8 @@ public class Arm extends Subsystem {
   private final DutyCycleEncoder m_elbowEncoder = new DutyCycleEncoder(Constants.Arm.Elbow.k_encoderId);
   private final DutyCycleEncoder m_wristEncoder = new DutyCycleEncoder(Constants.Arm.Wrist.k_encoderId);
 
+  private final RelativeEncoder tempShoulderEncoder = m_shoulderMotor.getEncoder(Type.kHallSensor, 42);
+  private final double shoulderStart;
   private static class PeriodicIO {
     // Automated control
     public double shoulderAngle = 0.0;
@@ -78,17 +83,21 @@ public class Arm extends Subsystem {
   private Arm() {
     m_armSim = ArmSim.getInstance();
 
-    m_shoulderEncoder.setDistancePerRotation(k_shoulderDegreesPerPulse);
-    m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
-    m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
+    // m_shoulderEncoder.setDistancePerRotation(k_shoulderDegreesPerPulse);
+    // m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
+    // m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
+
+    tempShoulderEncoder.setPositionConversionFactor((1 / 80) * (16 / 72));
+    shoulderStart = tempShoulderEncoder.getPosition();
 
     // TODO: do this for shoulder and wrist as well
+    m_shoulderPID.enableContinuousInput(0, 360);
     m_elbowPID.enableContinuousInput(0, 360);
     m_wristPID.enableContinuousInput(0, 360);
 
     m_wristMotor.setInverted(true);
 
-    m_shoulderMotor.setIdleMode(IdleMode.kBrake);
+    m_shoulderMotor.setIdleMode(IdleMode.kCoast);
     m_elbowMotor.setIdleMode(IdleMode.kBrake);
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
@@ -100,8 +109,8 @@ public class Arm extends Subsystem {
     //////////////
     // SHOULDER //
     //////////////
-    m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.elbowAngle);
-    // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+    m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.shoulderAngle);
+    m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
 
     ///////////
     // ELBOW //
@@ -179,6 +188,12 @@ public class Arm extends Subsystem {
     return new double[] { shoulderTargetAngle, elbowTargetAngle };
   }
 
+  public double getShoulderPositionDegrees() {
+    // double value = m_shoulderEncoder.getAbsolutePosition() - Constants.Arm.Shoulder.k_offset;
+    double value = tempShoulderEncoder.getPosition() - shoulderStart;
+    return Units.rotationsToDegrees(Helpers.modRotations(value));
+  }
+
   public double getElbowPositionDegrees() {
     double value = m_elbowEncoder.getAbsolutePosition() - Constants.Arm.Elbow.k_offset;
     return Units.rotationsToDegrees(Helpers.modRotations(value));
@@ -213,6 +228,11 @@ public class Arm extends Subsystem {
   public void outputTelemetry() {
     // Shoulder
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", getShoulderPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/PositionError", m_shoulderPID.getPositionError());
+    SmartDashboard.putBoolean(m_smartDashboardKey + "Shoulder/AtTarget", m_shoulderPID.atSetpoint());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Velocity", m_shoulderMotor.get());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Temperature", m_shoulderMotor.getMotorTemperature());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Current", m_shoulderMotor.getOutputCurrent());
 
     // Elbow
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", getElbowPositionDegrees());
