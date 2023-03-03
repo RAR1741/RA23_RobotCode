@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
 
     m_compressor = new Compressor(PneumaticsModuleType.REVPH);
     m_arm.setGripper(false);
+    m_arm.clearPIDAccumulation();
 
     // Camera server
     /*
