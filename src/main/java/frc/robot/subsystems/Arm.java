@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -139,15 +143,34 @@ public class Arm extends Subsystem {
     m_wristMotor.set(wrist);
   }
 
+  private ArrayList<ArmPose> getPath(double startX, double startY, double endX, double endY) {
+    ArrayList<ArmPose> path = new ArrayList<>();
+    path.add(new ArmPose(startX, startY, null));
+
+    if((startX < 0 &&  endX > 0) || (startX > 0 && endX < 0)) {
+      if(startY < Constants.Arm.Preset.HOME.getPose().getY()) {
+        path.add(new ArmPose(startX, Constants.Arm.Preset.HOME.getPose().getY(), null));
+      }
+      
+      path.add(Constants.Arm.Preset.HOME.getPose());
+
+      if(endY < Constants.Arm.Preset.HOME.getPose().getY()) {
+        path.add(new ArmPose(endX, Constants.Arm.Preset.HOME.getPose().getY(), null));
+      }
+    }
+
+    path.add(new ArmPose(endX, endY, null));
+    return path;
+  }
+
   private boolean isArmPositionValid(double x, double y) {
     // Is real number pass
     if (Double.isNaN(x) || Double.isNaN(y)) {
       return false;
     }
 
-    // Is robot going to die pass
-    if (Math.abs(x) < 20
-        && y < Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length - Constants.Arm.Elbow.k_length) {
+    //Is robot going to die pass
+    if(Math.abs(x) < Constants.Robot.k_length / 2 && y < Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length - Constants.Arm.Elbow.k_length) {
       return false;
     }
 
