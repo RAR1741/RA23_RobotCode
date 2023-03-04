@@ -97,8 +97,8 @@ public class Arm extends Subsystem {
 
     m_wristMotor.setInverted(true);
 
-    m_shoulderMotor.setIdleMode(IdleMode.kCoast);
-    m_elbowMotor.setIdleMode(IdleMode.kCoast);
+    m_shoulderMotor.setIdleMode(IdleMode.kBrake);
+    m_elbowMotor.setIdleMode(IdleMode.kBrake);
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
     System.out.println("Hey, I just met you,\nAnd this is CRAZY\nBut here's my number,\nSo call me, maybe");
@@ -110,13 +110,13 @@ public class Arm extends Subsystem {
     // SHOULDER //
     //////////////
     m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.shoulderAngle);
-    // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+    m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
 
     ///////////
     // ELBOW //
     ///////////
     m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
-    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
     ///////////
     // WRIST //
@@ -139,10 +139,32 @@ public class Arm extends Subsystem {
     m_wristMotor.set(wrist);
   }
 
+  private boolean isArmPositionValid(double x, double y) {
+    //Is real number pass
+    if(Double.isNaN(x) || Double.isNaN(y)) {
+      return false;
+    }
+
+    //Is robot going to die pass
+    if(Math.abs(x) < 20 && y < Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length - Constants.Arm.Elbow.k_length) {
+      return false;
+    }
+
+    //Is legal position pass
+    if(Math.abs(x) > 48 + (Constants.Robot.k_length / 2) || y > 78) {
+      return false;
+    }
+
+    //Happy ^_^
+    return true;
+  }
+
   public double[] setArmPosition(double x, double y) {
     double[] armAngles = calcAngles(x, y);
 
-    if(!(Double.isNaN(armAngles[0]) || Double.isNaN(armAngles[1]))) {
+    SmartDashboard.putBoolean(m_smartDashboardKey + "PositionIsValid", isArmPositionValid(x, y));
+
+    if(isArmPositionValid(x, y)) {
       m_periodicIO.shoulderAngle = armAngles[0];
       m_periodicIO.elbowAngle = armAngles[1];
 
