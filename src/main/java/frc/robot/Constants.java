@@ -88,6 +88,14 @@ public final class Constants {
 
       public static final double k_offset = 0.162329;
     }
+
+    public static class Positions {
+      public static final double[] k_highScore = {55.7, 108.8};
+      public static final double[] k_midScore = {22.6, 78.3};
+      public static final double[] k_groundPickup = {55.9, 1.4}; //cone pointed towards the robot
+      public static final double[] k_stationPickup = {6.2, 79};
+      public static final double[] k_stowed = {0, 11.5};
+    }
   }
 
   public static class Field {

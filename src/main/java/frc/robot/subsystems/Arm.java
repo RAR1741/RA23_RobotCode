@@ -97,8 +97,8 @@ public class Arm extends Subsystem {
 
     m_wristMotor.setInverted(true);
 
-    m_shoulderMotor.setIdleMode(IdleMode.kBrake);
-    m_elbowMotor.setIdleMode(IdleMode.kBrake);
+    m_shoulderMotor.setIdleMode(IdleMode.kCoast);
+    m_elbowMotor.setIdleMode(IdleMode.kCoast);
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
     System.out.println("Hey, I just met you,\nAnd this is CRAZY\nBut here's my number,\nSo call me, maybe");
@@ -110,13 +110,13 @@ public class Arm extends Subsystem {
     // SHOULDER //
     //////////////
     m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.shoulderAngle);
-    m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+    // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
 
     ///////////
     // ELBOW //
     ///////////
     m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
-    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
     ///////////
     // WRIST //
