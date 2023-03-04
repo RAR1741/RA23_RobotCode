@@ -12,7 +12,7 @@ import frc.robot.controls.controllers.DriverController;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
   private final DriverController m_driverController = new DriverController(0, true, true);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
