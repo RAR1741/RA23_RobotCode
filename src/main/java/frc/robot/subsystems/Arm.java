@@ -1,10 +1,9 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -59,6 +58,7 @@ public class Arm extends Subsystem {
 
   private final RelativeEncoder tempShoulderEncoder = m_shoulderMotor.getEncoder(Type.kHallSensor, 42);
   private final double shoulderStart;
+
   private static class PeriodicIO {
     // Automated control
     public double shoulderAngle = 0.0;
@@ -140,22 +140,23 @@ public class Arm extends Subsystem {
   }
 
   private boolean isArmPositionValid(double x, double y) {
-    //Is real number pass
-    if(Double.isNaN(x) || Double.isNaN(y)) {
+    // Is real number pass
+    if (Double.isNaN(x) || Double.isNaN(y)) {
       return false;
     }
 
-    //Is robot going to die pass
-    if(Math.abs(x) < 20 && y < Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length - Constants.Arm.Elbow.k_length) {
+    // Is robot going to die pass
+    if (Math.abs(x) < 20
+        && y < Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length - Constants.Arm.Elbow.k_length) {
       return false;
     }
 
-    //Is legal position pass
-    if(Math.abs(x) > 48 + (Constants.Robot.k_length / 2) || y > 78) {
+    // Is legal position pass
+    if (Math.abs(x) > 48 + (Constants.Robot.k_length / 2) || y > 78) {
       return false;
     }
 
-    //Happy ^_^
+    // Happy ^_^
     return true;
   }
 
@@ -164,7 +165,7 @@ public class Arm extends Subsystem {
 
     SmartDashboard.putBoolean(m_smartDashboardKey + "PositionIsValid", isArmPositionValid(x, y));
 
-    if(isArmPositionValid(x, y)) {
+    if (isArmPositionValid(x, y)) {
       m_periodicIO.shoulderAngle = armAngles[0];
       m_periodicIO.elbowAngle = armAngles[1];
 
@@ -184,7 +185,7 @@ public class Arm extends Subsystem {
 
   /**
    * (0, 11.5) is the desired default position :P
-   * 
+   *
    * @param x Horizontal distance from the center of the robot
    * @param y Vertical distance from the floor
    * @return An array containing the shoulder and elbow target angles
@@ -214,7 +215,8 @@ public class Arm extends Subsystem {
   }
 
   public double getShoulderPositionDegrees() {
-    // double value = m_shoulderEncoder.getAbsolutePosition() - Constants.Arm.Shoulder.k_offset;
+    // double value = m_shoulderEncoder.getAbsolutePosition() -
+    // Constants.Arm.Shoulder.k_offset;
     double value = tempShoulderEncoder.getPosition() - shoulderStart;
     return Units.rotationsToDegrees(Helpers.modRotations(value));
   }
