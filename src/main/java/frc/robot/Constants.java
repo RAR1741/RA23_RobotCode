@@ -59,7 +59,7 @@ public final class Constants {
     public static class Shoulder {
       public static final int k_motorId = 13;
       public static final int k_encoderId = 2; // DIO
-      public static final double k_length = 30.5; // Inches
+      public static final double k_length = 30.75; // Inches
       public static final double k_mass = Units.lbsToKilograms(15); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
@@ -70,7 +70,7 @@ public final class Constants {
     public static class Elbow {
       public static final int k_motorId = 14;
       public static final int k_encoderId = 1; // DIO
-      public static final double k_length = 39; // Inches
+      public static final double k_length = 38.25; // Inches
       public static final double k_mass = Units.lbsToKilograms(100); // Kg
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);

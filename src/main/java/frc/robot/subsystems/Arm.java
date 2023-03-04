@@ -24,11 +24,11 @@ public class Arm extends Subsystem {
 
   private final String m_smartDashboardKey = "Arm/";
 
-  private static final double k_shoulderMotorP = 0.25;
-  private static final double k_shoulderMotorI = 0.0;
+  private static final double k_shoulderMotorP = 0.07;
+  private static final double k_shoulderMotorI = 0.02;
   private static final double k_shoulderMotorD = 0.0;
 
-  private static final double k_elbowMotorP = 1.0;
+  private static final double k_elbowMotorP = 0.125;
   private static final double k_elbowMotorI = 0.0;
   private static final double k_elbowMotorD = 0.0;
 
@@ -87,7 +87,7 @@ public class Arm extends Subsystem {
     // m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
     // m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
 
-    tempShoulderEncoder.setPositionConversionFactor((1 / 80) * (16 / 72));
+    tempShoulderEncoder.setPositionConversionFactor((1.0 / 80.0) * (16.0 / 72.0));
     shoulderStart = tempShoulderEncoder.getPosition();
 
     // TODO: do this for shoulder and wrist as well
@@ -97,7 +97,7 @@ public class Arm extends Subsystem {
 
     m_wristMotor.setInverted(true);
 
-    m_shoulderMotor.setIdleMode(IdleMode.kCoast);
+    m_shoulderMotor.setIdleMode(IdleMode.kBrake);
     m_elbowMotor.setIdleMode(IdleMode.kBrake);
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
@@ -116,7 +116,7 @@ public class Arm extends Subsystem {
     // ELBOW //
     ///////////
     m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
-    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
     ///////////
     // WRIST //
@@ -142,10 +142,12 @@ public class Arm extends Subsystem {
   public double[] setArmPosition(double x, double y) {
     double[] armAngles = calcAngles(x, y);
 
-    m_periodicIO.shoulderAngle = armAngles[0];
-    m_periodicIO.elbowAngle = armAngles[1];
+    if(!(Double.isNaN(armAngles[0]) || Double.isNaN(armAngles[1]))) {
+      m_periodicIO.shoulderAngle = armAngles[0];
+      m_periodicIO.elbowAngle = armAngles[1];
 
-    m_armSim.updateArmPosition(armAngles[0], armAngles[1] + armAngles[0], m_periodicIO.wristAngle, x, y);
+      m_armSim.updateArmPosition(armAngles[0], armAngles[1] + armAngles[0], m_periodicIO.wristAngle, x, y);
+    }
 
     return armAngles;
   }
@@ -159,7 +161,8 @@ public class Arm extends Subsystem {
   }
 
   /**
-   *
+   * (0, 11.5) is the desired default position :P
+   * 
    * @param x Horizontal distance from the center of the robot
    * @param y Vertical distance from the floor
    * @return An array containing the shoulder and elbow target angles
@@ -253,5 +256,9 @@ public class Arm extends Subsystem {
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Velocity", m_wristMotor.get());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Temperature", m_wristMotor.getMotorTemperature());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Current", m_wristMotor.getOutputCurrent());
+  }
+
+  public void rezero() {
+    tempShoulderEncoder.setPosition(0);
   }
 }

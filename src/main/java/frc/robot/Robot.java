@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
   // running. We don't need to do anything else with it, so we'll suppress the
   // warning.
   @SuppressWarnings("unused")
-  private Compressor m_compressor;
+  private final Compressor m_compressor = new Compressor(PneumaticsModuleType.REVPH);;
 
   private int test_state = 1;
 
@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
 
-    m_compressor = new Compressor(PneumaticsModuleType.REVPH);
     m_arm.setGripper(false);
     m_arm.clearPIDAccumulation();
 
@@ -223,6 +222,10 @@ public class Robot extends TimedRobot {
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
       m_arm.setGripper(!m_arm.getGripperEngaged());
+    }
+
+    if(m_driverController.getRawButtonPressed(3)) {
+      m_arm.rezero();
     }
 
     m_arm.outputTelemetry();
