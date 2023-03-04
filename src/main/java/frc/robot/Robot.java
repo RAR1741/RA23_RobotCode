@@ -3,7 +3,13 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.lang.model.util.ElementScanner14;
+
+import org.opencv.core.RotatedRect;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -14,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmPose;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
@@ -181,8 +188,17 @@ public class Robot extends TimedRobot {
     if (!Preferences.containsKey("targetY")) {
       Preferences.setDouble("targetY", 20);
     }
+    if (!Preferences.containsKey("trajX")) {
+      Preferences.setDouble("trajX", 20);
+    }
+    if (!Preferences.containsKey("trajY")) {
+      Preferences.setDouble("trajY", 20);
+    }
     if (!Preferences.containsKey("wristAngle")) {
       Preferences.setDouble("wristAngle", 20);
+    }
+    if (!Preferences.containsKey("startTraj")) {
+      Preferences.setDouble("startTraj", 0);
     }
   }
 
@@ -193,10 +209,33 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(posX, posY));
     double targetX = Preferences.getDouble("targetX", 20);
     double targetY = Preferences.getDouble("targetY", 20);
+
+    double trajEndX = Preferences.getDouble("trajX", 20);
+    double trajEndY = Preferences.getDouble("trajY", 20);
     // double wristAngle = Preferences.getDouble("wristAngle", 0);
 
+    double startTraj = Preferences.getDouble("startTraj", 0);
+
+    if(startTraj == 1) {
+      Preferences.setDouble("startTraj", 2);
+      
+      double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
+      SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
+
+      ArmPose target = new ArmPose(trajEndX,trajEndY,new Rotation2d(0));
+      m_arm.generateTrajectoryToPose(target);
+      m_arm.startTrajectory();
+    }
+    else if(startTraj == 2) {
+      m_arm.runTrajectory();
+    } else {
+      double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
+      SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
+    }
+
     // m_arm.setWristAngle(wristAngle);
-    SmartDashboard.putNumberArray("Arm Values", m_arm.setArmPosition(targetX, targetY));
+
+
 
     // switch(test_state) {
     // case 0:

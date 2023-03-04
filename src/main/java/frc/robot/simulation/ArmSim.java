@@ -116,12 +116,21 @@ public class ArmSim {
 
   public void updateArmPosition(double shoulderAngle, double elbowAngle, double wristAngle, double x, double y) {
     m_arm1.setAngle(k_shoulderSimOffset - shoulderAngle);
-    m_arm2.setAngle(k_elbowSimOffset + elbowAngle);
+    m_arm2.setAngle(k_elbowSimOffset + elbowAngle + shoulderAngle);
     Translation2d setpoint = m_origin.plus(new Translation2d(x, y));
 
     m_crosshair.setPosition(setpoint.getX(), setpoint.getY());
 
+    SmartDashboard.putNumberArray("Arm Sim Angles", new double[] { shoulderAngle, elbowAngle });
     // TODO: add wrist display... somehow...
+  }
+
+  public double[] getArmAngles() {
+    double simShoulderAngle = m_arm1.getAngle();
+    double simElbowAngle = m_arm2.getAngle();
+    double shoulderAngle = k_shoulderSimOffset - simShoulderAngle;
+    double elbowAngle = simElbowAngle - k_elbowSimOffset - shoulderAngle;
+    return new double[] { shoulderAngle, elbowAngle };
   }
 
   // TODO I don't really understand this and didn't want to break anything, so I

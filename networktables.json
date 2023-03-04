@@ -38,5 +38,29 @@
     "properties": {
       "persistent": true
     }
+  },
+  {
+    "name": "/Preferences/startTraj",
+    "type": "double",
+    "value": 2.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/trajX",
+    "type": "double",
+    "value": 20.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/trajY",
+    "type": "double",
+    "value": 30.0,
+    "properties": {
+      "persistent": true
+    }
   }
 ]

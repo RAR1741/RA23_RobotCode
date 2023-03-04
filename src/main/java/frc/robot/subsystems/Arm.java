@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import com.revrobotics.AbsoluteEncoder;
@@ -10,12 +9,21 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Helpers;
@@ -38,6 +46,12 @@ public class Arm extends Subsystem {
   private static final double k_wristMotorP = 0.05;
   private static final double k_wristMotorI = 0.025;
   private static final double k_wristMotorD = 0.0;
+
+  // The units for Trajectories and Pose2d's are in meters, but
+  // we're going to pretend it's in inches.  As long as we put in inches
+  // and expected inches to come out, it doesn't really matter
+  private static final double k_maxTrajectorySpeed = 5; // 5 inches per second
+  private static final double k_maxTrajectoryAcceleration = 5; // 5 in/s^2
 
   // TODO: Update for actual robot
   // distance per pulse = (angle per revolution) / (pulses per revolution)
@@ -62,6 +76,11 @@ public class Arm extends Subsystem {
 
   private final RelativeEncoder tempShoulderEncoder = m_shoulderMotor.getEncoder(Type.kHallSensor, 42);
   private final double shoulderStart;
+
+  // private final TrajectoryConfig m_trajConfig = new TrajectoryConfig(k_maxTrajectorySpeed, k_maxTrajectoryAcceleration);
+  private ArmTrajectory m_currentTrajectory;
+  private boolean m_runningTrajectory = false;
+  private Timer m_trajTimer = new Timer();
 
   private static class PeriodicIO {
     // Automated control
@@ -147,7 +166,7 @@ public class Arm extends Subsystem {
     ArrayList<ArmPose> path = new ArrayList<>();
     path.add(new ArmPose(startX, startY, null));
 
-    if((startX < 0 &&  endX > 0) || (startX > 0 && endX < 0)) {
+    if((startX < 0 &&  endX >= 0) || (startX >= 0 && endX < 0)) {
       if(startY < Constants.Arm.Preset.HOME.getPose().getY()) {
         path.add(new ArmPose(startX, Constants.Arm.k_homeHeight, null));
       }
@@ -192,10 +211,55 @@ public class Arm extends Subsystem {
       m_periodicIO.shoulderAngle = armAngles[0];
       m_periodicIO.elbowAngle = armAngles[1];
 
-      m_armSim.updateArmPosition(armAngles[0], armAngles[1] + armAngles[0], m_periodicIO.wristAngle, x, y);
+      m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
     }
 
     return armAngles;
+  }
+
+  /**
+   * Given a target pose location of the arm, generate a trajectory
+   * @param targetPose (units of inches, and rotation of the wrist)
+   */
+  public void generateTrajectoryToPose(ArmPose targetPose) {
+    double[] currentAngles = m_armSim.getArmAngles();
+    double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
+
+    ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetPose.getX(), targetPose.getY());
+    m_currentTrajectory = new ArmTrajectory(waypoints, 10);
+  }
+
+  public void startTrajectory() {
+    if(m_runningTrajectory == false)
+    {
+      m_runningTrajectory = true;
+      m_trajTimer.reset();
+      m_trajTimer.start();
+    }
+  }
+
+  public void runTrajectory() {
+    if(m_runningTrajectory) {
+      ArmPose trajPose = m_currentTrajectory.sample(m_trajTimer.get());
+      double[] trajAngles = setArmPosition(trajPose.getX(), trajPose.getY());
+      // m_periodicIO.shoulderAngle = trajAngles[0];
+      // m_periodicIO.elbowAngle = trajAngles[1];
+
+      if(m_currentTrajectory.getTotalTime() < m_trajTimer.get())
+      {
+        m_runningTrajectory = false;
+      }
+    }
+    // else {
+    //   double[] currentAngles = m_armSim.getArmAngles();
+    //   double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
+    //   Pose2d currentPose = new Pose2d(currentXY[0], currentXY[1], new Rotation2d(0));
+    // }
+  }
+
+  public void stopTrajectory() {
+    m_runningTrajectory = false;
+    m_trajTimer.stop();
   }
 
   public void rotateWrist() {
@@ -235,6 +299,25 @@ public class Arm extends Subsystem {
     elbowTargetAngle = Units.radiansToDegrees(elbowTargetAngle);
 
     return new double[] { shoulderTargetAngle, elbowTargetAngle };
+  }
+
+  /**
+   *
+   * @param shoulderAngle Shoulder angle (degrees) from vertical (-90 to 90)
+   * @param elbowAngle    Elbow angle (degrees) from vertical (-150 to 150)
+   * @return An array containing the x, y position in inches
+   */
+  public double[] calcXY(double shoulderAngle, double elbowAngle) {
+    double shoulderAngleRad = Math.toRadians(shoulderAngle);
+    double elbowAngleRad = Math.toRadians(elbowAngle);
+    // Position at the end of the first arm
+    double xPrime = Constants.Arm.Shoulder.k_length * Math.sin(shoulderAngleRad);
+    double yPrime = Constants.Arm.k_shoulderPivotHeight
+        + Constants.Arm.Shoulder.k_length * Math.cos(shoulderAngleRad);
+
+    double x = xPrime + Constants.Arm.Elbow.k_length * Math.sin(elbowAngleRad);
+    double y = yPrime - Constants.Arm.Elbow.k_length * Math.cos(elbowAngleRad);
+    return new double[] { x, y };
   }
 
   public double getShoulderPositionDegrees() {
