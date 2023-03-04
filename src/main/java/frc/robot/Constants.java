@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.ArmPose;
 
 public final class Constants {
   public static class Robot {
@@ -55,6 +56,8 @@ public final class Constants {
   public static class Arm {
     // TODO Update for actual robot
     public static final double k_shoulderPivotHeight = 19; // Inches
+    public static final double k_homeHeight = Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length
+        - Constants.Arm.Elbow.k_length;
 
     public static class Shoulder {
       public static final int k_motorId = 13;
@@ -89,12 +92,25 @@ public final class Constants {
       public static final double k_offset = 0.162329;
     }
 
-    public static class Positions {
-      public static final double[] k_highScore = {55.7, 108.8};
-      public static final double[] k_midScore = {22.6, 78.3};
-      public static final double[] k_groundPickup = {55.9, 1.4}; //cone pointed towards the robot
-      public static final double[] k_stationPickup = {6.2, 79};
-      public static final double[] k_stowed = {0, 11.5};
+    public static enum Preset {
+      HOME(new ArmPose(0.0, Constants.Arm.k_homeHeight, null)),
+      SCORE_MID_CUBE(new ArmPose(0.0, 0.0, null)),
+      SCORE_HIGH_CUBE(new ArmPose(0.0, 0.0, null)),
+      SCORE_MID_CONE(new ArmPose(0.0, 0.0, null)),
+      SCORE_HIGH_CONE(new ArmPose(0.0, 0.0, null)),
+      SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
+      DOUBLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
+      FLOOR_CONE(new ArmPose(0.0, 0.0, null));
+
+      private ArmPose m_armPose;
+
+      private Preset(ArmPose pose) {
+        this.m_armPose = pose;
+      }
+
+      public ArmPose getPose() {
+        return this.m_armPose;
+      }
     }
   }
 

@@ -215,27 +215,26 @@ public class ArmSim {
             5,
             new Color8Bit(Color.kWhite)));
 
-    // Have to draw the crosshair in a weird way because each "ligament" has to be connected
-    //   (i.e. 4 lines radially from the center rather than two crossed lines)
+    // Have to draw the crosshair in a weird way because each "ligament" has to be
+    // connected
+    // (i.e. 4 lines radially from the center rather than two crossed lines)
     // TODO: Factor this out
 
     final double k_crosshairLength = 2;
     final double k_crosshairThickness = 1;
     final Color8Bit crosshairColor = new Color8Bit(Color.kOrange);
 
-    final String[] directions = { "Right", "Top", "Left", "Bottom"};
+    final String[] directions = { "Right", "Top", "Left", "Bottom" };
     double crosshairAngle = 0;
     for (String direction : directions) {
-        m_crosshair.append(
-        new MechanismLigament2d(
-            "Crosshair" + direction,
-            k_crosshairLength,
-            crosshairAngle,
-            k_crosshairThickness,
-            crosshairColor
-            )
-        );
-        crosshairAngle += 90;
+      m_crosshair.append(
+          new MechanismLigament2d(
+              "Crosshair" + direction,
+              k_crosshairLength,
+              crosshairAngle,
+              k_crosshairThickness,
+              crosshairColor));
+      crosshairAngle += 90;
     }
   }
 }
