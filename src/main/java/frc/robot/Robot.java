@@ -7,6 +7,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -31,6 +32,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    // Initialize on-board logging
+    DataLogManager.start();
+    DataLogManager.log("Logging initialized. Fard.");
+
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
 
