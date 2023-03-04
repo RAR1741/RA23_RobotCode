@@ -24,7 +24,7 @@ public class Arm extends Subsystem {
 
   private final String m_smartDashboardKey = "Arm/";
 
-  private static final double k_shoulderMotorP = 0.07;
+  private static final double k_shoulderMotorP = 0.1;
   private static final double k_shoulderMotorI = 0.02;
   private static final double k_shoulderMotorD = 0.0;
 
