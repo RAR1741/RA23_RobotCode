@@ -149,13 +149,13 @@ public class Arm extends Subsystem {
 
     if((startX < 0 &&  endX > 0) || (startX > 0 && endX < 0)) {
       if(startY < Constants.Arm.Preset.HOME.getPose().getY()) {
-        path.add(new ArmPose(startX, Constants.Arm.Preset.HOME.getPose().getY(), null));
+        path.add(new ArmPose(startX, Constants.Arm.k_homeHeight, null));
       }
       
       path.add(Constants.Arm.Preset.HOME.getPose());
 
       if(endY < Constants.Arm.Preset.HOME.getPose().getY()) {
-        path.add(new ArmPose(endX, Constants.Arm.Preset.HOME.getPose().getY(), null));
+        path.add(new ArmPose(endX, Constants.Arm.k_homeHeight, null));
       }
     }
 
@@ -170,7 +170,7 @@ public class Arm extends Subsystem {
     }
 
     //Is robot going to die pass
-    if(Math.abs(x) < Constants.Robot.k_length / 2 && y < Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length - Constants.Arm.Elbow.k_length) {
+    if(Math.abs(x) < Constants.Robot.k_length / 2 && y < Constants.Arm.k_homeHeight) {
       return false;
     }
 
