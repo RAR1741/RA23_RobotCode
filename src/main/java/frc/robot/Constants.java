@@ -1,7 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.ArmPose;
+import frc.robot.subsystems.arm.ArmPose;
 
 public final class Constants {
   public static class Robot {

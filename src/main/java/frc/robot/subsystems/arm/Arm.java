@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.arm;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Helpers;
 import frc.robot.simulation.ArmSim;
+import frc.robot.subsystems.Subsystem;
 
 public class Arm extends Subsystem {
   private static Arm m_arm = null;

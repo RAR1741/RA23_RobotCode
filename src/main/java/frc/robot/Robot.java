@@ -19,9 +19,9 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.ArmPose;
 import frc.robot.subsystems.Subsystem;
+import frc.robot.subsystems.arm.Arm;
+import frc.robot.subsystems.arm.ArmPose;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class Robot extends TimedRobot {
@@ -218,7 +218,7 @@ public class Robot extends TimedRobot {
 
     if(startTraj == 1) {
       Preferences.setDouble("startTraj", 2);
-      
+
       double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
       SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
 
