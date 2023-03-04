@@ -163,18 +163,34 @@ public class Arm extends Subsystem {
     m_wristMotor.set(wrist);
   }
 
+  private boolean hasOppositeSigns(double x, double y) {
+    return (x < 0 &&  y >= 0) || (x >= 0 && y < 0);
+  }
+
   private ArrayList<ArmPose> getPath(double startX, double startY, double endX, double endY) {
     ArrayList<ArmPose> path = new ArrayList<>();
     path.add(new ArmPose(startX, startY, null));
 
-    if((startX < 0 &&  endX >= 0) || (startX >= 0 && endX < 0)) {
+    if(hasOppositeSigns(startX, endX)) {
       if(startY < Constants.Arm.Preset.HOME.getPose().getY()) {
         path.add(new ArmPose(startX, Constants.Arm.k_homeHeight, null));
+      }
+
+      if(startX < 0) {
+        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+      } else {
+        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
       }
       
       path.add(Constants.Arm.Preset.HOME.getPose());
 
-      if(endY < Constants.Arm.Preset.HOME.getPose().getY()) {
+      if(endX < 0) {
+        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+      } else {
+        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+      }
+
+      if(endY < Constants.Arm.k_homeHeight) {
         path.add(new ArmPose(endX, Constants.Arm.k_homeHeight, null));
       }
     }
