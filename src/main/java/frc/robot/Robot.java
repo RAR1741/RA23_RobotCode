@@ -3,6 +3,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.littletonrobotics.junction.LoggedRobot;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
