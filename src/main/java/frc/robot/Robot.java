@@ -3,10 +3,14 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -22,6 +26,8 @@ public class Robot extends LoggedRobot {
   private final SlewRateLimiter m_yRateLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_rotRateLimiter = new SlewRateLimiter(3);
 
+  private Logger m_logger;
+
   // Robot subsystems
   private List<Subsystem> m_allSubsystems = new ArrayList<>();
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
@@ -35,8 +41,20 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotInit() {
     // Initialize on-board logging
-    DataLogManager.start();
-    DataLogManager.log("Logging initialized. Fard.");
+    m_logger = Logger.getInstance();
+    
+    if (isReal()) {
+      m_logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); //TODO: Find out what the value is, rn it goes to a USB stick potentially plugged in tp the RoboRIO
+      m_logger.addDataReceiver(new NT4Publisher()); // Publish to NT
+    } else {
+      m_logger.addDataReceiver(new WPILOGWriter(""));
+      m_logger.addDataReceiver(new NT4Publisher());
+    }
+
+    m_logger.start();
+
+    System.out.println("Logging initialized. Fard."); //It logs the console :P
+    // DataLogManager.log("Logging initialized. Fard."); // :(
 
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
