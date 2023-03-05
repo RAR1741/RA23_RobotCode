@@ -43,6 +43,7 @@ public class ArmTrajectory {
     SmartDashboard.putString("Waypoints", m_waypoints.toString());
     SmartDashboard.putString("WaypointDistances", m_waypointDists.toString());
     SmartDashboard.putString("WaypointTimes", m_waypointTimes.toString());
+    SmartDashboard.putNumber("TotalTime", m_totalTime);
   }
 
   /**
@@ -95,7 +96,7 @@ public class ArmTrajectory {
     double totalLength = 0.0;
     for(int i = 0; i < waypoints.size() - 1; i++)
     {
-      totalLength = dist(waypoints.get(i), waypoints.get(i+1));
+      totalLength += dist(waypoints.get(i), waypoints.get(i+1));
     }
     return totalLength;
   }
