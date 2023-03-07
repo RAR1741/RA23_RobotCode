@@ -10,11 +10,8 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-<<<<<<< HEAD
 import frc.robot.autonomous.Autonomous;
-=======
 import edu.wpi.first.wpilibj.DataLogManager;
->>>>>>> origin/master
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.logging.Logger;
 import frc.robot.subsystems.Subsystem;
