@@ -3,12 +3,19 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.controls.controllers.DriverController;
@@ -35,13 +42,15 @@ public class Robot extends TimedRobot {
   // running. We don't need to do anything else with it, so we'll suppress the
   // warning.
   @SuppressWarnings("unused")
-  private final Compressor m_compressor = new Compressor(PneumaticsModuleType.REVPH);;
+  private final Compressor m_compressor = new Compressor(PneumaticsModuleType.REVPH);
 
   // private int test_state = 1;
 
   // private UsbCamera mCamera;
 
-  // private final Timer m_stoppedTimer = new Timer();
+  private final Timer m_stoppedTimer = new Timer();
+
+  PathPlannerTrajectory autoPath;
 
   private final Field2d m_field = new Field2d();
 
@@ -50,6 +59,9 @@ public class Robot extends TimedRobot {
     // Initialize on-board logging
     DataLogManager.start();
     DataLogManager.log("Logging initialized. Fard.");
+
+    // Start the PathPlanner server
+    PathPlannerServer.startServer(5811);
 
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
@@ -77,10 +89,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    autoPath = PathPlanner.loadPath("BlueDefault",
+        new PathConstraints(Constants.Drivetrain.k_maxSpeed, Constants.Drivetrain.k_maxAngularSpeed));
+
+    // HashMap<String, Command> eventMap = new HashMap<>();
+    // eventMap.put("scoreHigh", new PrintCommand("Passed marker 1"));
+
+    m_stoppedTimer.start();
   }
 
   @Override
   public void autonomousPeriodic() {
+    PathPlannerState autoState = (PathPlannerState) autoPath.sample(m_stoppedTimer.get());
+
+    // Print the velocity at the sampled time
+    System.out.println(autoState.velocityMetersPerSecond);
+
+    // m_swerve.drive(xSpeed, ySpeed, rot, true);
   }
 
   @Override
@@ -242,7 +267,7 @@ public class Robot extends TimedRobot {
     // }
 
     // if (m_operatorController.getRawButtonPressed(3)) {
-    //   test_state = test_state == 2 ? 0 : test_state + 1;
+    // test_state = test_state == 2 ? 0 : test_state + 1;
     // }
 
     if (m_operatorController.getRawButtonPressed(6)) {
@@ -268,7 +293,7 @@ public class Robot extends TimedRobot {
       m_arm.setGripper(!m_arm.getGripperEngaged());
     }
 
-    if(m_driverController.getRawButtonPressed(3)) {
+    if (m_driverController.getRawButtonPressed(3)) {
       m_arm.rezero();
     }
 
