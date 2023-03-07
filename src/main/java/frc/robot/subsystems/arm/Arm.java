@@ -2,28 +2,18 @@ package frc.robot.subsystems.arm;
 
 import java.util.ArrayList;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
-import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -97,6 +87,8 @@ public class Arm extends Subsystem {
   }
 
   private PeriodicIO m_periodicIO = new PeriodicIO();
+  private double m_xPosition = 0;
+  private double m_yPosition = Constants.Arm.k_homeHeight;
 
   public static Arm getInstance() {
     if (m_arm == null) {
@@ -164,36 +156,37 @@ public class Arm extends Subsystem {
     m_wristMotor.set(wrist);
   }
 
-  private boolean hasOppositeSigns(double x, double y) {
-    return (x < 0 &&  y >= 0) || (x >= 0 && y < 0);
-  }
-
   private ArrayList<ArmPose> getPath(double startX, double startY, double endX, double endY) {
     ArrayList<ArmPose> path = new ArrayList<>();
     path.add(new ArmPose(startX, startY, null));
 
-    if(hasOppositeSigns(startX, endX)) {
-      if(startY < Constants.Arm.Preset.HOME.getPose().getY()) {
-        path.add(new ArmPose(startX, Constants.Arm.k_homeHeight+3.0639, null));
-      }
+    boolean enteringFront = (startX > Constants.Robot.k_length / 2 && endX < Constants.Robot.k_length / 2);
+    boolean enteringBack = (startX < -Constants.Robot.k_length / 2 && endX > -Constants.Robot.k_length / 2);
+    boolean exitingFront = (startX < Constants.Robot.k_length / 2 && endX > Constants.Robot.k_length / 2);
+    boolean exitingBack = (startX > -Constants.Robot.k_length / 2 && endX < -Constants.Robot.k_length / 2);;
+    boolean startingLow = (startY < Constants.Arm.k_homeHeight);
+    boolean endingLow = (endY < Constants.Arm.k_homeHeight);
 
-      if(startX < 0 && startX < -Constants.Robot.k_length / 2) {
-        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
-      } else if(startX > 0 && startX > Constants.Robot.k_length / 2) {
-        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
-      }
-      
-      path.add(Constants.Arm.Preset.HOME.getPose());
+    if(startingLow) {
+      path.add(new ArmPose(startX, Constants.Arm.k_homeHeight + 3.0639, null));
+    }
 
-      if(endX < 0 && endX < -Constants.Robot.k_length / 2) {
-        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
-      } else if(endX > 0 && endX > Constants.Robot.k_length / 2) {
-        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+    if(enteringFront) {
+      path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
+      if(exitingBack) {
+        path.add(Constants.Arm.Preset.HOME.getPose());
+        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
       }
+    } else if(enteringBack) {
+      path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
+      if(exitingFront) {
+        path.add(Constants.Arm.Preset.HOME.getPose());
+        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
+      }
+    }
 
-      if(endY < Constants.Arm.k_homeHeight) {
-        path.add(new ArmPose(endX, Constants.Arm.k_homeHeight+3.0639, null));
-      }
+    if(endingLow) {
+      path.add(new ArmPose(endX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
     path.add(new ArmPose(endX, endY, null));
@@ -233,10 +226,11 @@ public class Arm extends Subsystem {
       m_periodicIO.shoulderAngle = armAngles[0];
       m_periodicIO.elbowAngle = armAngles[1];
 
-      Preferences.setDouble("targetX", x);
-      Preferences.setDouble("targetY", y);
-      m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
+      m_xPosition = x;
+      m_yPosition = y;
+      // m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
     }
+    m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
 
     return armAngles;
   }
@@ -269,7 +263,7 @@ public class Arm extends Subsystem {
       // m_periodicIO.elbowAngle = trajAngles[1];
 
       if(m_currentTrajectory.getTotalTime() < m_trajTimer.get()) {
-        m_runningTrajectory = false;
+        stopTrajectory();
       }
     }
     // else {
@@ -387,6 +381,14 @@ public class Arm extends Subsystem {
     m_wristPID.reset();
   }
 
+  public void rezero() {
+    tempShoulderEncoder.setPosition(0);
+  }
+
+  public void adjustPosition(double xChange, double yChange) {
+    setArmPosition(m_xPosition + xChange, m_yPosition + yChange);
+  }
+
   @Override
   public void stop() {
     m_shoulderMotor.set(0);
@@ -400,6 +402,10 @@ public class Arm extends Subsystem {
 
   @Override
   public void outputTelemetry() {
+    SmartDashboard.putNumber(m_smartDashboardKey + "X", m_xPosition);
+    SmartDashboard.putNumber(m_smartDashboardKey + "Y", m_yPosition);
+    SmartDashboard.putBoolean(m_smartDashboardKey + "RunningTrajectory", m_runningTrajectory);
+
     // Shoulder
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", getShoulderPositionDegrees());
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/PositionError", m_shoulderPID.getPositionError());
@@ -421,9 +427,5 @@ public class Arm extends Subsystem {
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Velocity", m_wristMotor.get());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Temperature", m_wristMotor.getMotorTemperature());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Current", m_wristMotor.getOutputCurrent());
-  }
-
-  public void rezero() {
-    tempShoulderEncoder.setPosition(0);
   }
 }

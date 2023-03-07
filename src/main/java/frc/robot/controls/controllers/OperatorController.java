@@ -15,7 +15,7 @@ public class OperatorController extends FilteredController {
   }
 
   public double getArmHorizontalChange(double strength) {
-    return this.getRawAxis(0) * -strength;
+    return this.getRawAxis(0) * strength;
   }
 
   public double getArmVerticalChange(double strength) {
