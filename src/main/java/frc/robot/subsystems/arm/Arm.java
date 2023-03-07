@@ -173,25 +173,25 @@ public class Arm extends Subsystem {
 
     if(hasOppositeSigns(startX, endX)) {
       if(startY < Constants.Arm.Preset.HOME.getPose().getY()) {
-        path.add(new ArmPose(startX, Constants.Arm.k_homeHeight, null));
+        path.add(new ArmPose(startX, Constants.Arm.k_homeHeight+3.0639, null));
       }
 
       if(startX < 0) {
-        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight+3.0639, null));
       } else {
-        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight+3.0639, null));
       }
       
       path.add(Constants.Arm.Preset.HOME.getPose());
 
       if(endX < 0) {
-        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+        path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight+3.0639, null));
       } else {
-        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
+        path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight+3.0639, null));
       }
 
       if(endY < Constants.Arm.k_homeHeight) {
-        path.add(new ArmPose(endX, Constants.Arm.k_homeHeight, null));
+        path.add(new ArmPose(endX, Constants.Arm.k_homeHeight+3.0639, null));
       }
     }
 
@@ -295,22 +295,33 @@ public class Arm extends Subsystem {
    * @return An array containing the shoulder and elbow target angles
    */
   public double[] calcAngles(double x, double y) {
-    double L3 = Math.sqrt(Math.pow(x, 2) + Math.pow(y - Constants.Arm.k_shoulderPivotHeight, 2));
+    double shoulderTargetAngle = 0.0;
+    double elbowTargetAngle = 0.0;
 
-    double alpha = Math.acos(
-        (Math.pow(Constants.Arm.Shoulder.k_length, 2) + Math.pow(L3, 2) - Math.pow(Constants.Arm.Elbow.k_length, 2))
-            / (2 * Constants.Arm.Shoulder.k_length * L3));
+    // If the x,y position is within the width of the robot, fix the shoulder at 0 degrees and only move the elbow
+    if(Math.abs(x) <= Constants.Robot.k_length / 2) {
+      // When inside the frame perimeter, we will disregard the y setpoint so that the shoulder can stay fixed at 0
+      shoulderTargetAngle = 0.0;
 
-    double psi = Math.atan2(x, y - Constants.Arm.k_shoulderPivotHeight);
+      elbowTargetAngle = Math.asin(x / Constants.Arm.Elbow.k_length);
+    } else {
+      double L3 = Math.sqrt(Math.pow(x, 2) + Math.pow(y - Constants.Arm.k_shoulderPivotHeight, 2));
 
-    double shoulderTargetAngle = x >= 0 ? psi - alpha : psi + alpha;
-
-    // The position of the end of the first arm
-    double xPrime = Constants.Arm.Shoulder.k_length * Math.sin(shoulderTargetAngle);
-    double yPrime = Constants.Arm.k_shoulderPivotHeight
-        + Constants.Arm.Shoulder.k_length * Math.cos(shoulderTargetAngle);
-
-    double elbowTargetAngle = Math.atan2(x - xPrime, yPrime - y);
+      double alpha = Math.acos(
+          (Math.pow(Constants.Arm.Shoulder.k_length, 2) + Math.pow(L3, 2) - Math.pow(Constants.Arm.Elbow.k_length, 2))
+              / (2 * Constants.Arm.Shoulder.k_length * L3));
+  
+      double psi = Math.atan2(x, y - Constants.Arm.k_shoulderPivotHeight);
+  
+      shoulderTargetAngle = x >= 0 ? psi - alpha : psi + alpha;
+  
+      // The position of the end of the first arm
+      double xPrime = Constants.Arm.Shoulder.k_length * Math.sin(shoulderTargetAngle);
+      double yPrime = Constants.Arm.k_shoulderPivotHeight
+          + Constants.Arm.Shoulder.k_length * Math.cos(shoulderTargetAngle);
+  
+      elbowTargetAngle = Math.atan2(x - xPrime, yPrime - y);
+    }
 
     shoulderTargetAngle = Units.radiansToDegrees(shoulderTargetAngle);
     elbowTargetAngle = Units.radiansToDegrees(elbowTargetAngle);
