@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Helpers;
 
@@ -128,7 +129,7 @@ public class SwerveModule {
     velocity *= ((2 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio);
 
     // Convert to m per second
-    velocity *= 0.0254;
+    velocity = Units.inchesToMeters(velocity);
 
     return velocity;
   }
@@ -142,7 +143,7 @@ public class SwerveModule {
     double drivePosition = m_driveEncoder.getIntegratedSensorPosition();
     drivePosition /= k_driveEncPerRot; // Convert to # of rotations
     drivePosition *= ((2 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio); // Convert to inches
-    drivePosition *= 0.0254; // Convert to meters
+    drivePosition = Units.inchesToMeters(drivePosition);
 
     return new SwerveModulePosition(
         drivePosition, Rotation2d.fromRotations(getTurnPosition()));

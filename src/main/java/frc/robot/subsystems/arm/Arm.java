@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -176,17 +177,17 @@ public class Arm extends Subsystem {
         path.add(new ArmPose(startX, Constants.Arm.k_homeHeight, null));
       }
 
-      if(startX < 0) {
+      if(startX < 0 && startX < -Constants.Robot.k_length / 2) {
         path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
-      } else {
+      } else if(startX > 0 && startX > Constants.Robot.k_length / 2) {
         path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
       }
       
       path.add(Constants.Arm.Preset.HOME.getPose());
 
-      if(endX < 0) {
+      if(endX < 0 && endX < -Constants.Robot.k_length / 2) {
         path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
-      } else {
+      } else if(endX > 0 && endX > Constants.Robot.k_length / 2) {
         path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight, null));
       }
 
@@ -222,12 +223,18 @@ public class Arm extends Subsystem {
   public double[] setArmPosition(double x, double y) {
     double[] armAngles = calcAngles(x, y);
 
+    if (Double.isNaN(armAngles[0]) || Double.isNaN(armAngles[1])) {
+      return armAngles;
+    }
+
     SmartDashboard.putBoolean(m_smartDashboardKey + "PositionIsValid", isArmPositionValid(x, y));
 
     if (isArmPositionValid(x, y)) {
       m_periodicIO.shoulderAngle = armAngles[0];
       m_periodicIO.elbowAngle = armAngles[1];
 
+      Preferences.setDouble("targetX", x);
+      Preferences.setDouble("targetY", y);
       m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
     }
 
@@ -247,23 +254,21 @@ public class Arm extends Subsystem {
   }
 
   public void startTrajectory() {
-    if(m_runningTrajectory == false)
-    {
+    if(m_runningTrajectory == false) {
       m_runningTrajectory = true;
       m_trajTimer.reset();
       m_trajTimer.start();
     }
   }
 
-  public void runTrajectory() {
+  public boolean runTrajectory() {
     if(m_runningTrajectory) {
       ArmPose trajPose = m_currentTrajectory.sample(m_trajTimer.get());
       double[] trajAngles = setArmPosition(trajPose.getX(), trajPose.getY());
       // m_periodicIO.shoulderAngle = trajAngles[0];
       // m_periodicIO.elbowAngle = trajAngles[1];
 
-      if(m_currentTrajectory.getTotalTime() < m_trajTimer.get())
-      {
+      if(m_currentTrajectory.getTotalTime() < m_trajTimer.get()) {
         m_runningTrajectory = false;
       }
     }
@@ -272,6 +277,8 @@ public class Arm extends Subsystem {
     //   double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
     //   Pose2d currentPose = new Pose2d(currentXY[0], currentXY[1], new Rotation2d(0));
     // }
+
+    return m_runningTrajectory;
   }
 
   public void stopTrajectory() {

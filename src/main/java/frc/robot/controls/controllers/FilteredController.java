@@ -48,7 +48,7 @@ public class FilteredController extends GenericHID {
     return value;
   }
 
-  public boolean getHatUp() { //TODO: We hate this
+  public boolean getHatUpPressed() { //TODO: We hate this
     if(this.getPOV() != -1) {
       if(!m_hatLock) {
         m_hatLock = m_up.get();
@@ -60,7 +60,7 @@ public class FilteredController extends GenericHID {
     return false;
   }
 
-  public boolean getHatDown() {
+  public boolean getHatDownPressed() {
     if(this.getPOV() != -1) {
       if(!m_hatLock) {
         m_hatLock = m_down.get();
@@ -72,7 +72,7 @@ public class FilteredController extends GenericHID {
     return false;
   }
 
-  public boolean getHatLeft() {
+  public boolean getHatLeftPressed() {
     if(this.getPOV() != -1) {
       if(!m_hatLock) {
         m_hatLock = m_left.get();
@@ -84,7 +84,7 @@ public class FilteredController extends GenericHID {
     return false;
   }
 
-  public boolean getHatRight() {
+  public boolean getHatRightPressed() {
     if(this.getPOV() != -1) {
       if(!m_hatLock) {
         m_hatLock = m_right.get();
@@ -94,5 +94,21 @@ public class FilteredController extends GenericHID {
       m_hatLock = false;
     }
     return false;
+  }
+
+  public boolean getHatUp() {
+    return m_up.get();
+  }
+
+  public boolean getHatDown() {
+    return m_down.get();
+  }
+
+  public boolean getHatLeft() {
+    return m_left.get();
+  }
+
+  public boolean getHatRight() {
+    return m_right.get();
   }
 }
