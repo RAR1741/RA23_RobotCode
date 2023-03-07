@@ -97,10 +97,10 @@ public final class Constants {
       SCORE_MID_CUBE(new ArmPose(0.0, 0.0, null)),
       SCORE_HIGH_CUBE(new ArmPose(0.0, 0.0, null)),
       SCORE_MID_CONE(new ArmPose(0.0, 0.0, null)),
-      SCORE_HIGH_CONE(new ArmPose(0.0, 0.0, null)),
+      SCORE_HIGH_CONE(new ArmPose(52.5, 63.5, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
       DOUBLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
-      FLOOR_CONE(new ArmPose(0.0, 0.0, null));
+      FLOOR_CONE(new ArmPose(26.0, 3.5, null)); //19.5, 2.0
 
       private ArmPose m_armPose;
 

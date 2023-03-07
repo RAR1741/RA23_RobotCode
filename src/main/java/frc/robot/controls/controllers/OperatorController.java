@@ -14,23 +14,23 @@ public class OperatorController extends FilteredController {
     return this.getRawButton(2);
   }
 
-  public boolean getWantsCycleStateUp() {
-    return this.getHatDown();
+  public double getArmHorizontalChange(double strength) {
+    return this.getRawAxis(0) * -strength;
   }
 
-  public boolean getWantsCycleStateDown() {
-    return this.getHatUp();
-  }
-
-  public boolean getWantsMaxMovement() {
-    return this.getRawButton(3);
-  }
-
-  public boolean getWantsGroundPosition() {
-    return this.getRawButton(1);
+  public double getArmVerticalChange(double strength) {
+    return this.getRawAxis(5) * -strength;
   }
 
   public boolean getWantsGripToggle() {
       return this.getRawButtonPressed(5);
+  }
+
+  public boolean getWantsHighConeScore() {
+    return this.getHatUpPressed();
+  }
+
+  public boolean getWantsDoubleSubstation() {
+    return this.getHatRight();
   }
 }

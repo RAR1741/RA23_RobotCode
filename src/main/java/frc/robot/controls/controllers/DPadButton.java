@@ -24,8 +24,9 @@ public class DPadButton {
 
     public boolean get() {
         int dPadValue = controller.getPOV();
-        return (dPadValue == direction.direction) || (dPadValue == (direction.direction + 45) % 360)
-                || (dPadValue == (direction.direction + 315) % 360);
+        return dPadValue == direction.direction;
+        // return (dPadValue == direction.direction) || (dPadValue == (direction.direction + 45) % 360)
+        //         || (dPadValue == (direction.direction + 315) % 360);
     }
 
 }

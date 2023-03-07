@@ -183,20 +183,25 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     if (!Preferences.containsKey("targetX")) {
-      Preferences.setDouble("targetX", 20);
+      Preferences.setDouble("targetX", 0);
     }
+
     if (!Preferences.containsKey("targetY")) {
-      Preferences.setDouble("targetY", 20);
+      Preferences.setDouble("targetY", 11.5);
     }
+
     if (!Preferences.containsKey("trajX")) {
-      Preferences.setDouble("trajX", 20);
+      Preferences.setDouble("trajX", 0);
     }
+    
     if (!Preferences.containsKey("trajY")) {
-      Preferences.setDouble("trajY", 20);
+      Preferences.setDouble("trajY", 11.5);
     }
+
     if (!Preferences.containsKey("wristAngle")) {
-      Preferences.setDouble("wristAngle", 20);
+      Preferences.setDouble("wristAngle", 0);
     }
+    
     if (!Preferences.containsKey("startTraj")) {
       Preferences.setDouble("startTraj", 0);
     }
@@ -207,14 +212,17 @@ public class Robot extends TimedRobot {
     m_swerve.drive(0, 0, 0, false);
 
     // SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(posX, posY));
-    double targetX = Preferences.getDouble("targetX", 20);
-    double targetY = Preferences.getDouble("targetY", 20);
+    double targetX = Preferences.getDouble("targetX", 0);
+    double targetY = Preferences.getDouble("targetY", 11.5);
 
-    double trajEndX = Preferences.getDouble("trajX", 20);
-    double trajEndY = Preferences.getDouble("trajY", 20);
+    double trajEndX = Preferences.getDouble("trajX", 0);
+    double trajEndY = Preferences.getDouble("trajY", 11.5);
     // double wristAngle = Preferences.getDouble("wristAngle", 0);
 
     double startTraj = Preferences.getDouble("startTraj", 0);
+
+    //Preferences.setDouble("targetX", targetX += m_operatorController.getArmHorizontalChange(0.5));
+    //Preferences.setDouble("targetY", targetY += m_operatorController.getArmVerticalChange(0.5));
 
     if(startTraj == 1) {
       Preferences.setDouble("startTraj", 2);
@@ -225,17 +233,14 @@ public class Robot extends TimedRobot {
       ArmPose target = new ArmPose(trajEndX,trajEndY,new Rotation2d(0));
       m_arm.generateTrajectoryToPose(target);
       m_arm.startTrajectory();
-    }
-    else if(startTraj == 2) {
-      m_arm.runTrajectory();
+    } else if(startTraj == 2) {
+      Preferences.setDouble("startTraj", m_arm.runTrajectory() ? 2 : 0);
     } else {
       double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
       SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
     }
 
     // m_arm.setWristAngle(wristAngle);
-
-
 
     // switch(test_state) {
     // case 0:
@@ -251,12 +256,30 @@ public class Robot extends TimedRobot {
     // break;
     // }
 
-    if (m_operatorController.getRawButtonPressed(3)) {
-      test_state = test_state == 2 ? 0 : test_state + 1;
-    }
+    // if (m_operatorController.getRawButtonPressed(3)) {
+    //   test_state = test_state == 2 ? 0 : test_state + 1;
+    // }
 
     if (m_operatorController.getRawButtonPressed(6)) {
       m_arm.rotateWrist();
+    }
+
+    if (m_operatorController.getWantsDefaultState()) {
+      Preferences.setDouble("trajX", Constants.Arm.Preset.HOME.getPose().getX());
+      Preferences.setDouble("trajY", Constants.Arm.Preset.HOME.getPose().getY());
+      Preferences.setDouble("startTraj", 1);
+    }
+
+    if (m_operatorController.getWantsDoubleSubstation()) {
+      Preferences.setDouble("trajX", Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getX());
+      Preferences.setDouble("trajY", Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY());
+      Preferences.setDouble("startTraj", 1);
+    }
+
+    if (m_operatorController.getWantsHighConeScore()) {
+      Preferences.setDouble("trajX", Constants.Arm.Preset.SCORE_HIGH_CONE.getPose().getX());
+      Preferences.setDouble("trajY", Constants.Arm.Preset.SCORE_HIGH_CONE.getPose().getY());
+      Preferences.setDouble("startTraj", 1);
     }
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
