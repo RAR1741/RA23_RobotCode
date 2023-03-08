@@ -126,7 +126,7 @@ public class SwerveModule {
     double velocity = m_driveEncoder.getIntegratedSensorVelocity() / k_driveEncPerSec;
 
     // Convert to in per second
-    velocity *= ((2 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio);
+    velocity *= ((2.0 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio);
 
     // Convert to m per second
     velocity = Units.inchesToMeters(velocity);

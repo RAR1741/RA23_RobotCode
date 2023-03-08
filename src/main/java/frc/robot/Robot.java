@@ -87,23 +87,33 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.periodic());
+    m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
+    m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
+    m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
   }
 
   @Override
   public void autonomousInit() {
     autoPath = PathPlanner.loadPath("BlueDefault",
-        new PathConstraints(Constants.Drivetrain.k_maxSpeed, Constants.Drivetrain.k_maxAngularSpeed));
+        new PathConstraints(Constants.Auto.k_maxSpeed, Constants.Auto.k_maxAcceleration));
+    // autoPath = PathPlanner.loadPath("SPIN",
+    // new PathConstraints(Constants.Auto.k_maxSpeed,
+    // Constants.Auto.k_maxAcceleration));
 
     // HashMap<String, Command> eventMap = new HashMap<>();
     // eventMap.put("scoreHigh", new PrintCommand("Passed marker 1"));
 
     driveController = new PPHolonomicDriveController(
-        new PIDController(1, 0, 0),
-        new PIDController(1, 0, 0),
-        new PIDController(1, 0, 0));
+        new PIDController(1.0, 0, 0),
+        new PIDController(1.0, 0, 0),
+        new PIDController(1.0, 0, 0));
 
     // Reset the drive encoders, to make sure we start at 0
-    m_swerve.resetOdometry();
+    m_swerve.resetOdometry(autoPath.getInitialPose());
+    // m_swerve.resetOdometry(new Pose2d(
+    // autoPath.getInitialPose().getX(),
+    // autoPath.getInitialPose().getY(),
+    // m_swerve.getRotation2d()));
 
     m_stoppedTimer.reset();
     m_stoppedTimer.start();
@@ -130,11 +140,17 @@ public class Robot extends TimedRobot {
         chassisSpeeds.vxMetersPerSecond,
         chassisSpeeds.vyMetersPerSecond,
         chassisSpeeds.omegaRadiansPerSecond,
-        true);
+        false);
 
+    SmartDashboard.putNumber("velocityMetersPerSecond", autoState.velocityMetersPerSecond);
     SmartDashboard.putNumber("vxMetersPerSecond", chassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("vyMetersPerSecond", chassisSpeeds.vyMetersPerSecond);
     SmartDashboard.putNumber("omegaRadiansPerSecond", chassisSpeeds.omegaRadiansPerSecond);
+
+    Pose2d currentPose = m_swerve.getPose();
+    SmartDashboard.putNumber("currentPoseX", currentPose.getX());
+    SmartDashboard.putNumber("currentPoseY", currentPose.getY());
+    SmartDashboard.putNumber("currentPoseZ", currentPose.getRotation().getDegrees());
   }
 
   @Override
@@ -236,10 +252,6 @@ public class Robot extends TimedRobot {
       m_arm.rezero();
     }
 
-    m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
-    m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
-    m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
-
     m_driverController.outputTelemetry();
   }
 
@@ -262,6 +274,8 @@ public class Robot extends TimedRobot {
     // } else if (m_driverController.getRawButtonPressed(1)) {
     // Preferences.setDouble("shoulderAngle", 180);
     // }
+    m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
+
     updateSim();
   }
 

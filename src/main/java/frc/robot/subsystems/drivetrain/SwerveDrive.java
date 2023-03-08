@@ -3,6 +3,7 @@ package frc.robot.subsystems.drivetrain;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -71,7 +72,7 @@ public class SwerveDrive extends Subsystem {
 
   public void reset() {
     resetGyro();
-    resetOdometry();
+    resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
   }
 
   /**
@@ -81,11 +82,25 @@ public class SwerveDrive extends Subsystem {
     m_gyro.reset();
   }
 
-  public void resetOdometry() {
+  public Rotation2d getRotation2d() {
+    return m_gyro.getRotation2d();
+  }
+
+  public void resetOdometry(Pose2d pose) {
     m_frontLeft.resetDriveEncoder();
     m_frontRight.resetDriveEncoder();
     m_backLeft.resetDriveEncoder();
     m_backRight.resetDriveEncoder();
+
+    m_odometry.resetPosition(
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+        },
+        pose);
   }
 
   /**

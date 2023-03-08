@@ -17,6 +17,11 @@ public final class Constants {
     public static final double k_height = 80; // Inches
   }
 
+  public static class Auto {
+    public static final double k_maxSpeed = 1; // 1 meters per second
+    public static final double k_maxAcceleration = 0.5;
+  }
+
   public class Drivetrain {
     // Drivetrain wheel offsets
     // TODO: Change for final robot
