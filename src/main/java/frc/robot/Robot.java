@@ -57,8 +57,8 @@ public class Robot extends TimedRobot {
 
   // Auto things
   private final Timer m_stoppedTimer = new Timer();
-  PathPlannerTrajectory autoPath;
-  PPHolonomicDriveController driveController;
+  PathPlannerTrajectory m_autoPath;
+  PPHolonomicDriveController m_driveController;
 
   private final Field2d m_field = new Field2d();
 
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autoPath = PathPlanner.loadPath("BlueDefault",
+    m_autoPath = PathPlanner.loadPath("BlueDefault",
         new PathConstraints(Constants.Auto.k_maxSpeed, Constants.Auto.k_maxAcceleration));
     // autoPath = PathPlanner.loadPath("SPIN",
     // new PathConstraints(Constants.Auto.k_maxSpeed,
@@ -103,13 +103,13 @@ public class Robot extends TimedRobot {
     // HashMap<String, Command> eventMap = new HashMap<>();
     // eventMap.put("scoreHigh", new PrintCommand("Passed marker 1"));
 
-    driveController = new PPHolonomicDriveController(
+    m_driveController = new PPHolonomicDriveController(
         new PIDController(1.0, 0, 0),
         new PIDController(1.0, 0, 0),
         new PIDController(1.0, 0, 0));
 
     // Reset the drive encoders, to make sure we start at 0
-    m_swerve.resetOdometry(autoPath.getInitialPose());
+    m_swerve.resetOdometry(m_autoPath.getInitialPose());
     // m_swerve.resetOdometry(new Pose2d(
     // autoPath.getInitialPose().getX(),
     // autoPath.getInitialPose().getY(),
@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    PathPlannerState autoState = (PathPlannerState) autoPath.sample(m_stoppedTimer.get());
+    PathPlannerState autoState = (PathPlannerState) m_autoPath.sample(m_stoppedTimer.get());
 
     // Print the velocity at the sampled time
     // System.out.println(autoState.holonomicRotation);
@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
 
     m_field.setRobotPose(targetPose2d);
 
-    ChassisSpeeds chassisSpeeds = driveController.calculate(m_swerve.getPose(), autoState);
+    ChassisSpeeds chassisSpeeds = m_driveController.calculate(m_swerve.getPose(), autoState);
 
     m_swerve.drive(
         chassisSpeeds.vxMetersPerSecond,
