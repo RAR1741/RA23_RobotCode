@@ -7,10 +7,14 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -50,9 +54,10 @@ public class Robot extends TimedRobot {
 
   // private UsbCamera mCamera;
 
+  // Auto things
   private final Timer m_stoppedTimer = new Timer();
-
   PathPlannerTrajectory autoPath;
+  PPHolonomicDriveController driveController;
 
   private final Field2d m_field = new Field2d();
 
@@ -97,6 +102,15 @@ public class Robot extends TimedRobot {
     // HashMap<String, Command> eventMap = new HashMap<>();
     // eventMap.put("scoreHigh", new PrintCommand("Passed marker 1"));
 
+    driveController = new PPHolonomicDriveController(
+        new PIDController(1, 0, 0),
+        new PIDController(1, 0, 0),
+        new PIDController(1, 0, 0));
+
+    // Reset the drive encoders, to make sure we start at 0
+    m_swerve.resetOdometry();
+
+    m_stoppedTimer.reset();
     m_stoppedTimer.start();
   }
 
@@ -105,13 +119,32 @@ public class Robot extends TimedRobot {
     PathPlannerState autoState = (PathPlannerState) autoPath.sample(m_stoppedTimer.get());
 
     // Print the velocity at the sampled time
-    System.out.println(autoState.velocityMetersPerSecond);
+    // System.out.println(autoState.holonomicRotation);
 
-    // m_swerve.drive(xSpeed, ySpeed, rot, true);
+    // m_field.setRobotPose(m_swerve.getPose());
+    Pose2d targetPose2d = new Pose2d(
+        autoState.poseMeters.getX(),
+        autoState.poseMeters.getY(),
+        autoState.holonomicRotation);
+
+    m_field.setRobotPose(targetPose2d);
+
+    ChassisSpeeds chassisSpeeds = driveController.calculate(m_swerve.getPose(), autoState);
+
+    m_swerve.drive(
+        chassisSpeeds.vxMetersPerSecond,
+        chassisSpeeds.vyMetersPerSecond,
+        chassisSpeeds.omegaRadiansPerSecond,
+        true);
+
+    SmartDashboard.putNumber("vxMetersPerSecond", chassisSpeeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("vyMetersPerSecond", chassisSpeeds.vyMetersPerSecond);
+    SmartDashboard.putNumber("omegaRadiansPerSecond", chassisSpeeds.omegaRadiansPerSecond);
   }
 
   @Override
   public void teleopInit() {
+    m_swerve.drive(0, 0, 0, false);
   }
 
   @Override

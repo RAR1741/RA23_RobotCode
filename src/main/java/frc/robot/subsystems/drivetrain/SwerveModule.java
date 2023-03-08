@@ -149,6 +149,10 @@ public class SwerveModule {
         drivePosition, Rotation2d.fromRotations(getTurnPosition()));
   }
 
+  public void resetDriveEncoder() {
+    m_driveEncoder.setIntegratedSensorPosition(0, 0);
+  }
+
   /**
    * Sets the desired state for the module.
    *

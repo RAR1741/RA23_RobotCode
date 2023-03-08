@@ -58,12 +58,12 @@
         }
       },
       "/SmartDashboard/Field": {
-        "bottom": 900,
-        "height": 8.229599952697754,
-        "image": "PathWeaver/fields/2022-field.png",
-        "left": 74,
-        "right": 1774,
-        "top": 50,
+        "bottom": 544,
+        "height": 8.013679504394531,
+        "image": "/Users/jmiller/Documents/Git/RA23_RobotCode/PathWeaver/fields/2023-field.png",
+        "left": 46,
+        "right": 1088,
+        "top": 36,
         "traj": {
           "arrowSize": 16,
           "arrowWeight": 2.0,
@@ -73,7 +73,7 @@
           "weight": 3.0
         },
         "units": "feet",
-        "width": 16.459199905395508,
+        "width": 16.541748046875,
         "window": {
           "name": "Field",
           "visible": true
@@ -111,7 +111,7 @@
               "autoFit": true
             }
           ],
-          "height": 332,
+          "height": -43,
           "series": [
             {
               "color": [

@@ -69,11 +69,23 @@ public class SwerveDrive extends Subsystem {
     resetGyro();
   }
 
+  public void reset() {
+    resetGyro();
+    resetOdometry();
+  }
+
   /**
    * Calls the NavX reset function, resetting the Z angle to 0
    */
   public void resetGyro() {
     m_gyro.reset();
+  }
+
+  public void resetOdometry() {
+    m_frontLeft.resetDriveEncoder();
+    m_frontRight.resetDriveEncoder();
+    m_backLeft.resetDriveEncoder();
+    m_backRight.resetDriveEncoder();
   }
 
   /**
@@ -140,7 +152,6 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    // TODO: Add this back in
     m_odometry.update(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
