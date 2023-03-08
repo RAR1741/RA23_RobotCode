@@ -10,10 +10,11 @@ import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -27,7 +28,6 @@ import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmPose;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class Robot extends TimedRobot {
@@ -50,9 +50,10 @@ public class Robot extends TimedRobot {
   @SuppressWarnings("unused")
   private final Compressor m_compressor = new Compressor(PneumaticsModuleType.REVPH);
 
-  private int test_state = 1;
+  // private int test_state = 1;
 
-  // private UsbCamera mCamera;
+  @SuppressWarnings("unused")
+  private UsbCamera m_camera;
 
   // Auto things
   private final Timer m_stoppedTimer = new Timer();
@@ -73,17 +74,11 @@ public class Robot extends TimedRobot {
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
 
-    m_arm.setGripper(false);
+    m_arm.setGripper(true);
     m_arm.clearPIDAccumulation();
 
     // Camera server
-    /*
-     * if (RobotBase.isReal()) {
-     * mCamera = CameraServer.startAutomaticCapture();
-     * mCamera.setFPS(30);
-     * mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-     * }
-     */
+    m_camera = CameraServer.startAutomaticCapture();
 
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
@@ -204,6 +199,43 @@ public class Robot extends TimedRobot {
       m_arm.setGripper(!m_arm.getGripperEngaged());
     }
 
+    if (!m_arm.runTrajectory()) {
+      m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
+          m_operatorController.getArmVerticalChange(0.5));
+    }
+
+    if (m_operatorController.getRawButtonPressed(6)) {
+      m_arm.rotateWrist();
+    }
+
+    if (m_operatorController.getWantsDefaultState()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_operatorController.getWantsDoubleSubstation()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_operatorController.getWantsHighConeScore()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_operatorController.getWantsGroundPickup()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.FLOOR_CONE.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
+      m_arm.setGripper(!m_arm.getGripperEngaged());
+    }
+
+    if (m_operatorController.getRawButtonPressed(3)) {
+      m_arm.rezero();
+    }
+
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
@@ -240,23 +272,11 @@ public class Robot extends TimedRobot {
     }
 
     if (!Preferences.containsKey("targetY")) {
-      Preferences.setDouble("targetY", 11.5);
-    }
-
-    if (!Preferences.containsKey("trajX")) {
-      Preferences.setDouble("trajX", 0);
-    }
-
-    if (!Preferences.containsKey("trajY")) {
-      Preferences.setDouble("trajY", 11.5);
+      Preferences.setDouble("targetY", Constants.Arm.k_homeHeight);
     }
 
     if (!Preferences.containsKey("wristAngle")) {
       Preferences.setDouble("wristAngle", 0);
-    }
-
-    if (!Preferences.containsKey("startTraj")) {
-      Preferences.setDouble("startTraj", 0);
     }
   }
 
@@ -265,30 +285,42 @@ public class Robot extends TimedRobot {
     m_swerve.drive(0, 0, 0, false);
 
     // SmartDashboard.putNumberArray("Arm Values", m_arm.calcAngles(posX, posY));
-    double targetX = Preferences.getDouble("targetX", 0);
-    double targetY = Preferences.getDouble("targetY", 11.5);
+    // double targetX = Preferences.getDouble("targetX", 0);
+    // double targetY = Preferences.getDouble("targetY", 11.5);
 
-    double trajEndX = Preferences.getDouble("trajX", 0);
-    double trajEndY = Preferences.getDouble("trajY", 11.5);
-    // double wristAngle = Preferences.getDouble("wristAngle", 0);
+    // // double wristAngle = Preferences.getDouble("wristAngle", 0);
 
-    double startTraj = Preferences.getDouble("startTraj", 0);
+    // double startTraj = Preferences.getDouble("startTraj", 0);
 
-    if (startTraj == 1) {
-      Preferences.setDouble("startTraj", 2);
-
-      double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
-      SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
-
-      ArmPose target = new ArmPose(trajEndX, trajEndY, new Rotation2d(0));
-      m_arm.generateTrajectoryToPose(target);
-      m_arm.startTrajectory();
-    } else if (startTraj == 2) {
-      m_arm.runTrajectory();
-    } else {
-      double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
-      SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
+    if (!m_arm.runTrajectory()) {
+      m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
+          m_operatorController.getArmVerticalChange(0.5));
     }
+
+    // Preferences.setDouble("targetX", targetX +=
+    // m_operatorController.getArmHorizontalChange(0.5));
+    // Preferences.setDouble("targetY", targetY +=
+    // m_operatorController.getArmVerticalChange(0.5));
+
+    // if(startTraj == 1) {
+    // Preferences.setDouble("startTraj", 2);
+
+    // /*double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
+    // SmartDashboard.putNumberArray("CalcXY Double Check",
+    // m_arm.calcXY(targetAngles[0], targetAngles[1]));
+
+    // ArmPose target = new ArmPose(trajEndX,trajEndY,new Rotation2d(0));*/
+    // ArmPose target = new ArmPose(targetX, targetY, new Rotation2d(0));
+
+    // m_arm.generateTrajectoryToPose(target);
+    // m_arm.startTrajectory();
+    // } else if(startTraj == 2) {
+    // Preferences.setDouble("startTraj", m_arm.runTrajectory() ? 2 : 0);
+    // } else {
+    // double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
+    // SmartDashboard.putNumberArray("CalcXY Double Check",
+    // m_arm.calcXY(targetAngles[0], targetAngles[1]));
+    // }
 
     // m_arm.setWristAngle(wristAngle);
 
@@ -315,21 +347,18 @@ public class Robot extends TimedRobot {
     }
 
     if (m_operatorController.getWantsDefaultState()) {
-      Preferences.setDouble("trajX", Constants.Arm.Preset.HOME.getPose().getX());
-      Preferences.setDouble("trajY", Constants.Arm.Preset.HOME.getPose().getY());
-      Preferences.setDouble("startTraj", 1);
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+      m_arm.startTrajectory();
     }
 
     if (m_operatorController.getWantsDoubleSubstation()) {
-      Preferences.setDouble("trajX", Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getX());
-      Preferences.setDouble("trajY", Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY());
-      Preferences.setDouble("startTraj", 1);
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose());
+      m_arm.startTrajectory();
     }
 
     if (m_operatorController.getWantsHighConeScore()) {
-      Preferences.setDouble("trajX", Constants.Arm.Preset.SCORE_HIGH_CONE.getPose().getX());
-      Preferences.setDouble("trajY", Constants.Arm.Preset.SCORE_HIGH_CONE.getPose().getY());
-      Preferences.setDouble("startTraj", 1);
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose());
+      m_arm.startTrajectory();
     }
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {

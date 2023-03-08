@@ -15,15 +15,15 @@ public class OperatorController extends FilteredController {
   }
 
   public double getArmHorizontalChange(double strength) {
-    return this.getRawAxis(0) * -strength;
+    return this.getFilteredAxis(0) * strength;
   }
 
   public double getArmVerticalChange(double strength) {
-    return this.getRawAxis(5) * -strength;
+    return this.getFilteredAxis(5) * -strength;
   }
 
   public boolean getWantsGripToggle() {
-      return this.getRawButtonPressed(5);
+    return this.getRawButtonPressed(5);
   }
 
   public boolean getWantsHighConeScore() {
@@ -32,5 +32,9 @@ public class OperatorController extends FilteredController {
 
   public boolean getWantsDoubleSubstation() {
     return this.getHatRight();
+  }
+
+  public boolean getWantsGroundPickup() {
+    return this.getHatDown();
   }
 }
