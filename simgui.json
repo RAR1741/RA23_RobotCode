@@ -60,7 +60,7 @@
       "/SmartDashboard/Field": {
         "bottom": 544,
         "height": 8.013679504394531,
-        "image": "/Users/jmiller/Documents/Git/RA23_RobotCode/PathWeaver/fields/2023-field.png",
+        "image": "PathWeaver/fields/2023-field.png",
         "left": 46,
         "right": 1088,
         "top": 36,
