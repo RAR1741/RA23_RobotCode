@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 public abstract class Subsystem {
-  public void writeToLog() {
+  public void initializeLog() {
   }
 
   public void zeroSensors() {
@@ -14,4 +14,6 @@ public abstract class Subsystem {
   public abstract void writePeriodicOutputs();
 
   public abstract void outputTelemetry();
+
+  public abstract void writeToLog();
 }

@@ -25,6 +25,8 @@ public class Robot extends TimedRobot {
   private List<Subsystem> m_allSubsystems = new ArrayList<>();
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
 
+  private final Logger m_logger = Logger.getInstance();
+
   // private UsbCamera mCamera;
 
   // private final Timer m_stoppedTimer = new Timer();
@@ -33,12 +35,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // Initialize on-board logging
-    DataLogManager.start();
-    DataLogManager.log("Logging initialized. Fard.");
-
-    DriverStation.startDataLog(DataLogManager.getLog()); //Driver Station/Joystick Logs
-
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
 

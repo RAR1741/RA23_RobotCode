@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Logger;
 
 public class SwerveModule {
   private static final double k_wheelRadiusIn = 2; // 2 inches
@@ -178,6 +179,12 @@ public class SwerveModule {
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
 
+    Logger.addEntry(m_smartDashboardKey + "TurnTarget", turnTarget);
+    Logger.addEntry(m_smartDashboardKey + "TurnOutput", turnOutput + turnFeedforward);
+    Logger.addEntry(m_smartDashboardKey + "TurnAtGoal", turnAtGoal);
+    Logger.addEntry(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
+    Logger.addEntry(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
+
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
   }
@@ -186,5 +193,9 @@ public class SwerveModule {
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveMotorPos", m_driveEncoder.getIntegratedSensorPosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "DriveMotorVelocity", getDriveVelocity());
     SmartDashboard.putNumber(m_smartDashboardKey + "TurnMotorPosition", getTurnPosition());
+
+    Logger.addEntry(m_smartDashboardKey + "DriveMotorPos", m_driveEncoder.getIntegratedSensorPosition());
+    Logger.addEntry(m_smartDashboardKey + "DriveMotorVelocity", getDriveVelocity());
+    Logger.addEntry(m_smartDashboardKey + "TurnMotorPosition", getTurnPosition());
   }
 }
