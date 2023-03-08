@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Helpers;
+import frc.robot.Logger;
 import frc.robot.simulation.ArmSim;
 import frc.robot.subsystems.Subsystem;
 
@@ -217,6 +218,7 @@ public class Arm extends Subsystem {
     }
 
     SmartDashboard.putBoolean(m_smartDashboardKey + "PositionIsValid", isArmPositionValid(x, y));
+    Logger.addEntry(m_smartDashboardKey + "PositionIsValid", isArmPositionValid(x, y));
 
     if (isArmPositionValid(x, y)) {
       m_periodicIO.shoulderAngle = armAngles[0];
@@ -428,5 +430,35 @@ public class Arm extends Subsystem {
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Velocity", m_wristMotor.get());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Temperature", m_wristMotor.getMotorTemperature());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Current", m_wristMotor.getOutputCurrent());
+  }
+
+  @Override
+  public void writeToLog() {
+    Logger.addEntry(m_smartDashboardKey + "X", m_xPosition);
+    Logger.addEntry(m_smartDashboardKey + "Y", m_yPosition);
+    Logger.addEntry(m_smartDashboardKey + "RunningTrajectory", m_runningTrajectory);
+
+    // Shoulder
+    Logger.addEntry(m_smartDashboardKey + "Shoulder/Position", getShoulderPositionDegrees());
+    Logger.addEntry(m_smartDashboardKey + "Shoulder/PositionError", m_shoulderPID.getPositionError());
+    Logger.addEntry(m_smartDashboardKey + "Shoulder/AtTarget", m_shoulderPID.atSetpoint());
+    Logger.addEntry(m_smartDashboardKey + "Shoulder/Velocity", m_shoulderMotor.get());
+    Logger.addEntry(m_smartDashboardKey + "Shoulder/Temperature", m_shoulderMotor.getMotorTemperature());
+    Logger.addEntry(m_smartDashboardKey + "Shoulder/Current", m_shoulderMotor.getOutputCurrent());
+
+    // Elbow
+    Logger.addEntry(m_smartDashboardKey + "Elbow/Position", getElbowPositionDegrees());
+    Logger.addEntry(m_smartDashboardKey + "Elbow/Velocity", m_elbowMotor.get());
+    Logger.addEntry(m_smartDashboardKey + "Elbow/Temperature", m_elbowMotor.getMotorTemperature());
+    Logger.addEntry(m_smartDashboardKey + "Elbow/Current", m_elbowMotor.getOutputCurrent());
+
+    // Wrist
+    Logger.addEntry(m_smartDashboardKey + "Wrist/Position", getWristPositionDegrees());
+    Logger.addEntry(m_smartDashboardKey + "Wrist/PositionError", m_wristPID.getPositionError());
+    Logger.addEntry(m_smartDashboardKey + "Wrist/AtTarget", m_wristPID.atSetpoint());
+    Logger.addEntry(m_smartDashboardKey + "Wrist/Velocity", m_wristMotor.get());
+    Logger.addEntry(m_smartDashboardKey + "Wrist/Temperature", m_wristMotor.getMotorTemperature());
+    Logger.addEntry(m_smartDashboardKey + "Wrist/Current", m_wristMotor.getOutputCurrent());
+    
   }
 }
