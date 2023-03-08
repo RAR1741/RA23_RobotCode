@@ -10,6 +10,16 @@
         "header": {
           "open": true
         }
+      },
+      "SPARK MAX [13]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
+    "PWM Outputs": {
+      "window": {
+        "visible": true
       }
     }
   },
@@ -17,20 +27,43 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Ungrouped/AnalogGyro[0]": "Gyro",
+      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
       "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
       "/LiveWindow/Ungrouped/MotorControllerGroup[2]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PIDController[10]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[11]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
+      "/LiveWindow/Ungrouped/Talon FX [5]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [6]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [7]": "Motor Controller",
+      "/LiveWindow/Ungrouped/Talon FX [8]": "Motor Controller",
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/SmartDashboard/Arm Sim": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
+      "/SmartDashboard/Arm Sim": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
-        "bottom": 900,
-        "height": 8.229599952697754,
-        "image": "PathWeaver/fields/2022-field.png",
-        "left": 74,
-        "right": 1774,
-        "top": 50,
+        "bottom": 544,
+        "height": 8.013679504394531,
+        "image": "PathWeaver/fields/2023-field.png",
+        "left": 46,
+        "right": 1088,
+        "top": 36,
         "traj": {
           "arrowSize": 16,
           "arrowWeight": 2.0,
@@ -40,12 +73,67 @@
           "weight": 3.0
         },
         "units": "feet",
-        "width": 16.459199905395508,
+        "width": 16.541748046875,
         "window": {
           "name": "Field",
           "visible": true
         }
       }
+    }
+  },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "persistent": {
+      "Preferences": {
+        "open": true
+      }
+    },
+    "transitory": {
+      "SmartDashboard": {
+        "Arm Sim": {
+          "ArmShoulderPivot": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "axis": [
+            {
+              "autoFit": true
+            }
+          ],
+          "height": -43,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Shoulder Diff"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Elbow Diff"
+            }
+          ]
+        }
+      ]
     }
   }
 }

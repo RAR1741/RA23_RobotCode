@@ -14,9 +14,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Logger;
+import frc.robot.Helpers;
 
 public class SwerveModule {
   private static final double k_wheelRadiusIn = 2; // 2 inches
@@ -49,6 +51,8 @@ public class SwerveModule {
   private final double m_turningOffset;
   private final String m_moduleName;
   private final String m_smartDashboardKey;
+
+  private final PeriodicIO m_periodicIO = new PeriodicIO();
 
   private final TalonFXSensorCollection m_driveEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -99,6 +103,11 @@ public class SwerveModule {
     m_turningPIDController.enableContinuousInput(0, 1);
   }
 
+  private static class PeriodicIO {
+    double turnMotorVoltage = 0.0;
+    double driveMotorVoltage = 0.0;
+  }
+
   /**
    * Returns the current state of the module.
    *
@@ -110,15 +119,7 @@ public class SwerveModule {
   }
 
   public double getTurnPosition() {
-    return modRotations(m_turningEncoder.getPosition() - m_turningOffset);
-  }
-
-  public double modRotations(double input) {
-    input %= 1.0;
-    if (input < 0.0) {
-      input += 1.0;
-    }
-    return input;
+    return Helpers.modRotations(m_turningEncoder.getPosition() - m_turningOffset);
   }
 
   // Returns the drive velocity in meters per second.
@@ -127,10 +128,10 @@ public class SwerveModule {
     double velocity = m_driveEncoder.getIntegratedSensorVelocity() / k_driveEncPerSec;
 
     // Convert to in per second
-    velocity *= ((2 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio);
+    velocity *= ((2.0 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio);
 
     // Convert to m per second
-    velocity *= 0.0254;
+    velocity = Units.inchesToMeters(velocity);
 
     return velocity;
   }
@@ -144,10 +145,14 @@ public class SwerveModule {
     double drivePosition = m_driveEncoder.getIntegratedSensorPosition();
     drivePosition /= k_driveEncPerRot; // Convert to # of rotations
     drivePosition *= ((2 * k_wheelRadiusIn * Math.PI) / k_driveGearRatio); // Convert to inches
-    drivePosition *= 0.0254; // Convert to meters
+    drivePosition = Units.inchesToMeters(drivePosition);
 
     return new SwerveModulePosition(
         drivePosition, Rotation2d.fromRotations(getTurnPosition()));
+  }
+
+  public void resetDriveEncoder() {
+    m_driveEncoder.setIntegratedSensorPosition(0, 0);
   }
 
   /**
@@ -184,9 +189,13 @@ public class SwerveModule {
     Logger.addEntry(m_smartDashboardKey + "TurnAtGoal", turnAtGoal);
     Logger.addEntry(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
     Logger.addEntry(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
+    m_periodicIO.turnMotorVoltage = turnOutput + turnFeedforward;
+    m_periodicIO.driveMotorVoltage = driveOutput + driveFeedforward;
+  }
 
-    m_turningMotor.setVoltage(turnOutput + turnFeedforward);
-    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
+  public void periodic() {
+    m_turningMotor.setVoltage(m_periodicIO.turnMotorVoltage);
+    m_driveMotor.setVoltage(m_periodicIO.driveMotorVoltage);
   }
 
   public void outputTelemetry() {

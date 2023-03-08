@@ -3,6 +3,7 @@ package frc.robot.subsystems.drivetrain;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -72,11 +73,37 @@ public class SwerveDrive extends Subsystem {
     resetGyro();
   }
 
+  public void reset() {
+    resetGyro();
+    resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+  }
+
   /**
    * Calls the NavX reset function, resetting the Z angle to 0
    */
   public void resetGyro() {
     m_gyro.reset();
+  }
+
+  public Rotation2d getRotation2d() {
+    return m_gyro.getRotation2d();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    m_frontLeft.resetDriveEncoder();
+    m_frontRight.resetDriveEncoder();
+    m_backLeft.resetDriveEncoder();
+    m_backRight.resetDriveEncoder();
+
+    m_odometry.resetPosition(
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+        },
+        pose);
   }
 
   /**
@@ -125,6 +152,10 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void periodic() {
+    m_frontLeft.periodic();
+    m_frontRight.periodic();
+    m_backLeft.periodic();
+    m_backRight.periodic();
   }
 
   @Override
@@ -139,7 +170,6 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    // TODO: Add this back in
     m_odometry.update(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
