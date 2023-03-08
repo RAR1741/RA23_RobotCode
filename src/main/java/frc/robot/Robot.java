@@ -24,8 +24,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Subsystem;
@@ -46,8 +44,6 @@ public class Robot extends TimedRobot {
   private final SwerveDrive m_swerve = SwerveDrive.getInstance();
   private final Arm m_arm = Arm.getInstance();
 
-  private final Logger m_logger = Logger.getInstance();
-
   // private UsbCamera mCamera;
   // The mere instantiation of this object will cause the compressor to start
   // running. We don't need to do anything else with it, so we'll suppress the
@@ -59,6 +55,9 @@ public class Robot extends TimedRobot {
 
   @SuppressWarnings("unused")
   private UsbCamera m_camera;
+
+  @SuppressWarnings("unused")
+  private final Logger m_logger = Logger.getInstance();
 
   // Auto things
   private final Timer m_stoppedTimer = new Timer();
