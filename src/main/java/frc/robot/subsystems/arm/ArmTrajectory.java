@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class ArmTrajectory {
   private ArrayList<ArmPose> m_waypoints; // List of waypoints for the trajectory
@@ -16,13 +17,12 @@ public class ArmTrajectory {
   /**
    * 
    * @param waypoints ArrayList of ArmPose waypoints
-   * @param maxTranslationalSpeed
    */
-  public ArmTrajectory(ArrayList<ArmPose> waypoints, double maxTranslationalSpeed) {
+  public ArmTrajectory(ArrayList<ArmPose> waypoints) {
     m_waypoints = new ArrayList<ArmPose>(waypoints);
 
     // Calculate characteristics of the trajectory 
-    m_maxTranslationalSpeed = maxTranslationalSpeed;
+    m_maxTranslationalSpeed = Constants.Arm.k_maxTrajectorySpeed;
     m_totalLength = calcTotalDistance(m_waypoints);
     m_totalTime = m_totalLength / m_maxTranslationalSpeed;
 

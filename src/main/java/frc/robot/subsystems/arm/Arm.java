@@ -27,23 +27,17 @@ public class Arm extends Subsystem {
 
   private final String m_smartDashboardKey = "Arm/";
 
-  private static final double k_shoulderMotorP = 0.1;
-  private static final double k_shoulderMotorI = 0.02;
+  private static final double k_shoulderMotorP = 0.2;
+  private static final double k_shoulderMotorI = 0.0;
   private static final double k_shoulderMotorD = 0.0;
 
-  private static final double k_elbowMotorP = 0.125;
+  private static final double k_elbowMotorP = 0.65;
   private static final double k_elbowMotorI = 0.0;
   private static final double k_elbowMotorD = 0.0;
 
   private static final double k_wristMotorP = 0.05;
   private static final double k_wristMotorI = 0.025;
   private static final double k_wristMotorD = 0.0;
-
-  // The units for Trajectories and Pose2d's are in meters, but
-  // we're going to pretend it's in inches.  As long as we put in inches
-  // and expected inches to come out, it doesn't really matter
-  private static final double k_maxTrajectorySpeed = 5; // 5 inches per second
-  private static final double k_maxTrajectoryAcceleration = 5; // 5 in/s^2
 
   // TODO: Update for actual robot
   // distance per pulse = (angle per revolution) / (pulses per revolution)
@@ -69,7 +63,8 @@ public class Arm extends Subsystem {
   private final RelativeEncoder tempShoulderEncoder = m_shoulderMotor.getEncoder(Type.kHallSensor, 42);
   private final double shoulderStart;
 
-  // private final TrajectoryConfig m_trajConfig = new TrajectoryConfig(k_maxTrajectorySpeed, k_maxTrajectoryAcceleration);
+  // private final TrajectoryConfig m_trajConfig = new
+  // TrajectoryConfig(k_maxTrajectorySpeed, k_maxTrajectoryAcceleration);
   private ArmTrajectory m_currentTrajectory;
   private boolean m_runningTrajectory = false;
   private Timer m_trajTimer = new Timer();
@@ -163,29 +158,30 @@ public class Arm extends Subsystem {
     boolean enteringFront = (startX > Constants.Robot.k_length / 2 && endX < Constants.Robot.k_length / 2);
     boolean enteringBack = (startX < -Constants.Robot.k_length / 2 && endX > -Constants.Robot.k_length / 2);
     boolean exitingFront = (startX < Constants.Robot.k_length / 2 && endX > Constants.Robot.k_length / 2);
-    boolean exitingBack = (startX > -Constants.Robot.k_length / 2 && endX < -Constants.Robot.k_length / 2);;
+    boolean exitingBack = (startX > -Constants.Robot.k_length / 2 && endX < -Constants.Robot.k_length / 2);
+    ;
     boolean startingLow = (startY < Constants.Arm.k_homeHeight);
     boolean endingLow = (endY < Constants.Arm.k_homeHeight);
 
-    if(startingLow) {
+    if (startingLow) {
       path.add(new ArmPose(startX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
-    if(enteringFront) {
+    if (enteringFront) {
       path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
-      if(exitingBack) {
+      if (exitingBack) {
         path.add(Constants.Arm.Preset.HOME.getPose());
         path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
       }
-    } else if(enteringBack) {
+    } else if (enteringBack) {
       path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
-      if(exitingFront) {
+      if (exitingFront) {
         path.add(Constants.Arm.Preset.HOME.getPose());
         path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
       }
     }
 
-    if(endingLow) {
+    if (endingLow) {
       path.add(new ArmPose(endX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
@@ -199,8 +195,8 @@ public class Arm extends Subsystem {
       return false;
     }
 
-    //Is robot going to die pass
-    if(Math.abs(x) < Constants.Robot.k_length / 2 && y < Constants.Arm.k_homeHeight) {
+    // Is robot going to die pass
+    if (Math.abs(x) < Constants.Robot.k_length / 2 && y < Constants.Arm.k_homeHeight) {
       return false;
     }
 
@@ -228,7 +224,8 @@ public class Arm extends Subsystem {
 
       m_xPosition = x;
       m_yPosition = y;
-      // m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
+      // m_armSim.updateArmPosition(armAngles[0], armAngles[1],
+      // m_periodicIO.wristAngle, x, y);
     }
     m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
 
@@ -237,6 +234,7 @@ public class Arm extends Subsystem {
 
   /**
    * Given a target pose location of the arm, generate a trajectory
+   * 
    * @param targetPose (units of inches, and rotation of the wrist)
    */
   public void generateTrajectoryToPose(ArmPose targetPose) {
@@ -244,11 +242,11 @@ public class Arm extends Subsystem {
     double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
 
     ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetPose.getX(), targetPose.getY());
-    m_currentTrajectory = new ArmTrajectory(waypoints, 10);
+    m_currentTrajectory = new ArmTrajectory(waypoints);
   }
 
   public void startTrajectory() {
-    if(m_runningTrajectory == false) {
+    if (m_runningTrajectory == false) {
       m_runningTrajectory = true;
       m_trajTimer.reset();
       m_trajTimer.start();
@@ -256,20 +254,21 @@ public class Arm extends Subsystem {
   }
 
   public boolean runTrajectory() {
-    if(m_runningTrajectory) {
+    if (m_runningTrajectory) {
       ArmPose trajPose = m_currentTrajectory.sample(m_trajTimer.get());
       double[] trajAngles = setArmPosition(trajPose.getX(), trajPose.getY());
       // m_periodicIO.shoulderAngle = trajAngles[0];
       // m_periodicIO.elbowAngle = trajAngles[1];
 
-      if(m_currentTrajectory.getTotalTime() < m_trajTimer.get()) {
+      if (m_currentTrajectory.getTotalTime() < m_trajTimer.get()) {
         stopTrajectory();
       }
     }
     // else {
-    //   double[] currentAngles = m_armSim.getArmAngles();
-    //   double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
-    //   Pose2d currentPose = new Pose2d(currentXY[0], currentXY[1], new Rotation2d(0));
+    // double[] currentAngles = m_armSim.getArmAngles();
+    // double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
+    // Pose2d currentPose = new Pose2d(currentXY[0], currentXY[1], new
+    // Rotation2d(0));
     // }
 
     return m_runningTrajectory;
@@ -299,9 +298,11 @@ public class Arm extends Subsystem {
     double shoulderTargetAngle = 0.0;
     double elbowTargetAngle = 0.0;
 
-    // If the x,y position is within the width of the robot, fix the shoulder at 0 degrees and only move the elbow
-    if(Math.abs(x) <= Constants.Robot.k_length / 2) {
-      // When inside the frame perimeter, we will disregard the y setpoint so that the shoulder can stay fixed at 0
+    // If the x,y position is within the width of the robot, fix the shoulder at 0
+    // degrees and only move the elbow
+    if (Math.abs(x) <= Constants.Robot.k_length / 2) {
+      // When inside the frame perimeter, we will disregard the y setpoint so that the
+      // shoulder can stay fixed at 0
       shoulderTargetAngle = 0.0;
 
       elbowTargetAngle = Math.asin(x / Constants.Arm.Elbow.k_length);
@@ -311,16 +312,16 @@ public class Arm extends Subsystem {
       double alpha = Math.acos(
           (Math.pow(Constants.Arm.Shoulder.k_length, 2) + Math.pow(L3, 2) - Math.pow(Constants.Arm.Elbow.k_length, 2))
               / (2 * Constants.Arm.Shoulder.k_length * L3));
-  
+
       double psi = Math.atan2(x, y - Constants.Arm.k_shoulderPivotHeight);
-  
+
       shoulderTargetAngle = x >= 0 ? psi - alpha : psi + alpha;
-  
+
       // The position of the end of the first arm
       double xPrime = Constants.Arm.Shoulder.k_length * Math.sin(shoulderTargetAngle);
       double yPrime = Constants.Arm.k_shoulderPivotHeight
           + Constants.Arm.Shoulder.k_length * Math.cos(shoulderTargetAngle);
-  
+
       elbowTargetAngle = Math.atan2(x - xPrime, yPrime - y);
     }
 

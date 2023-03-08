@@ -9,6 +9,8 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.server.PathPlannerServer;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -46,7 +48,8 @@ public class Robot extends TimedRobot {
 
   // private int test_state = 1;
 
-  // private UsbCamera mCamera;
+  @SuppressWarnings("unused")
+  private UsbCamera m_camera;
 
   private final Timer m_stoppedTimer = new Timer();
 
@@ -66,17 +69,11 @@ public class Robot extends TimedRobot {
     // Set up the Field2d object for simulation
     SmartDashboard.putData("Field", m_field);
 
-    m_arm.setGripper(false);
+    m_arm.setGripper(true);
     m_arm.clearPIDAccumulation();
 
     // Camera server
-    /*
-     * if (RobotBase.isReal()) {
-     * mCamera = CameraServer.startAutomaticCapture();
-     * mCamera.setFPS(30);
-     * mCamera.setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
-     * }
-     */
+    m_camera = CameraServer.startAutomaticCapture();
 
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
@@ -169,6 +166,43 @@ public class Robot extends TimedRobot {
       m_arm.setGripper(!m_arm.getGripperEngaged());
     }
 
+    if (!m_arm.runTrajectory()) {
+      m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
+          m_operatorController.getArmVerticalChange(0.5));
+    }
+
+    if (m_operatorController.getRawButtonPressed(6)) {
+      m_arm.rotateWrist();
+    }
+
+    if (m_operatorController.getWantsDefaultState()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_operatorController.getWantsDoubleSubstation()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_operatorController.getWantsHighConeScore()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_operatorController.getWantsGroundPickup()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.FLOOR_CONE.getPose());
+      m_arm.startTrajectory();
+    }
+
+    if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
+      m_arm.setGripper(!m_arm.getGripperEngaged());
+    }
+
+    if (m_operatorController.getRawButtonPressed(3)) {
+      m_arm.rezero();
+    }
+
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
@@ -225,29 +259,34 @@ public class Robot extends TimedRobot {
 
     // double startTraj = Preferences.getDouble("startTraj", 0);
 
-    if(!m_arm.runTrajectory()) {
-      m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5), m_operatorController.getArmVerticalChange(0.5));
+    if (!m_arm.runTrajectory()) {
+      m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
+          m_operatorController.getArmVerticalChange(0.5));
     }
 
-    //Preferences.setDouble("targetX", targetX += m_operatorController.getArmHorizontalChange(0.5));
-    //Preferences.setDouble("targetY", targetY += m_operatorController.getArmVerticalChange(0.5));
+    // Preferences.setDouble("targetX", targetX +=
+    // m_operatorController.getArmHorizontalChange(0.5));
+    // Preferences.setDouble("targetY", targetY +=
+    // m_operatorController.getArmVerticalChange(0.5));
 
     // if(startTraj == 1) {
-    //   Preferences.setDouble("startTraj", 2);
+    // Preferences.setDouble("startTraj", 2);
 
-    //   /*double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
-    //   SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
+    // /*double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
+    // SmartDashboard.putNumberArray("CalcXY Double Check",
+    // m_arm.calcXY(targetAngles[0], targetAngles[1]));
 
-    //   ArmPose target = new ArmPose(trajEndX,trajEndY,new Rotation2d(0));*/
-    //   ArmPose target = new ArmPose(targetX, targetY, new Rotation2d(0));
+    // ArmPose target = new ArmPose(trajEndX,trajEndY,new Rotation2d(0));*/
+    // ArmPose target = new ArmPose(targetX, targetY, new Rotation2d(0));
 
-    //   m_arm.generateTrajectoryToPose(target);
-    //   m_arm.startTrajectory();
+    // m_arm.generateTrajectoryToPose(target);
+    // m_arm.startTrajectory();
     // } else if(startTraj == 2) {
-    //   Preferences.setDouble("startTraj", m_arm.runTrajectory() ? 2 : 0);
+    // Preferences.setDouble("startTraj", m_arm.runTrajectory() ? 2 : 0);
     // } else {
-    //   double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
-    //   SmartDashboard.putNumberArray("CalcXY Double Check", m_arm.calcXY(targetAngles[0], targetAngles[1]));
+    // double[] targetAngles = m_arm.setArmPosition(targetX, targetY);
+    // SmartDashboard.putNumberArray("CalcXY Double Check",
+    // m_arm.calcXY(targetAngles[0], targetAngles[1]));
     // }
 
     // m_arm.setWristAngle(wristAngle);

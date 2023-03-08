@@ -58,6 +58,7 @@ public final class Constants {
     public static final double k_shoulderPivotHeight = 19; // Inches
     public static final double k_homeHeight = Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length
         - Constants.Arm.Elbow.k_length;
+    public static final double k_maxTrajectorySpeed = 15;
 
     public static class Shoulder {
       public static final int k_motorId = 13;
@@ -99,8 +100,8 @@ public final class Constants {
       SCORE_MID_CONE(new ArmPose(0.0, 0.0, null)),
       SCORE_HIGH_CONE(new ArmPose(52.5, 63.5, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
-      DOUBLE_SUBSTATION(new ArmPose(31.0, 47.5, null)),
-      FLOOR_CONE(new ArmPose(26.0, 3.5, null)); //19.5, 2.0
+      DOUBLE_SUBSTATION(new ArmPose(-31.0, 56.35, null)),
+      FLOOR_CONE(new ArmPose(-25.14, 3.39, null));
 
       private ArmPose m_armPose;
 
