@@ -143,7 +143,8 @@ public class Robot extends TimedRobot {
 
     if (m_running && m_currentMarker <= m_autoPath.getMarkers().size() - 1
         && autoState.timeSeconds >= m_autoPath.getMarkers().get(m_currentMarker).timeSeconds) {
-      System.out.println("At marker: " + (++m_currentMarker));
+      DataLogManager.log("At marker: " + (++m_currentMarker));
+
       m_runningTimer.stop();
       m_running = false;
       m_stoppedTimer.reset();
@@ -156,7 +157,7 @@ public class Robot extends TimedRobot {
       m_runningTimer.start();
     }
 
-    m_field.setRobotPose(targetPose2d);
+    m_field.setRobotPose(targetPose2d); //simulation stuff
 
     ChassisSpeeds chassisSpeeds = m_driveController.calculate(m_swerve.getPose(), autoState);
 
@@ -167,6 +168,7 @@ public class Robot extends TimedRobot {
         false);
 
     Pose2d currentPose = m_swerve.getPose();
+    
     SmartDashboard.putNumber("velocityMetersPerSecond", autoState.velocityMetersPerSecond);
     SmartDashboard.putNumber("vxMetersPerSecond", chassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("vyMetersPerSecond", chassisSpeeds.vyMetersPerSecond);
