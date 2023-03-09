@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -228,7 +226,7 @@ public class Arm extends Subsystem {
 
   /**
    * Given a target pose location of the arm, generate a trajectory
-   * 
+   *
    * @param targetPose (units of inches, and rotation of the wrist)
    */
   public void generateTrajectoryToPose(ArmPose targetPose) {
@@ -237,6 +235,8 @@ public class Arm extends Subsystem {
 
     ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetPose.getX(), targetPose.getY());
     m_currentTrajectory = new ArmTrajectory(waypoints);
+
+    m_arm.startTrajectory();
   }
 
   public void startTrajectory() {

@@ -246,22 +246,18 @@ public class Robot extends TimedRobot {
 
     if (m_operatorController.getWantsDefaultState()) {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-      m_arm.startTrajectory();
     }
 
     if (m_operatorController.getWantsDoubleSubstation()) {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose());
-      m_arm.startTrajectory();
     }
 
     if (m_operatorController.getWantsHighConeScore()) {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose());
-      m_arm.startTrajectory();
     }
 
     if (m_operatorController.getWantsGroundPickup()) {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.FLOOR_CONE.getPose());
-      m_arm.startTrajectory();
     }
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
@@ -343,7 +339,6 @@ public class Robot extends TimedRobot {
     // ArmPose target = new ArmPose(targetX, targetY, new Rotation2d(0));
 
     // m_arm.generateTrajectoryToPose(target);
-    // m_arm.startTrajectory();
     // } else if(startTraj == 2) {
     // Preferences.setDouble("startTraj", m_arm.runTrajectory() ? 2 : 0);
     // } else {
@@ -378,17 +373,14 @@ public class Robot extends TimedRobot {
 
     if (m_operatorController.getWantsDefaultState()) {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-      m_arm.startTrajectory();
     }
 
     if (m_operatorController.getWantsDoubleSubstation()) {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose());
-      m_arm.startTrajectory();
     }
 
     if (m_operatorController.getWantsHighConeScore()) {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose());
-      m_arm.startTrajectory();
     }
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
