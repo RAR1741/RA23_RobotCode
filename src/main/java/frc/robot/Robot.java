@@ -3,9 +3,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.server.PathPlannerServer;
@@ -24,6 +23,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.autonomous.AutoChooser;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Subsystem;
@@ -59,6 +59,8 @@ public class Robot extends TimedRobot {
   private final Timer m_runningTimer = new Timer();
   private PathPlannerTrajectory m_autoPath;
   private PPHolonomicDriveController m_driveController;
+  AutoChooser m_autoChooser = new AutoChooser();
+
   private int m_currentMarker = 0;
   private final Timer m_stoppedTimer = new Timer();
   private boolean m_running = true;
@@ -97,11 +99,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autoPath = PathPlanner.loadPath("MarkerTest",
-        new PathConstraints(Constants.Auto.k_maxSpeed, Constants.Auto.k_maxAcceleration));
-    // autoPath = PathPlanner.loadPath("SPIN",
-    // new PathConstraints(Constants.Auto.k_maxSpeed,
-    // Constants.Auto.k_maxAcceleration));
+    // TODO: Use PathPlannerTrajectory.transformTrajectoryForAlliance make the state
+    // correct for our current alliance
+    m_autoPath = m_autoChooser.getSelectedAuto();
+
+    List<EventMarker> markers = m_autoPath.getMarkers();
 
     // HashMap<String, Command> eventMap = new HashMap<>();
     // eventMap.put("scoreHigh", new PrintCommand("Passed marker 1"));
