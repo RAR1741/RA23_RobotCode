@@ -5,13 +5,13 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
-      "height": "597",
+      "height": "687",
       "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "1114",
-      "xpos": "577",
-      "ypos": "342"
+      "width": "1383",
+      "xpos": "278",
+      "ypos": "189"
     }
   },
   "Table": {
@@ -47,6 +47,11 @@
       "Pos": "684,62",
       "Size": "808,466"
     },
+    "###/SmartDashboard/Auto choices": {
+      "Collapsed": "0",
+      "Pos": "148,507",
+      "Size": "254,54"
+    },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
       "Pos": "208,22",
@@ -64,7 +69,7 @@
     },
     "###FMS": {
       "Collapsed": "1",
-      "Pos": "135,524",
+      "Pos": "432,507",
       "Size": "283,146"
     },
     "###Joysticks": {
@@ -73,9 +78,9 @@
       "Size": "796,73"
     },
     "###NetworkTables": {
-      "Collapsed": "1",
+      "Collapsed": "0",
       "Pos": "209,63",
-      "Size": "468,872"
+      "Size": "468,32"
     },
     "###Other Devices": {
       "Collapsed": "1",
@@ -89,8 +94,8 @@
     },
     "###Plot <0>": {
       "Collapsed": "1",
-      "Pos": "434,523",
-      "Size": "806,400"
+      "Pos": "430,529",
+      "Size": "806,32"
     },
     "###RoboRIO": {
       "Collapsed": "0",

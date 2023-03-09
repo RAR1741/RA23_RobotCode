@@ -3,9 +3,8 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.server.PathPlannerServer;
@@ -24,6 +23,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.autonomous.AutoChooser;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Subsystem;
@@ -60,9 +60,14 @@ public class Robot extends TimedRobot {
   private final Logger m_logger = Logger.getInstance();
 
   // Auto things
+  private final Timer m_runningTimer = new Timer();
+  private PathPlannerTrajectory m_autoPath;
+  private PPHolonomicDriveController m_driveController;
+  AutoChooser m_autoChooser = new AutoChooser();
+
+  private int m_currentMarker = 0;
   private final Timer m_stoppedTimer = new Timer();
-  PathPlannerTrajectory m_autoPath;
-  PPHolonomicDriveController m_driveController;
+  private boolean m_running = true;
 
   private final Field2d m_field = new Field2d();
 
@@ -98,11 +103,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    m_autoPath = PathPlanner.loadPath("BlueDefault",
-        new PathConstraints(Constants.Auto.k_maxSpeed, Constants.Auto.k_maxAcceleration));
-    // autoPath = PathPlanner.loadPath("SPIN",
-    // new PathConstraints(Constants.Auto.k_maxSpeed,
-    // Constants.Auto.k_maxAcceleration));
+    // TODO: Use PathPlannerTrajectory.transformTrajectoryForAlliance make the state
+    // correct for our current alliance
+    m_autoPath = m_autoChooser.getSelectedAuto();
+
+    List<EventMarker> markers = m_autoPath.getMarkers();
 
     // HashMap<String, Command> eventMap = new HashMap<>();
     // eventMap.put("scoreHigh", new PrintCommand("Passed marker 1"));
@@ -119,13 +124,13 @@ public class Robot extends TimedRobot {
     // autoPath.getInitialPose().getY(),
     // m_swerve.getRotation2d()));
 
-    m_stoppedTimer.reset();
-    m_stoppedTimer.start();
+    m_runningTimer.reset();
+    m_runningTimer.start();
   }
 
   @Override
   public void autonomousPeriodic() {
-    PathPlannerState autoState = (PathPlannerState) m_autoPath.sample(m_stoppedTimer.get());
+    PathPlannerState autoState = (PathPlannerState) m_autoPath.sample(m_runningTimer.get());
 
     // Print the velocity at the sampled time
     // System.out.println(autoState.holonomicRotation);
@@ -135,6 +140,21 @@ public class Robot extends TimedRobot {
         autoState.poseMeters.getX(),
         autoState.poseMeters.getY(),
         autoState.holonomicRotation);
+
+    if (m_running && m_currentMarker <= m_autoPath.getMarkers().size() - 1
+        && autoState.timeSeconds >= m_autoPath.getMarkers().get(m_currentMarker).timeSeconds) {
+      System.out.println("At marker: " + (++m_currentMarker));
+      m_runningTimer.stop();
+      m_running = false;
+      m_stoppedTimer.reset();
+      m_stoppedTimer.start();
+    }
+
+    if (m_stoppedTimer.get() > 2) {
+      m_running = true;
+      m_stoppedTimer.stop();
+      m_runningTimer.start();
+    }
 
     m_field.setRobotPose(targetPose2d);
 
@@ -250,10 +270,6 @@ public class Robot extends TimedRobot {
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
       m_arm.setGripper(!m_arm.getGripperEngaged());
-    }
-
-    if (m_operatorController.getRawButtonPressed(3)) {
-      m_arm.rezero();
     }
 
     m_driverController.outputTelemetry();
@@ -381,10 +397,6 @@ public class Robot extends TimedRobot {
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
       m_arm.setGripper(!m_arm.getGripperEngaged());
-    }
-
-    if (m_driverController.getRawButtonPressed(3)) {
-      m_arm.rezero();
     }
 
     m_arm.outputTelemetry();
