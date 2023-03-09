@@ -166,15 +166,22 @@ public class Robot extends TimedRobot {
         chassisSpeeds.omegaRadiansPerSecond,
         false);
 
+    Pose2d currentPose = m_swerve.getPose();
     SmartDashboard.putNumber("velocityMetersPerSecond", autoState.velocityMetersPerSecond);
     SmartDashboard.putNumber("vxMetersPerSecond", chassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("vyMetersPerSecond", chassisSpeeds.vyMetersPerSecond);
     SmartDashboard.putNumber("omegaRadiansPerSecond", chassisSpeeds.omegaRadiansPerSecond);
-
-    Pose2d currentPose = m_swerve.getPose();
     SmartDashboard.putNumber("currentPoseX", currentPose.getX());
     SmartDashboard.putNumber("currentPoseY", currentPose.getY());
     SmartDashboard.putNumber("currentPoseZ", currentPose.getRotation().getDegrees());
+
+    Logger.addEntry("velocityMetersPerSecond", autoState.velocityMetersPerSecond);
+    Logger.addEntry("vxMetersPerSecond", chassisSpeeds.vxMetersPerSecond);
+    Logger.addEntry("vyMetersPerSecond", chassisSpeeds.vyMetersPerSecond);
+    Logger.addEntry("omegaRadiansPerSecond", chassisSpeeds.omegaRadiansPerSecond);
+    Logger.addEntry("currentPoseX", currentPose.getX());
+    Logger.addEntry("currentPoseY", currentPose.getY());
+    Logger.addEntry("currentPoseZ", currentPose.getRotation().getDegrees());
   }
 
   @Override
