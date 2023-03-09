@@ -187,8 +187,8 @@ public class SwerveModule {
   }
 
   public void periodic() {
-    m_turningMotor.setVoltage(m_periodicIO.turnMotorVoltage);
-    m_driveMotor.setVoltage(m_periodicIO.driveMotorVoltage);
+    // m_turningMotor.setVoltage(m_periodicIO.turnMotorVoltage);
+    // m_driveMotor.setVoltage(m_periodicIO.driveMotorVoltage);
   }
 
   public void outputTelemetry() {

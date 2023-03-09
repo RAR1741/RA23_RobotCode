@@ -266,10 +266,6 @@ public class Robot extends TimedRobot {
       m_arm.setGripper(!m_arm.getGripperEngaged());
     }
 
-    if (m_operatorController.getRawButtonPressed(3)) {
-      m_arm.rezero();
-    }
-
     m_driverController.outputTelemetry();
   }
 
@@ -395,10 +391,6 @@ public class Robot extends TimedRobot {
 
     if (m_driverController.getWantsGripToggle() || m_operatorController.getWantsGripToggle()) {
       m_arm.setGripper(!m_arm.getGripperEngaged());
-    }
-
-    if (m_driverController.getRawButtonPressed(3)) {
-      m_arm.rezero();
     }
 
     m_arm.outputTelemetry();

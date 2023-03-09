@@ -60,9 +60,6 @@ public class Arm extends Subsystem {
   private final DutyCycleEncoder m_elbowEncoder = new DutyCycleEncoder(Constants.Arm.Elbow.k_encoderId);
   private final DutyCycleEncoder m_wristEncoder = new DutyCycleEncoder(Constants.Arm.Wrist.k_encoderId);
 
-  private final RelativeEncoder tempShoulderEncoder = m_shoulderMotor.getEncoder(Type.kHallSensor, 42);
-  private final double shoulderStart;
-
   // private final TrajectoryConfig m_trajConfig = new
   // TrajectoryConfig(k_maxTrajectorySpeed, k_maxTrajectoryAcceleration);
   private ArmTrajectory m_currentTrajectory;
@@ -98,9 +95,6 @@ public class Arm extends Subsystem {
     // m_shoulderEncoder.setDistancePerRotation(k_shoulderDegreesPerPulse);
     // m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
     // m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
-
-    tempShoulderEncoder.setPositionConversionFactor((1.0 / 80.0) * (16.0 / 72.0));
-    shoulderStart = tempShoulderEncoder.getPosition();
 
     // TODO: do this for shoulder and wrist as well
     m_shoulderPID.enableContinuousInput(0, 360);
@@ -351,9 +345,8 @@ public class Arm extends Subsystem {
   }
 
   public double getShoulderPositionDegrees() {
-    // double value = m_shoulderEncoder.getAbsolutePosition() -
-    // Constants.Arm.Shoulder.k_offset;
-    double value = tempShoulderEncoder.getPosition() - shoulderStart;
+    double value = m_shoulderEncoder.getAbsolutePosition() -
+        Constants.Arm.Shoulder.k_offset;
     return Units.rotationsToDegrees(Helpers.modRotations(value));
   }
 
@@ -380,10 +373,6 @@ public class Arm extends Subsystem {
     m_shoulderPID.reset();
     m_elbowPID.reset();
     m_wristPID.reset();
-  }
-
-  public void rezero() {
-    tempShoulderEncoder.setPosition(0);
   }
 
   public void adjustPosition(double xChange, double yChange) {

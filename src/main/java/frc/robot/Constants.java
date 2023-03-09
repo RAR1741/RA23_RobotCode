@@ -46,10 +46,10 @@ public final class Constants {
     // Drivetrain (turn) constants
     public class Turn {
       // Drivetrain turning offset constants
-      public static final double k_FLOffset = 0.129074;
-      public static final double k_FROffset = 0.722532;
-      public static final double k_BLOffset = 0.205462;
-      public static final double k_BROffset = 0.412673;
+      public static final double k_FLOffset = 0.146883;
+      public static final double k_FROffset = 0.725897;
+      public static final double k_BLOffset = 0.201316;
+      public static final double k_BROffset = 0.406792;
 
       public static final int k_FLMotorId = 9;
       public static final int k_FRMotorId = 10;
@@ -73,7 +73,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
 
-      public static final double k_offset = 0.0;
+      public static final double k_offset = 0.514274;
     }
 
     public static class Elbow {
@@ -84,7 +84,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.124901;
+      public static final double k_offset = 0.304437;
     }
 
     public static class Wrist {
@@ -95,7 +95,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.162329;
+      public static final double k_offset = 0.646119;
     }
 
     public static enum Preset {
