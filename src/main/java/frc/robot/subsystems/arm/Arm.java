@@ -398,6 +398,7 @@ public class Arm extends Subsystem {
 
     // Shoulder
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", getShoulderPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/AbsPosition", m_shoulderEncoder.getAbsolutePosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/PositionError", m_shoulderPID.getPositionError());
     SmartDashboard.putBoolean(m_smartDashboardKey + "Shoulder/AtTarget", m_shoulderPID.atSetpoint());
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Velocity", m_shoulderMotor.get());
@@ -406,6 +407,7 @@ public class Arm extends Subsystem {
 
     // Elbow
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", getElbowPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/AbsPosition", m_elbowEncoder.getAbsolutePosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Velocity", m_elbowMotor.get());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Temperature", m_elbowMotor.getMotorTemperature());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Current", m_elbowMotor.getOutputCurrent());
