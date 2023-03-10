@@ -33,7 +33,8 @@ public final class Constants {
 
     public static final double k_maxSpeed = 3.0; // 3 meters per second
     public static final double k_maxAngularSpeed = Math.PI; // 1/2 rotation per second
-    public static final double k_slowScaler = 0.2;
+    public static final double k_slowScaler = 0.2; // 20% reduction in speed
+    public static final double k_boostScaler = 2.0; // 200% increase in speed
 
     // Drivetrain drive motor constants
     public class Drive {
