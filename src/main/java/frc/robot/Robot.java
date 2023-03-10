@@ -189,10 +189,15 @@ public class Robot extends TimedRobot {
     double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis()) *
         Constants.Drivetrain.k_maxAngularSpeed;
 
-    if (m_driverController.getWantsSlowMode()) {
-      xSpeed *= Constants.Drivetrain.k_slowScaler;
-      ySpeed *= Constants.Drivetrain.k_slowScaler;
-    }
+    // slowScaler should scale between k_slowScaler and 1
+    double slowScaler = Constants.Drivetrain.k_slowScaler
+        + ((1 - m_driverController.getSlowScaler()) * (1 - Constants.Drivetrain.k_slowScaler));
+
+    // boostScaler should scale between 1 and k_boostScaler
+    double boostScaler = 1 + (m_driverController.getBoostScaler() * (Constants.Drivetrain.k_boostScaler - 1));
+
+    xSpeed *= slowScaler * boostScaler;
+    ySpeed *= slowScaler * boostScaler;
 
     // m_swerve.drive(mDriverController.getForwardAxis(),
     // mDriverController.getStrafeAxis(),
