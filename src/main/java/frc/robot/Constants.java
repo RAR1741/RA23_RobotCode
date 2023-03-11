@@ -101,13 +101,14 @@ public final class Constants {
 
     public static enum Preset {
       HOME(new ArmPose(0.0, Constants.Arm.k_homeHeight, null)),
-      SCORE_MID_CUBE(new ArmPose(0.0, 0.0, null)),
-      SCORE_HIGH_CUBE(new ArmPose(0.0, 0.0, null)),
-      SCORE_MID_CONE(new ArmPose(0.0, 0.0, null)),
-      SCORE_HIGH_CONE(new ArmPose(52.5, 63.5, null)),
+      SCORE_MID_CUBE(new ArmPose(-41.9, 33.0, null)),
+      SCORE_HIGH_CUBE(new ArmPose(-58.4, 53.9, null)),
+      SCORE_MID_CONE(new ArmPose(-42.0, 55.2, null)),
+      SCORE_HIGH_CONE(new ArmPose(-52.5, 63.5, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
-      DOUBLE_SUBSTATION(new ArmPose(-31.0, 56.35, null)),
-      FLOOR_CONE(new ArmPose(-25.14, 3.39, null));
+      DOUBLE_SUBSTATION(new ArmPose(31.0, 56.35, null)),
+      FLOOR_PICKUP(new ArmPose(25.14, 0.02, null)),
+      FLOOR_SCORE(new ArmPose(-25.14, 3.39, null));
 
       private ArmPose m_armPose;
 

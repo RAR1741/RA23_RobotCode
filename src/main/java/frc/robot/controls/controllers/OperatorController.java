@@ -10,10 +10,6 @@ public class OperatorController extends FilteredController {
     super(port, useDeadband, useSquaredInput);
   }
 
-  public boolean getWantsDefaultState() {
-    return this.getRawButton(2);
-  }
-
   public double getArmHorizontalChange(double strength) {
     return this.getFilteredAxis(0) * strength;
   }
@@ -26,15 +22,35 @@ public class OperatorController extends FilteredController {
     return this.getRawButtonPressed(5);
   }
 
+  public boolean getWantsDefaultState() {
+    return this.getRawButton(2);
+  }
+
+  public boolean getWantsDoubleSubstation() {
+    return this.getRawButtonPressed(4);
+  }
+
+  public boolean getWantsGroundPickup() {
+    return this.getRawButtonPressed(1);
+  }
+
+  public boolean getWantsGroundScore() {
+    return this.getRawButtonPressed(3);
+  }
+
   public boolean getWantsHighConeScore() {
     return this.getHatUpPressed();
   }
 
-  public boolean getWantsDoubleSubstation() {
-    return this.getHatRight();
+  public boolean getWantsMidConeScore() {
+    return this.getHatRightPressed();
   }
 
-  public boolean getWantsGroundPickup() {
-    return this.getHatDown();
+  public boolean getWantsHighCubeScore() {
+    return this.getHatLeftPressed();
+  }
+
+  public boolean getWantsMidCubeScore() {
+    return this.getHatDownPressed();
   }
 }
