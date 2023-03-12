@@ -66,6 +66,10 @@ public class Robot extends TimedRobot {
   private final Timer m_stoppedTimer = new Timer();
   private boolean m_running = true;
 
+  // private int m_autoChoice = 2; //0 = yes cube yes drive, 1 = no cube yes drive, 2 = yes cube and no drive, 3 = do nothing
+
+  private final boolean m_scoring = true;
+
   private final Field2d m_field = new Field2d();
 
   @Override
@@ -98,6 +102,7 @@ public class Robot extends TimedRobot {
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
   }
 
+  //Disabled because not working yet
   // @Override
   // public void autonomousInit() {
   //   // TODO: Use PathPlannerTrajectory.transformTrajectoryForAlliance make the state
@@ -179,27 +184,98 @@ public class Robot extends TimedRobot {
     m_swerve.brakeOff();
     m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
-    m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
-
-    m_runningTimer.reset();
-    m_runningTimer.start();
+    if (m_scoring) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
+    
+      m_runningTimer.reset();
+      m_runningTimer.start();
+    } else {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+    }
   }
-  
+
+  //Disabled because not tested yet
+  // @Override
+  // public void autonomousInit() {
+  //   m_swerve.brakeOff();
+  //   m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+
+  //   if (m_autoChoice == 0) {
+  //     m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
+    
+  //     m_runningTimer.reset();
+  //     m_runningTimer.start();
+  //   } else if (m_autoChoice == 1) {
+  //     m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+  //   } else if (m_autoChoice == 2) {
+  //     m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
+    
+  //     m_runningTimer.reset();
+  //     m_runningTimer.start();
+  //   } else if (m_autoChoice == 3) {
+  //     m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+  //   }
+  // }
+
   @Override
   public void autonomousPeriodic() {
     m_arm.runTrajectory();
 
-    if (m_runningTimer.get() > 7){
-      m_arm.setGripper(false);
-    }
+    if (m_scoring) {
+      if (m_runningTimer.get() > 7){
+        m_arm.setGripper(false);
+      }
 
-    if(m_swerve.getPose().getX() < 5 && m_runningTimer.get() > 8) {
-      m_swerve.drive(1, 0, 0, true);
-      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+      if(m_swerve.getPose().getX() < 5 && m_runningTimer.get() > 8) {
+        m_swerve.drive(1, 0, 0, true);
+        m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+      } else {
+        m_swerve.drive(0, 0, 0, false);
+      }
     } else {
-      m_swerve.drive(0, 0, 0, false);
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+      if(m_swerve.getPose().getX() < 5) {
+        m_swerve.drive(1, 0, 0, true);
+      } else {
+        m_swerve.drive(0, 0, 0, false);
+      }
     }
   }
+  
+  //Disabled because not tested yet
+  // @Override
+  // public void autonomousPeriodic() {
+  //   m_arm.runTrajectory();
+  //   if (m_autoChoice == 0) {
+  //     if (m_runningTimer.get() > 7){
+  //       m_arm.setGripper(false);
+  //     }
+
+  //     if(m_swerve.getPose().getX() < 5 && m_runningTimer.get() > 8) {
+  //       m_swerve.drive(1, 0, 0, true);
+  //       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+  //     } else {
+  //       m_swerve.drive(0, 0, 0, false);
+  //     }
+  //   } else if (m_autoChoice == 1) {
+  //     m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+  //     if(m_swerve.getPose().getX() < 5) {
+  //       m_swerve.drive(1, 0, 0, true);
+  //     } else {
+  //       m_swerve.drive(0, 0, 0, false);
+  //     }
+  //   } else if (m_autoChoice == 2) {
+  //     if (m_runningTimer.get() > 7){
+  //       m_arm.setGripper(false);
+
+  //       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());        
+  //     }
+  //     m_swerve.drive(0, 0, 0, false);
+  //   } else if (m_autoChoice == 3) {
+  //     m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+  //     m_swerve.drive(0, 0, 0, false);
+  //   }
+  // }
 
   @Override
   public void teleopInit() {

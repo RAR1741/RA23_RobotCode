@@ -414,6 +414,7 @@ public class Arm extends Subsystem {
 
     // Wrist
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Position", getWristPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/AbsPosition", m_wristEncoder.getAbsolutePosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/PositionError", m_wristPID.getPositionError());
     SmartDashboard.putBoolean(m_smartDashboardKey + "Wrist/AtTarget", m_wristPID.atSetpoint());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Velocity", m_wristMotor.get());
