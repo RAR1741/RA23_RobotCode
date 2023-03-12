@@ -120,6 +120,10 @@ public class SwerveModule {
     return Helpers.modRotations(m_turningEncoder.getPosition() - m_turningOffset);
   }
 
+  public WPI_TalonFX getDriveMotor() {
+    return m_driveMotor;
+  }
+
   // Returns the drive velocity in meters per second.
   public double getDriveVelocity() {
     // In revs per second

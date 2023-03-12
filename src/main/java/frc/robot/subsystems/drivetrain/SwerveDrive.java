@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -67,7 +68,22 @@ public class SwerveDrive extends Subsystem {
   }
 
   private SwerveDrive() {
+    brakeOff();
     resetGyro();
+  }
+
+  public void brakeOn() {
+    m_frontLeft.getDriveMotor().setNeutralMode(NeutralMode.Brake);
+    m_frontRight.getDriveMotor().setNeutralMode(NeutralMode.Brake);
+    m_backLeft.getDriveMotor().setNeutralMode(NeutralMode.Brake);
+    m_backRight.getDriveMotor().setNeutralMode(NeutralMode.Brake);
+  }
+
+  public void brakeOff() {
+    m_frontLeft.getDriveMotor().setNeutralMode(NeutralMode.Coast);
+    m_frontRight.getDriveMotor().setNeutralMode(NeutralMode.Coast);
+    m_backLeft.getDriveMotor().setNeutralMode(NeutralMode.Coast);
+    m_backRight.getDriveMotor().setNeutralMode(NeutralMode.Coast);
   }
 
   public void reset() {
@@ -157,6 +173,7 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void stop() {
+    brakeOn();
     drive(0.0, 0.0, 0.0, true);
   }
 
@@ -182,5 +199,6 @@ public class SwerveDrive extends Subsystem {
     m_backRight.outputTelemetry();
 
     SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
+    SmartDashboard.putNumberArray("Drivetrain/Pose", new double[] {getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()});
   }
 }

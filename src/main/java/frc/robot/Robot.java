@@ -14,6 +14,7 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -174,7 +175,35 @@ public class Robot extends TimedRobot {
   // }
 
   @Override
+  public void autonomousInit() {
+    m_swerve.brakeOff();
+    m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+
+    m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
+
+    m_runningTimer.reset();
+    m_runningTimer.start();
+  }
+  
+  @Override
+  public void autonomousPeriodic() {
+    m_arm.runTrajectory();
+
+    if (m_runningTimer.get() > 7){
+      m_arm.setGripper(false);
+    }
+
+    if(m_swerve.getPose().getX() < 5 && m_runningTimer.get() > 8) {
+      m_swerve.drive(1, 0, 0, true);
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+    } else {
+      m_swerve.drive(0, 0, 0, false);
+    }
+  }
+
+  @Override
   public void teleopInit() {
+    m_swerve.brakeOff();
     m_swerve.drive(0, 0, 0, false);
   }
 
