@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
-import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,6 +22,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutoChooser;
+import frc.robot.autonomous.AutoRunner;
+import frc.robot.autonomous.AutoTask;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Subsystem;
@@ -42,8 +41,10 @@ public class Robot extends TimedRobot {
 
   // Robot subsystems
   private List<Subsystem> m_allSubsystems = new ArrayList<>();
-  private final SwerveDrive m_swerve = SwerveDrive.getInstance();
-  private final Arm m_arm = Arm.getInstance();
+  public final SwerveDrive m_swerve = SwerveDrive.getInstance();
+  public final Arm m_arm = Arm.getInstance();
+  // private AutoTask m_currentTask;
+  // private AutoRunner m_autoRunner;
 
   // The mere instantiation of this object will cause the compressor to start
   // running. We don't need to do anything else with it, so we'll suppress the
@@ -192,6 +193,11 @@ public class Robot extends TimedRobot {
     } else {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
     }
+
+    // m_autoRunner = AutoRunner.getInstance(this);
+    // m_autoRunner.queueBlueDefaultTasks();
+    // m_currentTask = m_autoRunner.getNextTask();
+    // m_currentTask.start();
   }
 
   //Disabled because not tested yet
@@ -240,6 +246,11 @@ public class Robot extends TimedRobot {
         m_swerve.drive(0, 0, 0, false);
       }
     }
+
+    // if (m_currentTask.run()) {
+    //   m_currentTask = m_autoRunner.getNextTask();
+    //   m_currentTask.start();
+    // }
   }
   
   //Disabled because not tested yet
