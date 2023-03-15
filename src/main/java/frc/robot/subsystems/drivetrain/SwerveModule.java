@@ -188,6 +188,7 @@ public class SwerveModule {
     Logger.addEntry(m_smartDashboardKey + "TurnAtGoal", turnAtGoal);
     Logger.addEntry(m_smartDashboardKey + "DriveTargetVelocity", desiredState.speedMetersPerSecond);
     Logger.addEntry(m_smartDashboardKey + "DriveOutput", driveOutput + driveFeedforward);
+    
     m_periodicIO.turnMotorVoltage = turnOutput + turnFeedforward;
     m_periodicIO.driveMotorVoltage = driveOutput + driveFeedforward;
   }

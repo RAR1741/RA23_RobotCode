@@ -73,9 +73,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // Initialize on-board logging
-    DataLogManager.start();
-    DataLogManager.log("Logging initialized. Fard.");
+    // // Initialize on-board logging
+    // DataLogManager.start();
+    // DataLogManager.log("Logging initialized. Fard.");
 
     // Start the PathPlanner server
     PathPlannerServer.startServer(5811);
@@ -143,7 +143,7 @@ public class Robot extends TimedRobot {
 
     if (m_running && m_currentMarker <= m_autoPath.getMarkers().size() - 1
         && autoState.timeSeconds >= m_autoPath.getMarkers().get(m_currentMarker).timeSeconds) {
-      DataLogManager.log("At marker: " + (++m_currentMarker));
+      System.out.println("At marker: " + (++m_currentMarker));
 
       m_runningTimer.stop();
       m_running = false;
@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
       m_runningTimer.start();
     }
 
-    m_field.setRobotPose(targetPose2d); //simulation stuff
+    m_field.setRobotPose(targetPose2d); // simulation stuff
 
     ChassisSpeeds chassisSpeeds = m_driveController.calculate(m_swerve.getPose(), autoState);
 
@@ -168,7 +168,7 @@ public class Robot extends TimedRobot {
         false);
 
     Pose2d currentPose = m_swerve.getPose();
-    
+
     SmartDashboard.putNumber("velocityMetersPerSecond", autoState.velocityMetersPerSecond);
     SmartDashboard.putNumber("vxMetersPerSecond", chassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("vyMetersPerSecond", chassisSpeeds.vyMetersPerSecond);
