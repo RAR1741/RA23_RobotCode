@@ -198,17 +198,8 @@ public class Robot extends TimedRobot {
     // TODO: Reset this to our actual starting postion
     m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
-    // if (m_scoring) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
-
-    // m_runningTimer.reset();
-    // m_runningTimer.start();
-    // } else {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-    // }
-
     m_autoRunner = AutoRunner.getInstance();
-    // m_autoRunner.setAutoMode(AutoRunner.AutoMode.DO_NOTHING);
+    // TODO: Change this to use the AutoChooser
     m_autoRunner.setAutoMode(AutoRunner.AutoMode.BLUE_DEFAULT);
     m_currentTask = m_autoRunner.getNextTask();
 
@@ -218,52 +209,8 @@ public class Robot extends TimedRobot {
     }
   }
 
-  // Disabled because not tested yet
-  // @Override
-  // public void autonomousInit() {
-  // m_swerve.brakeOff();
-  // m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-
-  // if (m_autoChoice == 0) {
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
-
-  // m_runningTimer.reset();
-  // m_runningTimer.start();
-  // } else if (m_autoChoice == 1) {
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-  // } else if (m_autoChoice == 2) {
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
-
-  // m_runningTimer.reset();
-  // m_runningTimer.start();
-  // } else if (m_autoChoice == 3) {
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-  // }
-  // }
-
   @Override
   public void autonomousPeriodic() {
-    // if (m_scoring) {
-    // if (m_runningTimer.get() > 7) {
-    // m_arm.setGripper(false);
-    // }
-
-    // if (m_swerve.getPose().getX() < 5 && m_runningTimer.get() > 8) {
-    // m_swerve.drive(1, 0, 0, true);
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-    // } else {
-    // m_swerve.drive(0, 0, 0, false);
-    // }
-    // } else {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-
-    // if (m_swerve.getPose().getX() < 5) {
-    // m_swerve.drive(1, 0, 0, true);
-    // } else {
-    // m_swerve.drive(0, 0, 0, false);
-    // }
-    // }
-
     // If there is a current task, run it
     if (m_currentTask != null) {
       // Run the current task
@@ -280,41 +227,6 @@ public class Robot extends TimedRobot {
       }
     }
   }
-
-  // Disabled because not tested yet
-  // @Override
-  // public void autonomousPeriodic() {
-  // m_arm.runTrajectory();
-  // if (m_autoChoice == 0) {
-  // if (m_runningTimer.get() > 7){
-  // m_arm.setGripper(false);
-  // }
-
-  // if(m_swerve.getPose().getX() < 5 && m_runningTimer.get() > 8) {
-  // m_swerve.drive(1, 0, 0, true);
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-  // } else {
-  // m_swerve.drive(0, 0, 0, false);
-  // }
-  // } else if (m_autoChoice == 1) {
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-  // if(m_swerve.getPose().getX() < 5) {
-  // m_swerve.drive(1, 0, 0, true);
-  // } else {
-  // m_swerve.drive(0, 0, 0, false);
-  // }
-  // } else if (m_autoChoice == 2) {
-  // if (m_runningTimer.get() > 7){
-  // m_arm.setGripper(false);
-
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-  // }
-  // m_swerve.drive(0, 0, 0, false);
-  // } else if (m_autoChoice == 3) {
-  // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-  // m_swerve.drive(0, 0, 0, false);
-  // }
-  // }
 
   @Override
   public void teleopInit() {

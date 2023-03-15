@@ -11,8 +11,11 @@ public class BlueDefaultMode extends AutoModeBase {
 
   public void queueTasks() {
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
+
     queueTask(new GripperTask(false));
+
     queueTask(new WaitTask(1.0));
+
     queueTask(
         new ParallelTask(
             new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
