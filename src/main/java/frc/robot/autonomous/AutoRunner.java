@@ -24,8 +24,26 @@ public class AutoRunner {
 
   public AutoTask getNextTask() {
     // Pop the first task off the list
-    // TODO: Safeguard this if we run out of tasks
-    return m_tasks.remove(0);
+    try {
+      return m_tasks.remove(0);
+    } catch (IndexOutOfBoundsException ex) {
+      return null;
+    }
+  }
+
+  public void queueDoNothing() {
+    m_tasks.add(new AutoTask(m_robot) {
+      @Override
+      public void start() {
+        System.out.println("Starting do nothing auto...");
+      }
+
+      @Override
+      public boolean run() {
+        System.out.println("Do nothing auto complete");
+        return true;
+      }
+    });
   }
 
   public void queueBlueDefaultTasks() {
