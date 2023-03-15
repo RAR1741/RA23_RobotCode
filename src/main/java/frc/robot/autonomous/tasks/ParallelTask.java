@@ -1,48 +1,48 @@
 package frc.robot.autonomous.tasks;
 
 public class ParallelTask extends Task {
-  private Task[] tasks;
-  private boolean[] finished;
-  private boolean allFinished = false;
+  private Task[] m_tasks;
+  private boolean[] m_finished;
+  private boolean m_allFinished = false;
 
   public ParallelTask(Task... tasks) {
-    this.tasks = tasks;
-    finished = new boolean[tasks.length];
+    this.m_tasks = tasks;
+    m_finished = new boolean[tasks.length];
   }
 
   @Override
   public void start() {
-    for (Task task : tasks) {
+    for (Task task : m_tasks) {
       task.start();
     }
   }
 
   @Override
   public void update() {
-    for (int i = 0; i < tasks.length; i++) {
-      if (!finished[i]) {
-        tasks[i].update();
-        if (tasks[i].isFinished()) {
-          finished[i] = true;
+    for (int i = 0; i < m_tasks.length; i++) {
+      if (!m_finished[i]) {
+        m_tasks[i].update();
+        if (m_tasks[i].isFinished()) {
+          m_finished[i] = true;
         }
       }
     }
-    allFinished = true;
-    for (boolean b : finished) {
+    m_allFinished = true;
+    for (boolean b : m_finished) {
       if (!b) {
-        allFinished = false;
+        m_allFinished = false;
       }
     }
   }
 
   @Override
   public boolean isFinished() {
-    return allFinished;
+    return m_allFinished;
   }
 
   @Override
   public void done() {
-    for (Task task : tasks) {
+    for (Task task : m_tasks) {
       task.done();
     }
   }

@@ -1,8 +1,6 @@
 package frc.robot.autonomous.tasks;
 
 public abstract class Task {
-  
-
   public abstract void start();
 
   public abstract void update();
