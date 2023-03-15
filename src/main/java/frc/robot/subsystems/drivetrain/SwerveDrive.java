@@ -102,12 +102,7 @@ public class SwerveDrive extends Subsystem {
     return m_gyro.getRotation2d();
   }
 
-  public void resetOdometry(Pose2d pose) {
-    m_frontLeft.resetDriveEncoder();
-    m_frontRight.resetDriveEncoder();
-    m_backLeft.resetDriveEncoder();
-    m_backRight.resetDriveEncoder();
-
+  public void setPose(Pose2d pose) {
     m_odometry.resetPosition(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
@@ -117,6 +112,15 @@ public class SwerveDrive extends Subsystem {
             m_backRight.getPosition()
         },
         pose);
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    m_frontLeft.resetDriveEncoder();
+    m_frontRight.resetDriveEncoder();
+    m_backLeft.resetDriveEncoder();
+    m_backRight.resetDriveEncoder();
+
+    setPose(pose);
   }
 
   /**
@@ -199,6 +203,7 @@ public class SwerveDrive extends Subsystem {
     m_backRight.outputTelemetry();
 
     SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
-    SmartDashboard.putNumberArray("Drivetrain/Pose", new double[] {getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()});
+    SmartDashboard.putNumberArray("Drivetrain/Pose",
+        new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 }

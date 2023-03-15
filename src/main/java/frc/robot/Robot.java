@@ -10,6 +10,8 @@ import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -99,6 +101,8 @@ public class Robot extends TimedRobot {
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
+
+    updateSim();
   }
 
   // Disabled because not working yet
@@ -189,8 +193,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    // m_swerve.brakeOff();
-    // m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+    m_swerve.brakeOff();
+
+    // TODO: Reset this to our actual starting postion
+    m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
     // if (m_scoring) {
     // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
@@ -563,6 +569,6 @@ public class Robot extends TimedRobot {
   private void updateSim() {
     // Update the odometry in the sim.
     // mDrive.simulationPeriodic();
-    // m_field.setRobotPose(m_swerve.getPose());
+    m_field.setRobotPose(m_swerve.getPose());
   }
 }
