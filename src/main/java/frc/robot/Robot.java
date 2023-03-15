@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutoChooser;
 import frc.robot.autonomous.AutoRunner;
-import frc.robot.autonomous.AutoTask;
+import frc.robot.autonomous.tasks.Task;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.subsystems.Subsystem;
@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   private List<Subsystem> m_allSubsystems = new ArrayList<>();
   public final SwerveDrive m_swerve = SwerveDrive.getInstance();
   public final Arm m_arm = Arm.getInstance();
-  private AutoTask m_currentTask;
+  private Task m_currentTask;
   private AutoRunner m_autoRunner;
 
   // The mere instantiation of this object will cause the compressor to start
@@ -201,9 +201,9 @@ public class Robot extends TimedRobot {
     // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
     // }
 
-    m_autoRunner = AutoRunner.getInstance(this);
-    // m_autoRunner.queueBlueDefaultTasks();
-    m_autoRunner.queueDoNothing();
+    m_autoRunner = AutoRunner.getInstance();
+    // m_autoRunner.setAutoMode(AutoRunner.AutoMode.DO_NOTHING);
+    m_autoRunner.setAutoMode(AutoRunner.AutoMode.BLUE_DEFAULT);
     m_currentTask = m_autoRunner.getNextTask();
 
     // Start the first task
@@ -237,8 +237,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    m_arm.runTrajectory();
-
     // if (m_scoring) {
     // if (m_runningTimer.get() > 7) {
     // m_arm.setGripper(false);
@@ -260,17 +258,19 @@ public class Robot extends TimedRobot {
     // }
     // }
 
-    // Early return if no task is running
-    if (m_currentTask == null) {
-      return;
-    }
+    // If there is a current task, run it
+    if (m_currentTask != null) {
+      // Run the current task
+      m_currentTask.update();
 
-    // Run the current task
-    if (m_currentTask.run()) {
-      m_currentTask = m_autoRunner.getNextTask();
+      // If the current task is finished, get the next task
+      if (m_currentTask.isFinished()) {
+        m_currentTask = m_autoRunner.getNextTask();
 
-      if (m_currentTask != null) {
-        m_currentTask.start();
+        // Start the next task
+        if (m_currentTask != null) {
+          m_currentTask.start();
+        }
       }
     }
   }

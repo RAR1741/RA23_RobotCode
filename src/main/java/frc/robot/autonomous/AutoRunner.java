@@ -1,76 +1,44 @@
 package frc.robot.autonomous;
 
-import java.util.ArrayList;
-
-import frc.robot.Robot;
+import frc.robot.autonomous.modes.AutoModeBase;
+import frc.robot.autonomous.modes.BlueDefaultMode;
+import frc.robot.autonomous.modes.DoNothingMode;
+import frc.robot.autonomous.tasks.Task;
 
 public class AutoRunner {
   private static AutoRunner m_autoRunner = null;
-  private ArrayList<AutoTask> m_tasks;
+  private AutoModeBase m_autoMode;
 
-  private Robot m_robot;
-
-  private AutoRunner(Robot robot) {
-    m_robot = robot;
-    m_tasks = new ArrayList<>();
-  }
-
-  public static AutoRunner getInstance(Robot robot) {
+  public static AutoRunner getInstance() {
     if (m_autoRunner == null) {
-      m_autoRunner = new AutoRunner(robot);
+      m_autoRunner = new AutoRunner();
     }
     return m_autoRunner;
   }
 
-  public AutoTask getNextTask() {
-    // Pop the first task off the list
-    try {
-      return m_tasks.remove(0);
-    } catch (IndexOutOfBoundsException ex) {
-      return null;
+  public enum AutoMode {
+    DO_NOTHING,
+    BLUE_DEFAULT
+  }
+
+  public Task getNextTask() {
+    return m_autoMode.getNextTask();
+  }
+
+  public void setAutoMode(AutoMode mode) {
+    switch (mode) {
+      case DO_NOTHING:
+        m_autoMode = new DoNothingMode();
+        break;
+      case BLUE_DEFAULT:
+        m_autoMode = new BlueDefaultMode();
+        break;
+      default:
+        System.out.println("Invalid auto mode selected. Defaulting to do nothing.");
+        m_autoMode = new DoNothingMode();
+        break;
     }
-  }
 
-  public void queueDoNothing() {
-    m_tasks.add(new AutoTask(m_robot) {
-      @Override
-      public void start() {
-        System.out.println("Starting do nothing auto...");
-      }
-
-      @Override
-      public boolean run() {
-        System.out.println("Do nothing auto complete");
-        return true;
-      }
-    });
-  }
-
-  public void queueBlueDefaultTasks() {
-    m_tasks.add(new AutoTask(m_robot) {
-      @Override
-      public void start() {
-        System.out.println("1: Starting...");
-      }
-
-      @Override
-      public boolean run() {
-        System.out.println("1: Running...");
-        return false;
-      }
-    });
-
-    m_tasks.add(new AutoTask(m_robot) {
-      @Override
-      public void start() {
-        System.out.println("2: Starting...");
-      }
-
-      @Override
-      public boolean run() {
-        System.out.println("2: Running...");
-        return false;
-      }
-    });
+    m_autoMode.queueTasks();
   }
 }

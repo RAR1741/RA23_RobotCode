@@ -5,13 +5,13 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
-      "height": "687",
+      "height": "991",
       "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "1383",
-      "xpos": "278",
-      "ypos": "189"
+      "width": "1907",
+      "xpos": "1925",
+      "ypos": "33"
     }
   },
   "Table": {
@@ -43,18 +43,18 @@
       "Size": "123,144"
     },
     "###/SmartDashboard/Arm Sim": {
-      "Collapsed": "1",
-      "Pos": "684,62",
+      "Collapsed": "0",
+      "Pos": "1095,29",
       "Size": "808,466"
     },
     "###/SmartDashboard/Auto choices": {
       "Collapsed": "0",
-      "Pos": "148,507",
+      "Pos": "827,119",
       "Size": "254,54"
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
-      "Pos": "208,22",
+      "Pos": "1008,505",
       "Size": "887,479"
     },
     "###Analog Inputs": {
@@ -68,24 +68,24 @@
       "Size": "168,77"
     },
     "###FMS": {
-      "Collapsed": "1",
+      "Collapsed": "0",
       "Pos": "432,507",
       "Size": "283,146"
     },
     "###Joysticks": {
-      "Collapsed": "1",
-      "Pos": "209,40",
+      "Collapsed": "0",
+      "Pos": "106,31",
       "Size": "796,73"
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "209,63",
-      "Size": "468,32"
+      "Pos": "342,127",
+      "Size": "468,856"
     },
     "###Other Devices": {
-      "Collapsed": "1",
-      "Pos": "1004,20",
-      "Size": "263,692"
+      "Collapsed": "0",
+      "Pos": "3,574",
+      "Size": "330,413"
     },
     "###PWM Outputs": {
       "Collapsed": "0",
@@ -93,9 +93,9 @@
       "Size": "104,48"
     },
     "###Plot <0>": {
-      "Collapsed": "1",
+      "Collapsed": "0",
       "Pos": "430,529",
-      "Size": "806,32"
+      "Size": "806,400"
     },
     "###RoboRIO": {
       "Collapsed": "0",

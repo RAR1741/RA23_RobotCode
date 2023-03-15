@@ -117,7 +117,7 @@
               "autoFit": true
             }
           ],
-          "height": -43,
+          "height": 338,
           "series": [
             {
               "color": [
@@ -139,7 +139,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }
