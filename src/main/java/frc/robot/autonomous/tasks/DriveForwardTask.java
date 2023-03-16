@@ -1,7 +1,6 @@
 package frc.robot.autonomous.tasks;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -29,8 +28,9 @@ public class DriveForwardTask extends Task {
     m_runningTimer.start();
 
     Pose2d currentPose = m_swerve.getPose();
-    double x = currentPose.getX() + m_targetDistance;
-    m_targetPose = new Pose2d(x, currentPose.getY(), currentPose.getRotation());
+    double x = currentPose.getX() + (m_targetDistance * Math.cos(currentPose.getRotation().getRadians()));
+    double y = currentPose.getY() + (m_targetDistance * Math.sin(currentPose.getRotation().getRadians()));
+    m_targetPose = new Pose2d(x, y, currentPose.getRotation());
   }
 
   @Override
@@ -40,9 +40,16 @@ public class DriveForwardTask extends Task {
     if (!RobotBase.isReal()) {
       // This simulates the robot driving in the positive x direction
       Pose2d currentPose = m_swerve.getPose();
+
+      // Move "forward", based on the robot's current rotation
+      double newX = currentPose.getX()
+          + m_xSpeed * (m_runningTimer.get() - m_lastTime) * Math.cos(currentPose.getRotation().getRadians());
+      double newY = currentPose.getY()
+          + m_xSpeed * (m_runningTimer.get() - m_lastTime) * Math.sin(currentPose.getRotation().getRadians());
+
       Pose2d newPose = new Pose2d(
-          currentPose.getX() + m_xSpeed * (m_runningTimer.get() - m_lastTime),
-          currentPose.getY(),
+          newX,
+          newY,
           currentPose.getRotation());
 
       m_swerve.setPose(newPose);
@@ -52,8 +59,8 @@ public class DriveForwardTask extends Task {
 
   @Override
   public boolean isFinished() {
-    // return m_runningTimer.get() > m_targetDistance / m_xSpeed;
-    return m_swerve.getPose().getX() >= m_targetPose.getX();
+    Pose2d relativePose = m_swerve.getPose().relativeTo(m_targetPose);
+    return Math.abs(relativePose.getX()) <= 0.1 && Math.abs(relativePose.getY()) <= 0.1;
   }
 
   @Override

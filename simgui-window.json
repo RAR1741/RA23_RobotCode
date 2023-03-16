@@ -9,9 +9,9 @@
       "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "1907",
-      "xpos": "1925",
-      "ypos": "33"
+      "width": "1728",
+      "xpos": "0",
+      "ypos": "71"
     }
   },
   "Table": {
@@ -44,17 +44,17 @@
     },
     "###/SmartDashboard/Arm Sim": {
       "Collapsed": "0",
-      "Pos": "1095,29",
+      "Pos": "908,30",
       "Size": "808,466"
     },
     "###/SmartDashboard/Auto choices": {
       "Collapsed": "0",
-      "Pos": "827,119",
+      "Pos": "149,111",
       "Size": "254,54"
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
-      "Pos": "1008,505",
+      "Pos": "825,503",
       "Size": "887,479"
     },
     "###Analog Inputs": {

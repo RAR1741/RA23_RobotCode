@@ -101,8 +101,7 @@
         "Arm Sim": {
           "ArmShoulderPivot": {
             "open": true
-          },
-          "open": true
+          }
         },
         "open": true
       }

@@ -1,14 +1,18 @@
 package frc.robot.autonomous.modes;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
 import frc.robot.autonomous.tasks.BrakeTask;
 import frc.robot.autonomous.tasks.DriveForwardTask;
-import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
-import frc.robot.autonomous.tasks.WaitTask;
 
 public class RedCubeBalance extends AutoModeBase {
+  @Override
+  public Pose2d getStartingPosition() {
+    return new Pose2d(14.7, 2.8, Rotation2d.fromDegrees(180.0));
+  }
 
   public void queueTasks() {
     queueTask(new DriveForwardTask(0, 0));

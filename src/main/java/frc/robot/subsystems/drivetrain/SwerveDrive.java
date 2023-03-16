@@ -136,7 +136,7 @@ public class SwerveDrive extends Subsystem {
                 Rotation2d.fromRotations(m_backRight.getTurnPosition())),
         });
 
-    setPose(pose);
+    // setPose(pose);
   }
 
   /**
@@ -219,6 +219,7 @@ public class SwerveDrive extends Subsystem {
     m_backRight.outputTelemetry();
 
     SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
+    SmartDashboard.putNumber("Drivetrain/Gyro/Pitch", m_gyro.getPitch());
     SmartDashboard.putNumberArray("Drivetrain/Pose",
         new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
