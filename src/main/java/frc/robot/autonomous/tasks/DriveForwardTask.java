@@ -10,16 +10,17 @@ public class DriveForwardTask extends Task {
   private SwerveDrive m_swerve;
   private double m_targetDistance;
   private double m_xSpeed;
+  private double m_tolerance = 0.5;
+  private Pose2d m_startPose;
 
   private Timer m_runningTimer = new Timer();
   private double m_lastTime = 0;
-
-  private Pose2d m_targetPose;
 
   public DriveForwardTask(double distance, double xSpeed) {
     m_swerve = SwerveDrive.getInstance();
     m_targetDistance = distance;
     m_xSpeed = xSpeed;
+    m_startPose = m_swerve.getPose();
   }
 
   @Override
@@ -30,17 +31,19 @@ public class DriveForwardTask extends Task {
     Pose2d currentPose = m_swerve.getPose();
     double x = currentPose.getX() + (m_targetDistance * Math.cos(currentPose.getRotation().getRadians()));
     double y = currentPose.getY() + (m_targetDistance * Math.sin(currentPose.getRotation().getRadians()));
-    m_targetPose = new Pose2d(x, y, currentPose.getRotation());
   }
 
   @Override
   public void update() {
-    m_swerve.drive(m_xSpeed, 0, 0, true);
+    Pose2d currentPose = m_swerve.getPose();
 
+    double xSpeed = m_xSpeed * Math.cos(currentPose.getRotation().getRadians());
+    double ySpeed = m_xSpeed * Math.sin(currentPose.getRotation().getRadians());
+
+    m_swerve.drive(xSpeed, ySpeed, 0, true);
+
+    // This simulates the robot driving in the positive x direction
     if (!RobotBase.isReal()) {
-      // This simulates the robot driving in the positive x direction
-      Pose2d currentPose = m_swerve.getPose();
-
       // Move "forward", based on the robot's current rotation
       double newX = currentPose.getX()
           + m_xSpeed * (m_runningTimer.get() - m_lastTime) * Math.cos(currentPose.getRotation().getRadians());
@@ -59,13 +62,13 @@ public class DriveForwardTask extends Task {
 
   @Override
   public boolean isFinished() {
-    Pose2d relativePose = m_swerve.getPose().relativeTo(m_targetPose);
-    return Math.abs(relativePose.getX()) <= 0.1 && Math.abs(relativePose.getY()) <= 0.1;
+    Pose2d relativePose = m_startPose.relativeTo(m_swerve.getPose());
+    return Math.hypot(relativePose.getX(), relativePose.getY()) >= m_targetDistance;
   }
 
   @Override
   public void done() {
-    DriverStation.reportWarning("Auto done driving", false);
+    DriverStation.reportWarning("Auto driving done", false);
     m_swerve.drive(0, 0, 0, false);
   }
 }

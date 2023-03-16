@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
+import frc.robot.autonomous.tasks.AutoBalanceTask;
 import frc.robot.autonomous.tasks.BrakeTask;
 import frc.robot.autonomous.tasks.DriveForwardTask;
 import frc.robot.autonomous.tasks.ParallelTask;
@@ -31,7 +32,9 @@ public class RedCubeBalance extends AutoModeBase {
             new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
             new DriveForwardTask(2.3, 1))); // 6 meters is past
 
-    queueTask(new DriveForwardTask(0.5, 0.6));
+    // queueTask(new DriveForwardTask(0.5, 0.6));
+
+    queueTask(new AutoBalanceTask());
 
     queueTask(new BrakeTask(true));
 

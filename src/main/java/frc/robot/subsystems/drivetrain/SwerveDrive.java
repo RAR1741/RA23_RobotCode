@@ -98,6 +98,14 @@ public class SwerveDrive extends Subsystem {
     m_gyro.reset();
   }
 
+  public AHRS getGyro() {
+    return m_gyro;
+  }
+
+  public void setGyroAngleDegrees(double angle) {
+    m_gyro.setAngleAdjustment(angle);
+  }
+
   public Rotation2d getRotation2d() {
     return m_gyro.getRotation2d();
   }
@@ -136,7 +144,7 @@ public class SwerveDrive extends Subsystem {
                 Rotation2d.fromRotations(m_backRight.getTurnPosition())),
         });
 
-    // setPose(pose);
+    setPose(pose);
   }
 
   /**

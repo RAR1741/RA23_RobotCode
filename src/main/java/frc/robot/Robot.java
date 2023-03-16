@@ -196,7 +196,7 @@ public class Robot extends TimedRobot {
     m_swerve.brakeOff();
 
     // TODO: Reset this to our actual starting postion
-    m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+    // m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
     m_autoRunner = AutoRunner.getInstance();
     // TODO: Change this to use the AutoChooser
@@ -211,6 +211,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    m_arm.runTrajectory();
+
     // If there is a current task, run it
     if (m_currentTask != null) {
       // Run the current task

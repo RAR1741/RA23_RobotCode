@@ -11,7 +11,12 @@ public abstract class AutoModeBase {
 
   public AutoModeBase() {
     m_tasks = new ArrayList<>();
-    SwerveDrive.getInstance().setPose(getStartingPosition());
+
+    // Reset the gyro and set the starting position
+    Pose2d startingPosition = getStartingPosition();
+    SwerveDrive swerve = SwerveDrive.getInstance();
+    swerve.setGyroAngleDegrees(startingPosition.getRotation().getDegrees());
+    swerve.resetOdometry(startingPosition);
   }
 
   public Task getNextTask() {
