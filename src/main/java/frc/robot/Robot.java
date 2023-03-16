@@ -364,6 +364,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_allSubsystems.forEach(subsystem -> subsystem.stop());
+    m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
   }
 
   @Override
@@ -376,8 +377,6 @@ public class Robot extends TimedRobot {
     // Preferences.setDouble("shoulderAngle", 180);
     // }
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
-
-    m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
     updateSim();
   }
