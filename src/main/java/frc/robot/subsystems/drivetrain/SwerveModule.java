@@ -154,7 +154,7 @@ public class SwerveModule {
   }
 
   public void resetDriveEncoder() {
-    m_driveEncoder.setIntegratedSensorPosition(0, 0);
+    m_driveEncoder.setIntegratedSensorPosition(0.0, 50);
   }
 
   /**

@@ -50,7 +50,7 @@ public class SwerveDrive extends Subsystem {
   private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  private SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       m_kinematics,
       m_gyro.getRotation2d(),
       new SwerveModulePosition[] {
@@ -69,7 +69,7 @@ public class SwerveDrive extends Subsystem {
 
   private SwerveDrive() {
     brakeOff();
-    resetGyro();
+    reset();
   }
 
   public void brakeOn() {
@@ -119,6 +119,16 @@ public class SwerveDrive extends Subsystem {
     m_frontRight.resetDriveEncoder();
     m_backLeft.resetDriveEncoder();
     m_backRight.resetDriveEncoder();
+
+    m_odometry = new SwerveDriveOdometry(
+        m_kinematics,
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            m_frontLeft.getPosition(),
+            m_frontRight.getPosition(),
+            m_backLeft.getPosition(),
+            m_backRight.getPosition()
+        });
 
     setPose(pose);
   }

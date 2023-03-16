@@ -200,7 +200,7 @@ public class Robot extends TimedRobot {
 
     m_autoRunner = AutoRunner.getInstance();
     // TODO: Change this to use the AutoChooser
-    m_autoRunner.setAutoMode(AutoRunner.AutoMode.BLUE_DEFAULT);
+    m_autoRunner.setAutoMode(AutoRunner.AutoMode.RED_CUBE_BALANCE);
     m_currentTask = m_autoRunner.getNextTask();
 
     // Start the first task
@@ -218,6 +218,7 @@ public class Robot extends TimedRobot {
 
       // If the current task is finished, get the next task
       if (m_currentTask.isFinished()) {
+        m_currentTask.done();
         m_currentTask = m_autoRunner.getNextTask();
 
         // Start the next task
@@ -375,6 +376,8 @@ public class Robot extends TimedRobot {
     // Preferences.setDouble("shoulderAngle", 180);
     // }
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
+
+    m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
     updateSim();
   }
