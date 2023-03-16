@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxRelativeEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
@@ -230,7 +228,7 @@ public class Arm extends Subsystem {
 
   /**
    * Given a target pose location of the arm, generate a trajectory
-   * 
+   *
    * @param targetPose (units of inches, and rotation of the wrist)
    */
   public void generateTrajectoryToPose(ArmPose targetPose) {
@@ -239,6 +237,8 @@ public class Arm extends Subsystem {
 
     ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetPose.getX(), targetPose.getY());
     m_currentTrajectory = new ArmTrajectory(waypoints);
+
+    m_arm.startTrajectory();
   }
 
   public void startTrajectory() {
@@ -400,6 +400,7 @@ public class Arm extends Subsystem {
 
     // Shoulder
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Position", getShoulderPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/AbsPosition", m_shoulderEncoder.getAbsolutePosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/PositionError", m_shoulderPID.getPositionError());
     SmartDashboard.putBoolean(m_smartDashboardKey + "Shoulder/AtTarget", m_shoulderPID.atSetpoint());
     SmartDashboard.putNumber(m_smartDashboardKey + "Shoulder/Velocity", m_shoulderMotor.get());
@@ -408,12 +409,14 @@ public class Arm extends Subsystem {
 
     // Elbow
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", getElbowPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/AbsPosition", m_elbowEncoder.getAbsolutePosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Velocity", m_elbowMotor.get());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Temperature", m_elbowMotor.getMotorTemperature());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Current", m_elbowMotor.getOutputCurrent());
 
     // Wrist
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Position", getWristPositionDegrees());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/AbsPosition", m_wristEncoder.getAbsolutePosition());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/PositionError", m_wristPID.getPositionError());
     SmartDashboard.putBoolean(m_smartDashboardKey + "Wrist/AtTarget", m_wristPID.atSetpoint());
     SmartDashboard.putNumber(m_smartDashboardKey + "Wrist/Velocity", m_wristMotor.get());

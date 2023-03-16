@@ -33,7 +33,8 @@ public final class Constants {
 
     public static final double k_maxSpeed = 3.0; // 3 meters per second
     public static final double k_maxAngularSpeed = Math.PI; // 1/2 rotation per second
-    public static final double k_slowScaler = 0.2;
+    public static final double k_slowScaler = 0.2; // 20% reduction in speed
+    public static final double k_boostScaler = 2.0; // 200% increase in speed
 
     // Drivetrain drive motor constants
     public class Drive {
@@ -46,10 +47,10 @@ public final class Constants {
     // Drivetrain (turn) constants
     public class Turn {
       // Drivetrain turning offset constants
-      public static final double k_FLOffset = 0.146883;
+      public static final double k_FLOffset = 0.131019;
       public static final double k_FROffset = 0.725897;
       public static final double k_BLOffset = 0.201316;
-      public static final double k_BROffset = 0.406792;
+      public static final double k_BROffset = 0.416294;
 
       public static final int k_FLMotorId = 9;
       public static final int k_FRMotorId = 10;
@@ -73,7 +74,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
 
-      public static final double k_offset = 0.514274;
+      public static final double k_offset = 0.830012;
     }
 
     public static class Elbow {
@@ -84,7 +85,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.304437;
+      public static final double k_offset = 0.390261;
     }
 
     public static class Wrist {
@@ -95,18 +96,19 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.646119;
+      public static final double k_offset = 0.606600;
     }
 
     public static enum Preset {
       HOME(new ArmPose(0.0, Constants.Arm.k_homeHeight, null)),
-      SCORE_MID_CUBE(new ArmPose(0.0, 0.0, null)),
-      SCORE_HIGH_CUBE(new ArmPose(0.0, 0.0, null)),
-      SCORE_MID_CONE(new ArmPose(0.0, 0.0, null)),
-      SCORE_HIGH_CONE(new ArmPose(52.5, 63.5, null)),
+      SCORE_MID_CUBE(new ArmPose(-47.6, 39.66, null)),
+      SCORE_HIGH_CUBE(new ArmPose(-58.4, 53.9, null)),
+      SCORE_MID_CONE(new ArmPose(-42.0, 55.2, null)),
+      SCORE_HIGH_CONE(new ArmPose(-52.5, 63.5, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
-      DOUBLE_SUBSTATION(new ArmPose(-31.0, 56.35, null)),
-      FLOOR_CONE(new ArmPose(-25.14, 3.39, null));
+      DOUBLE_SUBSTATION(new ArmPose(31.0, 56.35, null)),
+      FLOOR_PICKUP(new ArmPose(25.14, 0.02, null)),
+      FLOOR_SCORE(new ArmPose(-25.14, 3.39, null));
 
       private ArmPose m_armPose;
 

@@ -28,8 +28,12 @@ public class DriverController extends FilteredController {
     return -this.getFilteredAxis(4);
   }
 
-  public boolean getWantsSlowMode() {
-    return this.getFilteredAxis(3) > k_triggerActivationThreshold;
+  public double getSlowScaler() {
+    return this.getFilteredAxis(3);
+  }
+
+  public double getBoostScaler() {
+    return this.getFilteredAxis(2);
   }
 
   public boolean getWantsResetGyro() {
@@ -54,6 +58,6 @@ public class DriverController extends FilteredController {
   }
 
   public boolean getWantsGripToggle() {
-      return this.getRawButtonPressed(1);
+    return this.getRawButtonPressed(1);
   }
 }
