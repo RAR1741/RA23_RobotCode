@@ -115,13 +115,13 @@ public class Arm extends Subsystem {
     // SHOULDER //
     //////////////
     m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.shoulderAngle);
-    m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+    // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
 
     ///////////
     // ELBOW //
     ///////////
     m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
-    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
     ///////////
     // WRIST //

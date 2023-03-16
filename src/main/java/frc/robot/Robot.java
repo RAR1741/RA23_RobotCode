@@ -79,9 +79,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // Initialize on-board logging
-    DataLogManager.start();
-    DataLogManager.log("Logging initialized. Fard.");
+    // // Initialize on-board logging
+    // DataLogManager.start();
+    // DataLogManager.log("Logging initialized. Fard.");
 
     // Start the PathPlanner server
     PathPlannerServer.startServer(5811);
