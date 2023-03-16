@@ -120,14 +120,20 @@ public class SwerveDrive extends Subsystem {
     m_backLeft.resetDriveEncoder();
     m_backRight.resetDriveEncoder();
 
+    // We're manually setting the drive encoder positions to 0, since we
+    // just reset them, but the encoder isn't reporting 0 yet.
     m_odometry = new SwerveDriveOdometry(
         m_kinematics,
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_backLeft.getPosition(),
-            m_backRight.getPosition()
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_frontLeft.getTurnPosition())),
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_frontRight.getTurnPosition())),
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_backLeft.getTurnPosition())),
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_backRight.getTurnPosition())),
         });
 
     setPose(pose);
