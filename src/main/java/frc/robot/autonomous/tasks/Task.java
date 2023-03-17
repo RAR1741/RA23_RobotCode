@@ -5,6 +5,9 @@ public abstract class Task {
 
   public abstract void update();
 
+  public void updateSim() {
+  }
+
   public abstract boolean isFinished();
 
   public void done() {

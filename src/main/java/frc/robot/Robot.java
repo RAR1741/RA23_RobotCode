@@ -16,13 +16,13 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.autonomous.AutoChooser;
 import frc.robot.autonomous.AutoRunner;
 import frc.robot.autonomous.tasks.Task;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
+import frc.robot.simulation.Field;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -57,16 +57,7 @@ public class Robot extends TimedRobot {
   // Auto things
   AutoChooser m_autoChooser = new AutoChooser();
 
-  private int m_currentMarker = 0;
-  private final Timer m_stoppedTimer = new Timer();
-  private boolean m_running = true;
-
-  // private int m_autoChoice = 2; //0 = yes cube yes drive, 1 = no cube yes
-  // drive, 2 = yes cube and no drive, 3 = do nothing
-
-  private final boolean m_scoring = true;
-
-  private final Field2d m_field = new Field2d();
+  private final Field m_field = Field.getInstance();
 
   @Override
   public void robotInit() {
@@ -100,98 +91,9 @@ public class Robot extends TimedRobot {
     updateSim();
   }
 
-  // Disabled because not working yet
-  // @Override
-  // public void autonomousInit() {
-  // // TODO: Use PathPlannerTrajectory.transformTrajectoryForAlliance make the
-  // state
-  // // correct for our current alliance
-  // m_autoPath = m_autoChooser.getSelectedAuto();
-
-  // List<EventMarker> markers = m_autoPath.getMarkers();
-
-  // // HashMap<String, Command> eventMap = new HashMap<>();
-  // // eventMap.put("scoreHigh", new PrintCommand("Passed marker 1"));
-
-  // m_driveController = new PPHolonomicDriveController(
-  // new PIDController(1.0, 0, 0),
-  // new PIDController(1.0, 0, 0),
-  // new PIDController(1.0, 0, 0));
-
-  // // Reset the drive encoders, to make sure we start at 0
-  // m_swerve.resetOdometry(m_autoPath.getInitialPose());
-  // // m_swerve.resetOdometry(new Pose2d(
-  // // autoPath.getInitialPose().getX(),
-  // // autoPath.getInitialPose().getY(),
-  // // m_swerve.getRotation2d()));
-
-  // m_runningTimer.reset();
-  // m_runningTimer.start();
-  // }
-
-  // @Override
-  // public void autonomousPeriodic() {
-  // PathPlannerState autoState = (PathPlannerState)
-  // m_autoPath.sample(m_runningTimer.get());
-
-  // // Print the velocity at the sampled time
-  // // System.out.println(autoState.holonomicRotation);
-
-  // // m_field.setRobotPose(m_swerve.getPose());
-  // // Pose2d targetPose2d = new Pose2d(
-  // // autoState.poseMeters.getX(),
-  // // autoState.poseMeters.getY(),
-  // // autoState.holonomicRotation);
-
-  // // if (m_running && m_currentMarker <= m_autoPath.getMarkers().size() - 1
-  // // && autoState.timeSeconds >=
-  // // m_autoPath.getMarkers().get(m_currentMarker).timeSeconds) {
-  // // System.out.println("At marker: " + (++m_currentMarker));
-  // // m_runningTimer.stop();
-  // // m_running = false;
-  // // m_stoppedTimer.reset();
-  // // m_stoppedTimer.start();
-  // // }
-
-  // // if (m_stoppedTimer.get() > 2) {
-  // // m_running = true;
-  // // m_stoppedTimer.stop();
-  // // m_runningTimer.start();
-  // // }
-
-  // m_field.setRobotPose(targetPose2d);
-
-  // ChassisSpeeds chassisSpeeds = m_driveController.calculate(m_swerve.getPose(),
-  // autoState);
-
-  // m_swerve.drive(
-  // chassisSpeeds.vxMetersPerSecond,
-  // chassisSpeeds.vyMetersPerSecond,
-  // chassisSpeeds.omegaRadiansPerSecond,
-  // false);
-
-  // SmartDashboard.putNumber("velocityMetersPerSecond",
-  // autoState.velocityMetersPerSecond);
-  // SmartDashboard.putNumber("vxMetersPerSecond",
-  // chassisSpeeds.vxMetersPerSecond);
-  // SmartDashboard.putNumber("vyMetersPerSecond",
-  // chassisSpeeds.vyMetersPerSecond);
-  // SmartDashboard.putNumber("omegaRadiansPerSecond",
-  // chassisSpeeds.omegaRadiansPerSecond);
-
-  // Pose2d currentPose = m_swerve.getPose();
-  // SmartDashboard.putNumber("currentPoseX", currentPose.getX());
-  // SmartDashboard.putNumber("currentPoseY", currentPose.getY());
-  // SmartDashboard.putNumber("currentPoseZ",
-  // currentPose.getRotation().getDegrees());
-  // }
-
   @Override
   public void autonomousInit() {
     m_swerve.brakeOff();
-
-    // TODO: Reset this to our actual starting postion
-    // m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
 
     m_autoRunner = AutoRunner.getInstance();
     // TODO: Change this to use the AutoChooser
@@ -212,6 +114,7 @@ public class Robot extends TimedRobot {
     if (m_currentTask != null) {
       // Run the current task
       m_currentTask.update();
+      m_currentTask.updateSim();
 
       // If the current task is finished, get the next task
       if (m_currentTask.isFinished()) {
@@ -253,38 +156,7 @@ public class Robot extends TimedRobot {
     xSpeed *= slowScaler * boostScaler;
     ySpeed *= slowScaler * boostScaler;
 
-    // m_swerve.drive(mDriverController.getForwardAxis(),
-    // mDriverController.getStrafeAxis(),
-    // 0, true);
-
-    // mDrive.slowMode(mDriverController.getWantsSlowMode());
-
-    // m_swerve.drive(xSpeed, ySpeed, 0, true);
-    // if (xSpeed == 0.0 && ySpeed == 0.0 && rot == 0.0) {
-    // m_stoppedTimer.start();
-    // } else {
-    // m_stoppedTimer.reset();
-    // m_stoppedTimer.stop();
-    // }
-
-    // if (m_stoppedTimer.hasElapsed(1.0)) {
-    // m_swerve.pointDirection(1.0, 0.0, 0.0, false);
-    // } else {
     m_swerve.drive(xSpeed, ySpeed, rot, true);
-    // }
-
-    // m_swerve.drive(0.3, 0, 0, false);
-    // m_swerve.drive(0, 0.1, 0, false);
-    // m_swerve.drive(0, 0, 0.1, false);
-
-    // Intake controls
-    /*
-     * if (mDriverController.getWantsIntakeOpen()) {
-     * // m_intake.open();
-     * } else if (mDriverController.getWantsIntakeClose()) {
-     * // m_intake.close();
-     * }
-     */
 
     if (m_driverController.getWantsResetGyro()) {
       m_swerve.resetGyro();
@@ -366,13 +238,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    // if (m_driverController.getRawButtonPressed(3)) {
-    // Preferences.setDouble("shoulderAngle", 0);
-    // } else if (m_driverController.getRawButtonPressed(4)) {
-    // Preferences.setDouble("shoulderAngle", 90);
-    // } else if (m_driverController.getRawButtonPressed(1)) {
-    // Preferences.setDouble("shoulderAngle", 180);
-    // }
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
 
     updateSim();
@@ -479,7 +344,6 @@ public class Robot extends TimedRobot {
 
   private void updateSim() {
     // Update the odometry in the sim.
-    // mDrive.simulationPeriodic();
     m_field.setRobotPose(m_swerve.getPose());
   }
 }

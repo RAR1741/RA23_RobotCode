@@ -37,9 +37,14 @@ public class DriveForwardTask extends Task {
     double ySpeed = m_speed * Math.sin(currentPose.getRotation().getRadians());
 
     m_swerve.drive(xSpeed, ySpeed, 0, true);
+  }
 
+  @Override
+  public void updateSim() {
     // This simulates the robot driving in the positive x direction
     if (!RobotBase.isReal()) {
+      Pose2d currentPose = m_swerve.getPose();
+
       // Move "forward", based on the robot's current rotation
       double newX = currentPose.getX()
           + m_speed * (m_runningTimer.get() - m_lastTime) * Math.cos(currentPose.getRotation().getRadians());
