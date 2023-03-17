@@ -8,6 +8,7 @@ import frc.robot.autonomous.tasks.AutoBalanceTask;
 import frc.robot.autonomous.tasks.BrakeTask;
 import frc.robot.autonomous.tasks.DriveForwardTask;
 import frc.robot.autonomous.tasks.ParallelTask;
+import frc.robot.autonomous.tasks.PointModulesInwardTask;
 
 public class RedCubeBalance extends AutoModeBase {
   @Override
@@ -37,6 +38,8 @@ public class RedCubeBalance extends AutoModeBase {
     queueTask(new AutoBalanceTask());
 
     queueTask(new BrakeTask(true));
+
+    queueTask(new PointModulesInwardTask());
 
     // queueTask(new WaitTask(0.5));
 

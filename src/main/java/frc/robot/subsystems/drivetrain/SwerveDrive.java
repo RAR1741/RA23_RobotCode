@@ -187,6 +187,18 @@ public class SwerveDrive extends Subsystem {
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  public void pointInwards() {
+    SwerveModuleState flState = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+    SwerveModuleState frState = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+    SwerveModuleState blState = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+    SwerveModuleState brState = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+
+    m_frontLeft.setDesiredState(flState);
+    m_frontRight.setDesiredState(frState);
+    m_backLeft.setDesiredState(blState);
+    m_backRight.setDesiredState(brState);
+  }
+
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
