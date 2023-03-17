@@ -124,6 +124,10 @@ public class SwerveModule {
     return m_driveMotor;
   }
 
+  public void clearTurnPIDAccumulation() {
+    m_turningPIDController.reset(getTurnPosition());
+  }
+
   // Returns the drive velocity in meters per second.
   public double getDriveVelocity() {
     // In revs per second

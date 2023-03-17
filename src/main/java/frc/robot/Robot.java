@@ -3,8 +3,6 @@ package frc.robot;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -57,9 +55,6 @@ public class Robot extends TimedRobot {
   private UsbCamera m_camera;
 
   // Auto things
-  private final Timer m_runningTimer = new Timer();
-  private PathPlannerTrajectory m_autoPath;
-  private PPHolonomicDriveController m_driveController;
   AutoChooser m_autoChooser = new AutoChooser();
 
   private int m_currentMarker = 0;

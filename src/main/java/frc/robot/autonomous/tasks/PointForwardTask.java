@@ -1,17 +1,18 @@
 package frc.robot.autonomous.tasks;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
-public class PointForwardsTask extends Task {
+public class PointForwardTask extends Task {
   private SwerveDrive m_swerve;
 
-  public PointForwardsTask(double distance, double xSpeed) {
+  public PointForwardTask() {
     m_swerve = SwerveDrive.getInstance();
   }
 
   @Override
   public void start() {
-    m_swerve.pointModules(0, 0, 0, true);
+    m_swerve.pointModules(1, 0, 0, true);
   }
 
   @Override
@@ -25,5 +26,6 @@ public class PointForwardsTask extends Task {
 
   @Override
   public void done() {
+    DriverStation.reportWarning("Auto point forward done", false);
   }
 }
