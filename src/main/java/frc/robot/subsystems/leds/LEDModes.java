@@ -8,29 +8,20 @@ import edu.wpi.first.wpilibj.util.Color;
 // Custom yellow buffer.setRGB(i, 255, (int) (255 * 0.50), 0);
 
 public final class LEDModes {
-  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> red = (
-      start) -> {
-    return (length) -> {
-      return (buffer) -> {
-        for (int i = start; i < (start + length); i++) {
-          buffer.setLED(i, Color.kRed);
-        }
-        return buffer;
+  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> setColor(
+      Color color) {
+    return (
+        start) -> {
+      return (length) -> {
+        return (buffer) -> {
+          for (int i = start; i < (start + length); i++) {
+            buffer.setLED(i, color);
+          }
+          return buffer;
+        };
       };
     };
-  };
-
-  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> blue = (
-      start) -> {
-    return (length) -> {
-      return (buffer) -> {
-        for (int i = start; i < (start + length); i++) {
-          buffer.setLED(i, Color.kBlue);
-        }
-        return buffer;
-      };
-    };
-  };
+  }
 
   private static double rainbowSpeed = 100;
   public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> rainbow = (

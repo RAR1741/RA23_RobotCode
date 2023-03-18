@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants;
 import frc.robot.subsystems.Subsystem;
 
@@ -31,8 +32,8 @@ public class LEDs extends Subsystem {
 
   @Override
   public void periodic() {
-    setArmRightColorMode(LEDModes.red);
-    setArmLeftColorMode(LEDModes.blue);
+    setArmRightColorMode(LEDModes.setColor(Color.kRed));
+    setArmLeftColorMode(LEDModes.setColor(Color.kBlue));
     setDriveColorMode(LEDModes.rainbow);
 
     m_led.setData(m_buffer);
