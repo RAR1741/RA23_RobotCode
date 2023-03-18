@@ -1,11 +1,10 @@
 package frc.robot.autonomous;
 
 import frc.robot.autonomous.modes.AutoModeBase;
-import frc.robot.autonomous.modes.BlueRight_OneCubeHigh_Balance;
 import frc.robot.autonomous.modes.DefaultMode;
 import frc.robot.autonomous.modes.DoNothingMode;
-import frc.robot.autonomous.modes.RedCenter_OneCubeHigh_Balance;
-import frc.robot.autonomous.modes.RedLeft_OneCubeHigh_Balance;
+import frc.robot.autonomous.modes.Center_OneCubeHigh_Balance;
+import frc.robot.autonomous.modes.Left_OneCubeHigh_Balance;
 import frc.robot.autonomous.modes.Right_OneCubeHigh_Balance;
 import frc.robot.autonomous.tasks.Task;
 
@@ -25,8 +24,8 @@ public class AutoRunner {
     DEFAULT,
     RIGHT_CUBE_BALANCE,
     BLUE_RIGHT_CUBE_BALANCE,
-    RED_CENTER_CUBE_BALANCE,
-    RED_LEFT_CUBE_BALANCE
+    CENTER_CUBE_BALANCE,
+    LEFT_CUBE_BALANCE
   }
 
   public Task getNextTask() {
@@ -44,14 +43,11 @@ public class AutoRunner {
       case RIGHT_CUBE_BALANCE:
         m_autoMode = new Right_OneCubeHigh_Balance();
         break;
-      case BLUE_RIGHT_CUBE_BALANCE:
-        m_autoMode = new BlueRight_OneCubeHigh_Balance();
+      case CENTER_CUBE_BALANCE:
+        m_autoMode = new Center_OneCubeHigh_Balance();
         break;
-      case RED_CENTER_CUBE_BALANCE:
-        m_autoMode = new RedCenter_OneCubeHigh_Balance();
-        break;
-      case RED_LEFT_CUBE_BALANCE:
-        m_autoMode = new RedLeft_OneCubeHigh_Balance();
+      case LEFT_CUBE_BALANCE:
+        m_autoMode = new Left_OneCubeHigh_Balance();
         break;
       default:
         System.out.println("Invalid auto mode selected. Defaulting to do nothing.");

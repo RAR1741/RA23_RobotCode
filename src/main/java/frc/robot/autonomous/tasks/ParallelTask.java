@@ -23,6 +23,7 @@ public class ParallelTask extends Task {
       if (!m_finished[i]) {
         m_tasks[i].update();
         if (m_tasks[i].isFinished()) {
+          m_tasks[i].done();
           m_finished[i] = true;
         }
       }
@@ -38,7 +39,9 @@ public class ParallelTask extends Task {
   @Override
   public void updateSim() {
     for (Task task : m_tasks) {
-      task.updateSim();
+      if (!task.isFinished()) {
+        task.updateSim();
+      }
     }
   }
 
@@ -49,8 +52,8 @@ public class ParallelTask extends Task {
 
   @Override
   public void done() {
-    for (Task task : m_tasks) {
-      task.done();
-    }
+    // for (Task task : m_tasks) {
+    // task.done();
+    // }
   }
 }
