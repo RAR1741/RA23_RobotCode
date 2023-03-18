@@ -21,8 +21,8 @@ public final class Constants {
     public static final int k_driveLEDLength = 30;
 
     // Arm LEDs
-    public static final int k_armLEDStart = 30;
-    public static final int k_armLEDLength = 30;
+    public static final int k_armLEDStart = k_driveLEDLength;
+    public static final int k_armLEDLength = k_ledTotalLength - k_driveLEDLength;
   }
 
   public static class Simulation {
