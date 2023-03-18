@@ -1,5 +1,13 @@
 {
   "HALProvider": {
+    "Addressable LEDs": {
+      "0": {
+        "serpentine": true
+      },
+      "window": {
+        "visible": true
+      }
+    },
     "Other Devices": {
       "AnalogGyro[0]": {
         "header": {
