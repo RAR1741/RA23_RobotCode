@@ -36,6 +36,13 @@ public class ParallelTask extends Task {
   }
 
   @Override
+  public void updateSim() {
+    for (Task task : m_tasks) {
+      task.updateSim();
+    }
+  }
+
+  @Override
   public boolean isFinished() {
     return m_allFinished;
   }
