@@ -1,5 +1,13 @@
 {
   "HALProvider": {
+    "Addressable LEDs": {
+      "0": {
+        "serpentine": true
+      },
+      "window": {
+        "visible": true
+      }
+    },
     "Other Devices": {
       "AnalogGyro[0]": {
         "header": {
@@ -7,11 +15,6 @@
         }
       },
       "Compressor[0]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [13]": {
         "header": {
           "open": true
         }
@@ -98,11 +101,6 @@
     },
     "transitory": {
       "SmartDashboard": {
-        "Arm Sim": {
-          "ArmShoulderPivot": {
-            "open": true
-          }
-        },
         "open": true
       }
     }
