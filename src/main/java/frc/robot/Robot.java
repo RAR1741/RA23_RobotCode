@@ -99,7 +99,8 @@ public class Robot extends TimedRobot {
 
     m_autoRunner = AutoRunner.getInstance();
     // TODO: Change this to use the AutoChooser
-    m_autoRunner.setAutoMode(AutoRunner.AutoMode.BLUE_RIGHT_CUBE_BALANCE);
+    // m_autoRunner.setAutoMode(AutoRunner.AutoMode.RED_RIGHT_CUBE_BALANCE);
+    m_autoRunner.setAutoMode(AutoRunner.AutoMode.RIGHT_CUBE_BALANCE);
     m_currentTask = m_autoRunner.getNextTask();
 
     // Start the first task

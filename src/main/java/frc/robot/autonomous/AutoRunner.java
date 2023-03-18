@@ -1,12 +1,12 @@
 package frc.robot.autonomous;
 
 import frc.robot.autonomous.modes.AutoModeBase;
-import frc.robot.autonomous.modes.BlueDefaultMode;
 import frc.robot.autonomous.modes.BlueRight_OneCubeHigh_Balance;
+import frc.robot.autonomous.modes.DefaultMode;
 import frc.robot.autonomous.modes.DoNothingMode;
 import frc.robot.autonomous.modes.RedCenter_OneCubeHigh_Balance;
-import frc.robot.autonomous.modes.RedRight_OneCubeHigh_Balance;
 import frc.robot.autonomous.modes.RedLeft_OneCubeHigh_Balance;
+import frc.robot.autonomous.modes.Right_OneCubeHigh_Balance;
 import frc.robot.autonomous.tasks.Task;
 
 public class AutoRunner {
@@ -22,8 +22,8 @@ public class AutoRunner {
 
   public enum AutoMode {
     DO_NOTHING,
-    BLUE_DEFAULT,
-    RED_RIGHT_CUBE_BALANCE,
+    DEFAULT,
+    RIGHT_CUBE_BALANCE,
     BLUE_RIGHT_CUBE_BALANCE,
     RED_CENTER_CUBE_BALANCE,
     RED_LEFT_CUBE_BALANCE
@@ -38,11 +38,11 @@ public class AutoRunner {
       case DO_NOTHING:
         m_autoMode = new DoNothingMode();
         break;
-      case BLUE_DEFAULT:
-        m_autoMode = new BlueDefaultMode();
+      case DEFAULT:
+        m_autoMode = new DefaultMode();
         break;
-      case RED_RIGHT_CUBE_BALANCE:
-        m_autoMode = new RedRight_OneCubeHigh_Balance();
+      case RIGHT_CUBE_BALANCE:
+        m_autoMode = new Right_OneCubeHigh_Balance();
         break;
       case BLUE_RIGHT_CUBE_BALANCE:
         m_autoMode = new BlueRight_OneCubeHigh_Balance();

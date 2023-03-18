@@ -9,10 +9,10 @@ import frc.robot.autonomous.tasks.ParallelTask;
 import frc.robot.autonomous.tasks.PointForwardTask;
 import frc.robot.autonomous.tasks.WaitTask;
 
-public class RedRight_OneCubeHigh_Balance extends AutoModeBase {
+public class Right_OneCubeHigh_Balance extends AutoModeBase {
   @Override
   public Pose2d getStartingPosition() {
-    return new Pose2d(14.7, 2.8, Rotation2d.fromDegrees(180.0));
+    return new Pose2d(14.655021228445234, 12.233675837143341, Rotation2d.fromDegrees(180.0));
   }
 
   public void queueTasks() {
@@ -22,7 +22,7 @@ public class RedRight_OneCubeHigh_Balance extends AutoModeBase {
 
     queueTask(new DriveTrajectoryTask("RedRightFarBalance", 1.0, 0.5));
 
-    queueTask(new DriveForwardTask(2.0, 1.0));
+    queueTask(new DriveForwardTask(2.0, -1.0));
 
     queueTask(new AutoBalanceTask());
 

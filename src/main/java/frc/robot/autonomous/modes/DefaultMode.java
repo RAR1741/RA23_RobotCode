@@ -9,7 +9,7 @@ import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
 import frc.robot.autonomous.tasks.WaitTask;
 
-public class BlueDefaultMode extends AutoModeBase {
+public class DefaultMode extends AutoModeBase {
   @Override
   public Pose2d getStartingPosition() {
     return new Pose2d(0, 0, Rotation2d.fromDegrees(0));
