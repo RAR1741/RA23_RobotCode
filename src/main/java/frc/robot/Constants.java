@@ -12,6 +12,19 @@ public final class Constants {
     public static final double k_bumperHeight = 5; // Inches
   }
 
+  public static class LEDs {
+    public static final int k_ledPWMId = 0;
+    public static final int k_ledTotalLength = 60;
+
+    // Drive LEDs
+    public static final int k_driveLEDStart = 0;
+    public static final int k_driveLEDLength = 30;
+
+    // Arm LEDs
+    public static final int k_armLEDStart = 30;
+    public static final int k_armLEDLength = 30;
+  }
+
   public static class Simulation {
     public static final double k_width = 150; // Inches
     public static final double k_height = 80; // Inches

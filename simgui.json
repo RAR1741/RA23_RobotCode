@@ -10,11 +10,6 @@
         "header": {
           "open": true
         }
-      },
-      "SPARK MAX [13]": {
-        "header": {
-          "open": true
-        }
       }
     },
     "PWM Outputs": {
@@ -98,11 +93,6 @@
     },
     "transitory": {
       "SmartDashboard": {
-        "Arm Sim": {
-          "ArmShoulderPivot": {
-            "open": true
-          }
-        },
         "open": true
       }
     }
