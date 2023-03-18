@@ -14,7 +14,7 @@ import frc.robot.autonomous.tasks.WaitTask;
 
 public class RedLeft_OneCubeHigh_Balance extends AutoModeBase {
   @Override
-  public Pose2d getStartingPosition() {
+  public Pose2d getRedStartingPosition() {
     return new Pose2d(14.7, 1.05, Rotation2d.fromDegrees(180.0));
   }
 

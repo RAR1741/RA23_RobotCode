@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.autonomous.modes.AutoModeBase;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class DriveTrajectoryTask extends Task {
@@ -40,9 +41,8 @@ public class DriveTrajectoryTask extends Task {
 
   @Override
   public void start() {
-    PathPlannerTrajectory oldTraj = m_autoPath;
     if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-      m_autoPath = PathPlannerTrajectory.transformTrajectoryForAlliance(m_autoPath, DriverStation.Alliance.Red);
+      m_autoPath = AutoModeBase.transformTrajectoryForAlliance(m_autoPath);
     }
 
     Pose2d startingPosition = m_autoPath.getInitialPose();

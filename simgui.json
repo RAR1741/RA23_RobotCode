@@ -20,9 +20,9 @@
         }
       }
     },
-    "PWM Outputs": {
+    "Timing": {
       "window": {
-        "visible": true
+        "visible": false
       }
     }
   },
@@ -101,6 +101,9 @@
     },
     "transitory": {
       "SmartDashboard": {
+        "Drivetrain": {
+          "open": true
+        },
         "open": true
       }
     }

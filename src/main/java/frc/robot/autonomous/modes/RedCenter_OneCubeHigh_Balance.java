@@ -6,7 +6,6 @@ import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
 import frc.robot.autonomous.tasks.AutoBalanceTask;
 import frc.robot.autonomous.tasks.DriveForwardTask;
-import frc.robot.autonomous.tasks.DriveTrajectoryTask;
 import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
 import frc.robot.autonomous.tasks.PointForwardTask;
@@ -14,7 +13,7 @@ import frc.robot.autonomous.tasks.WaitTask;
 
 public class RedCenter_OneCubeHigh_Balance extends AutoModeBase {
   @Override
-  public Pose2d getStartingPosition() {
+  public Pose2d getRedStartingPosition() {
     return new Pose2d(14.7, 2.73, Rotation2d.fromDegrees(180.0));
   }
 

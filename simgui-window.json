@@ -49,17 +49,17 @@
     },
     "###/SmartDashboard/Auto choices": {
       "Collapsed": "0",
-      "Pos": "149,111",
+      "Pos": "9,123",
       "Size": "254,54"
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
-      "Pos": "825,503",
-      "Size": "887,479"
+      "Pos": "820,509",
+      "Size": "892,473"
     },
     "###Addressable LEDs": {
       "Collapsed": "0",
-      "Pos": "198,268",
+      "Pos": "198,335",
       "Size": "142,238"
     },
     "###Analog Inputs": {
@@ -74,7 +74,7 @@
     },
     "###FMS": {
       "Collapsed": "0",
-      "Pos": "432,507",
+      "Pos": "8,183",
       "Size": "283,146"
     },
     "###Joysticks": {
@@ -84,8 +84,8 @@
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "342,127",
-      "Size": "468,856"
+      "Pos": "342,111",
+      "Size": "468,872"
     },
     "###Other Devices": {
       "Collapsed": "0",
@@ -109,7 +109,7 @@
     },
     "###System Joysticks": {
       "Collapsed": "0",
-      "Pos": "7,285",
+      "Pos": "2,335",
       "Size": "192,218"
     },
     "###Timing": {

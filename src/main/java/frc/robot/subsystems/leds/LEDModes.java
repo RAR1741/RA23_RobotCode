@@ -56,4 +56,8 @@ public final class LEDModes {
       };
     };
   };
+
+  // TODO: Add "pulse" mode
+
+  // TODO: Add mode that takes in a color and sets all the leds to that color
 }
