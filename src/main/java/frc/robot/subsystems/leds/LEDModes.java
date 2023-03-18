@@ -5,6 +5,8 @@ import java.util.function.Function;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 
+// Custom yellow buffer.setRGB(i, 255, (int) (255 * 0.50), 0);
+
 public final class LEDModes {
   public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> red = (
       start) -> {

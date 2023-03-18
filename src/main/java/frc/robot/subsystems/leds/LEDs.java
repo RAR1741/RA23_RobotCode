@@ -13,7 +13,7 @@ public class LEDs extends Subsystem {
   private AddressableLED m_led;
   private AddressableLEDBuffer m_buffer;
 
-  private int m_ledTotalLength = Constants.LEDs.k_ledTotalLength;
+  private int m_ledTotalLength = Constants.LEDs.k_totalLength;
 
   public static LEDs getInstance() {
     if (m_instance == null) {
@@ -23,7 +23,7 @@ public class LEDs extends Subsystem {
   }
 
   private LEDs() {
-    m_led = new AddressableLED(Constants.LEDs.k_ledPWMId);
+    m_led = new AddressableLED(Constants.LEDs.k_PWMId);
     m_led.setLength(m_ledTotalLength);
     m_buffer = new AddressableLEDBuffer(m_ledTotalLength);
     m_led.start();
@@ -31,22 +31,28 @@ public class LEDs extends Subsystem {
 
   @Override
   public void periodic() {
-    setDriveColorMode(LEDModes.red);
-    setArmColorMode(LEDModes.rainbow);
+    setArmRightColorMode(LEDModes.red);
+    setArmLeftColorMode(LEDModes.blue);
+    setDriveColorMode(LEDModes.rainbow);
 
     m_led.setData(m_buffer);
+  }
+
+  public void setArmRightColorMode(
+      Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> callback) {
+    m_buffer = callback.apply(Constants.LEDs.ArmRight.k_start).apply(Constants.LEDs.ArmRight.k_length)
+        .apply(m_buffer);
+  }
+
+  public void setArmLeftColorMode(
+      Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> callback) {
+    m_buffer = callback.apply(Constants.LEDs.ArmLeft.k_start).apply(Constants.LEDs.ArmLeft.k_length)
+        .apply(m_buffer);
   }
 
   public void setDriveColorMode(
       Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> callback) {
-    callback.apply(Constants.LEDs.k_driveLEDStart).apply(Constants.LEDs.k_driveLEDLength).apply(m_buffer);
-    m_led.setData(m_buffer);
-  }
-
-  public void setArmColorMode(
-      Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> callback) {
-    callback.apply(Constants.LEDs.k_armLEDStart).apply(Constants.LEDs.k_armLEDLength).apply(m_buffer);
-    m_led.setData(m_buffer);
+    m_buffer = callback.apply(Constants.LEDs.Drive.k_start).apply(Constants.LEDs.Drive.k_length).apply(m_buffer);
   }
 
   @Override

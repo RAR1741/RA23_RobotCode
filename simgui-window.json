@@ -5,13 +5,13 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
-      "height": "1760",
-      "maximized": "1",
+      "height": "1051",
+      "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "2880",
+      "width": "1723",
       "xpos": "0",
-      "ypos": "40"
+      "ypos": "71"
     }
   },
   "Table": {
@@ -19,6 +19,12 @@
       "Column 0  Width": "163",
       "Column 1  Width": "243",
       "RefScale": "13"
+    },
+    "0xE56EC1C2,4": {
+      "Column 0  Weight": "1.0000",
+      "Column 1  Weight": "1.0000",
+      "Column 2  Weight": "1.0000",
+      "Column 3  Weight": "1.0000"
     }
   },
   "Window": {
@@ -54,8 +60,8 @@
     },
     "###/SmartDashboard/Auto picker": {
       "Collapsed": "0",
-      "Pos": "1818,67",
-      "Size": "415,72"
+      "Pos": "111,114",
+      "Size": "254,54"
     },
     "###/SmartDashboard/Field": {
       "Collapsed": "0",
@@ -65,7 +71,7 @@
     "###Addressable LEDs": {
       "Collapsed": "0",
       "Pos": "198,335",
-      "Size": "227,346"
+      "Size": "142,433"
     },
     "###Analog Inputs": {
       "Collapsed": "0",
@@ -80,17 +86,22 @@
     "###FMS": {
       "Collapsed": "0",
       "Pos": "8,183",
-      "Size": "442,200"
+      "Size": "283,146"
     },
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "106,31",
-      "Size": "1336,100"
+      "Size": "796,73"
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "1797,182",
+      "Pos": "341,172",
       "Size": "468,872"
+    },
+    "###NetworkTables Info": {
+      "Collapsed": "0",
+      "Pos": "305,107",
+      "Size": "750,145"
     },
     "###Other Devices": {
       "Collapsed": "0",
@@ -115,7 +126,7 @@
     "###System Joysticks": {
       "Collapsed": "0",
       "Pos": "2,359",
-      "Size": "313,326"
+      "Size": "192,218"
     },
     "###Timing": {
       "Collapsed": "0",
@@ -130,7 +141,7 @@
     "Robot State": {
       "Collapsed": "0",
       "Pos": "5,20",
-      "Size": "144,144"
+      "Size": "92,99"
     }
   }
 }

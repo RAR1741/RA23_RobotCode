@@ -13,16 +13,27 @@ public final class Constants {
   }
 
   public static class LEDs {
-    public static final int k_ledPWMId = 0;
-    public static final int k_ledTotalLength = 60;
+    public static final int k_PWMId = 0;
+    public static final int k_totalLength = ArmRight.k_length + ArmLeft.k_length + Drive.k_length;
 
-    // Drive LEDs
-    public static final int k_driveLEDStart = 0;
-    public static final int k_driveLEDLength = 30;
+    public static class ArmRight {
+      public static final int k_start = 0;
+      public static final int k_length = 60;
+      public static final int k_frontTop = 23;
+      public static final int k_backTop = k_start + k_length - 23;
+    }
 
-    // Arm LEDs
-    public static final int k_armLEDStart = k_driveLEDLength;
-    public static final int k_armLEDLength = k_ledTotalLength - k_driveLEDLength;
+    public static class ArmLeft {
+      public static final int k_start = ArmRight.k_start + ArmRight.k_length;
+      public static final int k_length = 60;
+      public static final int k_frontTop = k_start + 23;
+      public static final int k_backTop = k_start + k_length - 23;
+    }
+
+    public static class Drive {
+      public static final int k_start = ArmLeft.k_start + ArmLeft.k_length;
+      public static final int k_length = 120;
+    }
   }
 
   public static class Simulation {
