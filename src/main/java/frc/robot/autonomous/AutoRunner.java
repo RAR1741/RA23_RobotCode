@@ -2,6 +2,7 @@ package frc.robot.autonomous;
 
 import frc.robot.autonomous.modes.AutoModeBase;
 import frc.robot.autonomous.modes.BlueDefaultMode;
+import frc.robot.autonomous.modes.BlueRight_OneCubeHigh_Balance;
 import frc.robot.autonomous.modes.DoNothingMode;
 import frc.robot.autonomous.modes.RedCenter_OneCubeHigh_Balance;
 import frc.robot.autonomous.modes.RedRight_OneCubeHigh_Balance;
@@ -23,6 +24,7 @@ public class AutoRunner {
     DO_NOTHING,
     BLUE_DEFAULT,
     RED_RIGHT_CUBE_BALANCE,
+    BLUE_RIGHT_CUBE_BALANCE,
     RED_CENTER_CUBE_BALANCE,
     RED_LEFT_CUBE_BALANCE
   }
@@ -41,6 +43,9 @@ public class AutoRunner {
         break;
       case RED_RIGHT_CUBE_BALANCE:
         m_autoMode = new RedRight_OneCubeHigh_Balance();
+        break;
+      case BLUE_RIGHT_CUBE_BALANCE:
+        m_autoMode = new BlueRight_OneCubeHigh_Balance();
         break;
       case RED_CENTER_CUBE_BALANCE:
         m_autoMode = new RedCenter_OneCubeHigh_Balance();

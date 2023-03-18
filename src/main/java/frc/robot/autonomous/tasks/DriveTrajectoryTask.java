@@ -36,23 +36,24 @@ public class DriveTrajectoryTask extends Task {
         new PIDController(1.0, 0, 0),
         new PIDController(1.0, 0, 0),
         new PIDController(1.0, 0, 0));
-
-    Pose2d startingPosition = m_autoPath.getInitialPose();
-    m_swerve.setGyroAngleDegrees(startingPosition.getRotation().getDegrees());
-    m_swerve.resetOdometry(startingPosition);
   }
 
   @Override
   public void start() {
+    PathPlannerTrajectory oldTraj = m_autoPath;
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+      m_autoPath = PathPlannerTrajectory.transformTrajectoryForAlliance(m_autoPath, DriverStation.Alliance.Red);
+    }
+
+    Pose2d startingPosition = m_autoPath.getInitialPose();
+    m_swerve.setGyroAngleDegrees(startingPosition.getRotation().getDegrees());
+    m_swerve.resetOdometry(startingPosition);
+
     m_runningTimer.reset();
     m_runningTimer.start();
 
     m_swerve.clearTurnPIDAccumulation();
     DriverStation.reportWarning("Running path for " + DriverStation.getAlliance().toString(), false);
-
-    if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-      m_autoPath = PathPlannerTrajectory.transformTrajectoryForAlliance(m_autoPath, DriverStation.Alliance.Red);
-    }
   }
 
   @Override
