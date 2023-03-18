@@ -6,34 +6,36 @@ import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
 import frc.robot.autonomous.tasks.AutoBalanceTask;
 import frc.robot.autonomous.tasks.DriveForwardTask;
+import frc.robot.autonomous.tasks.DriveTrajectoryTask;
 import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
 import frc.robot.autonomous.tasks.PointForwardTask;
 import frc.robot.autonomous.tasks.WaitTask;
 
-public class Center_OneCubeHigh_Balance extends AutoModeBase {
+public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
   @Override
   public Pose2d getRedStartingPosition() {
-    return new Pose2d(14.7, 2.73, Rotation2d.fromDegrees(180.0));
+    return new Pose2d(14.655021228445234, 4.458172598636864, Rotation2d.fromDegrees(180.0));
   }
 
   public void queueTasks() {
-    queueTask(new ParallelTask(
-        new PointForwardTask(),
-        new WaitTask(0.5)));
+    queueTask(new PointForwardTask());
 
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
-    queueTask(new GripperTask(false));
-    queueTask(new WaitTask(0.5));
 
-    // queueTask(new ParallelTask(
-    // new DriveTrajectoryTask("RedLeftFarBalance", 1.0, 0.5),
-    // new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose())));
+    queueTask(new WaitTask(1.0));
+
+    queueTask(new GripperTask(false));
+
+    queueTask(new WaitTask(1.0));
 
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveForwardTask(2.0, 1.0)));
+        new DriveTrajectoryTask("RightFarBalance", 1.0, 0.5)));
+
+    queueTask(new DriveForwardTask(2.0, -1.0));
 
     queueTask(new AutoBalanceTask());
   }
+
 }

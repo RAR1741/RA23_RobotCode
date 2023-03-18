@@ -12,14 +12,17 @@ import frc.robot.autonomous.tasks.ParallelTask;
 import frc.robot.autonomous.tasks.PointForwardTask;
 import frc.robot.autonomous.tasks.WaitTask;
 
-public class Right_OneCubeHigh_Balance extends AutoModeBase {
+public class Left_OneCubeHigh_BalanceMode extends AutoModeBase {
   @Override
   public Pose2d getRedStartingPosition() {
-    return new Pose2d(14.655021228445234, 4.458172598636864, Rotation2d.fromDegrees(180.0));
+    return new Pose2d(14.7, 1.05, Rotation2d.fromDegrees(180.0));
   }
 
   public void queueTasks() {
-    queueTask(new PointForwardTask());
+
+    queueTask(new ParallelTask(
+        new PointForwardTask(),
+        new WaitTask(0.5)));
 
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
 
@@ -29,11 +32,15 @@ public class Right_OneCubeHigh_Balance extends AutoModeBase {
 
     queueTask(new WaitTask(1.0));
 
+    // queueTask(new ParallelTask( // TODO: DriveForward not working in ParallelTask
+    // new DriveTrajectoryTask("RedLeftFarBalance", 1.0, 0.5),
+    // new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose())));
+
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveTrajectoryTask("RightFarBalance", 1.0, 0.5)));
+        new DriveTrajectoryTask("LeftFarBalance", 2.0, 0.5)));
 
-    queueTask(new DriveForwardTask(2.0, -1.0));
+    queueTask(new DriveForwardTask(1.5, -1.0)); // TODO: Always goes forward in sim
 
     queueTask(new AutoBalanceTask());
   }
