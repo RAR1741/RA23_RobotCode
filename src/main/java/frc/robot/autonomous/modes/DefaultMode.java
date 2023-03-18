@@ -12,7 +12,7 @@ import frc.robot.autonomous.tasks.WaitTask;
 public class DefaultMode extends AutoModeBase {
   @Override
   public Pose2d getRedStartingPosition() {
-    return new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+    return new Pose2d(14.655021228445234, 0, Rotation2d.fromDegrees(180));
   }
 
   public void queueTasks() {

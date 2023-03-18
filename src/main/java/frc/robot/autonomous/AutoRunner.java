@@ -23,7 +23,6 @@ public class AutoRunner {
     DO_NOTHING,
     DEFAULT,
     RIGHT_CUBE_BALANCE,
-    BLUE_RIGHT_CUBE_BALANCE,
     CENTER_CUBE_BALANCE,
     LEFT_CUBE_BALANCE
   }
