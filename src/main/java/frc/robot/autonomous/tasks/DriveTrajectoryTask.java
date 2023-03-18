@@ -48,6 +48,11 @@ public class DriveTrajectoryTask extends Task {
     m_runningTimer.start();
 
     m_swerve.clearTurnPIDAccumulation();
+    DriverStation.reportWarning("Running path for " + DriverStation.getAlliance().toString(), false);
+
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+      m_autoPath = PathPlannerTrajectory.transformTrajectoryForAlliance(m_autoPath, DriverStation.Alliance.Red);
+    }
   }
 
   @Override

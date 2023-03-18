@@ -25,7 +25,6 @@ public class AutoRunner {
     RED_RIGHT_CUBE_BALANCE,
     RED_CENTER_CUBE_BALANCE,
     RED_LEFT_CUBE_BALANCE
-
   }
 
   public Task getNextTask() {
