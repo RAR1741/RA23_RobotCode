@@ -23,6 +23,7 @@ import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.simulation.Field;
 import frc.robot.subsystems.Subsystem;
+import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 import frc.robot.subsystems.leds.LEDs;
 
@@ -38,7 +39,7 @@ public class Robot extends TimedRobot {
   // Robot subsystems
   private List<Subsystem> m_allSubsystems = new ArrayList<>();
   public final SwerveDrive m_swerve = SwerveDrive.getInstance();
-  // public final Arm m_arm = Arm.getInstance();
+  public final Arm m_arm = Arm.getInstance();
   public final LEDs m_leds = LEDs.getInstance();
   private Task m_currentTask;
   private AutoRunner m_autoRunner;
@@ -78,7 +79,7 @@ public class Robot extends TimedRobot {
     m_camera = CameraServer.startAutomaticCapture();
 
     m_allSubsystems.add(m_swerve);
-    // m_allSubsystems.add(m_arm);
+    m_allSubsystems.add(m_arm);
     m_allSubsystems.add(m_leds);
   }
 
@@ -164,56 +165,56 @@ public class Robot extends TimedRobot {
       m_swerve.resetGyro();
     }
 
-    // if (m_driverController.getWantsGripToggle() ||
-    // m_operatorController.getWantsGripToggle()) {
-    // m_arm.setGripper(!m_arm.getGripperEngaged());
-    // }
+    if (m_driverController.getWantsGripToggle() ||
+        m_operatorController.getWantsGripToggle()) {
+      m_arm.setGripper(!m_arm.getGripperEngaged());
+    }
 
-    // if (!m_arm.runTrajectory()) {
-    // m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
-    // m_operatorController.getArmVerticalChange(0.5));
-    // }
+    if (!m_arm.runTrajectory()) {
+      m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
+          m_operatorController.getArmVerticalChange(0.5));
+    }
 
-    // if (m_operatorController.getRawButtonPressed(6)) {
-    // m_arm.rotateWrist();
-    // }
+    if (m_operatorController.getRawButtonPressed(6)) {
+      m_arm.rotateWrist();
+    }
 
-    // if (m_operatorController.getWantsDefaultState()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
-    // }
+    if (m_operatorController.getWantsDefaultState()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.HOME.getPose());
+    }
 
-    // if (m_operatorController.getWantsDoubleSubstation()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose());
-    // }
+    if (m_operatorController.getWantsDoubleSubstation()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose());
+    }
 
-    // if (m_operatorController.getWantsGroundPickup()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.FLOOR_PICKUP.getPose());
-    // }
+    if (m_operatorController.getWantsGroundPickup()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.FLOOR_PICKUP.getPose());
+    }
 
-    // if (m_operatorController.getWantsGroundScore()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.FLOOR_SCORE.getPose());
-    // }
+    if (m_operatorController.getWantsGroundScore()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.FLOOR_SCORE.getPose());
+    }
 
-    // if (m_operatorController.getWantsHighConeScore()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose());
-    // }
+    if (m_operatorController.getWantsHighConeScore()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose());
+    }
 
-    // if (m_operatorController.getWantsMidConeScore()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_MID_CONE.getPose());
-    // }
+    if (m_operatorController.getWantsMidConeScore()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_MID_CONE.getPose());
+    }
 
-    // if (m_operatorController.getWantsHighCubeScore()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
-    // }
+    if (m_operatorController.getWantsHighCubeScore()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose());
+    }
 
-    // if (m_operatorController.getWantsMidCubeScore()) {
-    // m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_MID_CUBE.getPose());
-    // }
+    if (m_operatorController.getWantsMidCubeScore()) {
+      m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_MID_CUBE.getPose());
+    }
 
-    // if (m_driverController.getWantsGripToggle() ||
-    // m_operatorController.getWantsGripToggle()) {
-    // m_arm.setGripper(!m_arm.getGripperEngaged());
-    // }
+    if (m_driverController.getWantsGripToggle() ||
+        m_operatorController.getWantsGripToggle()) {
+      m_arm.setGripper(!m_arm.getGripperEngaged());
+    }
 
     /*
      * Ground pickup A
