@@ -12,6 +12,30 @@ public final class Constants {
     public static final double k_bumperHeight = 5; // Inches
   }
 
+  public static class LEDs {
+    public static final int k_PWMId = 0;
+    public static final int k_totalLength = ArmRight.k_length + ArmLeft.k_length + Drive.k_length;
+
+    public static class ArmRight {
+      public static final int k_start = 0;
+      public static final int k_length = 60;
+      public static final int k_frontTop = 23;
+      public static final int k_backTop = k_start + k_length - 23;
+    }
+
+    public static class ArmLeft {
+      public static final int k_start = ArmRight.k_start + ArmRight.k_length;
+      public static final int k_length = 60;
+      public static final int k_frontTop = k_start + 23;
+      public static final int k_backTop = k_start + k_length - 23;
+    }
+
+    public static class Drive {
+      public static final int k_start = ArmLeft.k_start + ArmLeft.k_length;
+      public static final int k_length = 120;
+    }
+  }
+
   public static class Simulation {
     public static final double k_width = 150; // Inches
     public static final double k_height = 80; // Inches
@@ -74,7 +98,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
 
-      public static final double k_offset = 0.830012;
+      public static final double k_offset = 0.841119;
     }
 
     public static class Elbow {
@@ -85,7 +109,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.390261;
+      public static final double k_offset = 0.396141;
     }
 
     public static class Wrist {
@@ -96,7 +120,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.606600;
+      public static final double k_offset = 0.617917;
     }
 
     public static enum Preset {
@@ -129,5 +153,8 @@ public final class Constants {
 
     public static final double k_highGoalX = 39.75; // Inches
     public static final double k_highGoalHeight = 46; // Inches
+
+    public static final double k_width = Units.feetToMeters(54.0);
+    public static final double k_length = Units.feetToMeters(27.0);
   }
 }
