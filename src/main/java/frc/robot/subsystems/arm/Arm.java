@@ -65,6 +65,8 @@ public class Arm extends Subsystem {
   private boolean m_runningTrajectory = false;
   private Timer m_trajTimer = new Timer();
 
+  private boolean m_inverted = false;
+
   private static class PeriodicIO {
     // Automated control
     public double shoulderAngle = 0.0;
@@ -235,7 +237,8 @@ public class Arm extends Subsystem {
     double[] currentAngles = m_armSim.getArmAngles();
     double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
 
-    ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetPose.getX(), targetPose.getY());
+    ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1],
+        m_inverted ? -targetPose.getX() : targetPose.getX(), targetPose.getY());
     m_currentTrajectory = new ArmTrajectory(waypoints);
 
     m_arm.startTrajectory();
@@ -294,35 +297,44 @@ public class Arm extends Subsystem {
     double shoulderTargetAngle = 0.0;
     double elbowTargetAngle = 0.0;
 
+    double xMod = Math.abs(x);
+
     // If the x,y position is within the width of the robot, fix the shoulder at 0
     // degrees and only move the elbow
-    if (Math.abs(x) <= Constants.Robot.k_length / 2) {
+    if (xMod <= Constants.Robot.k_length / 2) {
       // When inside the frame perimeter, we will disregard the y setpoint so that the
       // shoulder can stay fixed at 0
       shoulderTargetAngle = 0.0;
 
       elbowTargetAngle = Math.asin(x / Constants.Arm.Elbow.k_length);
     } else {
-      double L3 = Math.sqrt(Math.pow(x, 2) + Math.pow(y - Constants.Arm.k_shoulderPivotHeight, 2));
+      double L3 = Math.sqrt(Math.pow(xMod, 2) + Math.pow(y - Constants.Arm.k_shoulderPivotHeight, 2));
 
       double alpha = Math.acos(
           (Math.pow(Constants.Arm.Shoulder.k_length, 2) + Math.pow(L3, 2) - Math.pow(Constants.Arm.Elbow.k_length, 2))
               / (2 * Constants.Arm.Shoulder.k_length * L3));
 
-      double psi = Math.atan2(x, y - Constants.Arm.k_shoulderPivotHeight);
+      double psi = Math.atan2(xMod, Constants.Arm.k_shoulderPivotHeight - y);
 
-      shoulderTargetAngle = x >= 0 ? psi - alpha : psi + alpha;
+      shoulderTargetAngle = Math.PI - alpha - psi;
 
       // The position of the end of the first arm
       double xPrime = Constants.Arm.Shoulder.k_length * Math.sin(shoulderTargetAngle);
       double yPrime = Constants.Arm.k_shoulderPivotHeight
           + Constants.Arm.Shoulder.k_length * Math.cos(shoulderTargetAngle);
 
-      elbowTargetAngle = Math.atan2(x - xPrime, yPrime - y);
+      elbowTargetAngle = Math.acos((yPrime - y) / Constants.Arm.Elbow.k_length) + shoulderTargetAngle;
+
+      if (x < 0) {
+        shoulderTargetAngle *= -1;
+        elbowTargetAngle *= -1;
+      }
     }
 
     shoulderTargetAngle = Units.radiansToDegrees(shoulderTargetAngle);
     elbowTargetAngle = Units.radiansToDegrees(elbowTargetAngle);
+
+    SmartDashboard.putNumberArray("CalculatedAngles", new double[] { shoulderTargetAngle, elbowTargetAngle });
 
     return new double[] { shoulderTargetAngle, elbowTargetAngle };
   }
@@ -379,6 +391,13 @@ public class Arm extends Subsystem {
 
   public void adjustPosition(double xChange, double yChange) {
     setArmPosition(m_xPosition + xChange, m_yPosition + yChange);
+  }
+
+  public void setInverted() {
+    if (m_xPosition == Constants.Arm.Preset.HOME.getPose().getX()
+        && m_yPosition == Constants.Arm.Preset.HOME.getPose().getY()) {
+      m_inverted = !m_inverted;
+    }
   }
 
   @Override

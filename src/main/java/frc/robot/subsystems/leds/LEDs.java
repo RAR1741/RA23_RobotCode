@@ -16,6 +16,11 @@ public class LEDs extends Subsystem {
 
   private int m_ledTotalLength = Constants.LEDs.k_totalLength;
 
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_rightArmColor = LEDModes
+      .setColor(Color.kRed);
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_leftArmColor = LEDModes
+      .setColor(Color.kRed);
+
   public static LEDs getInstance() {
     if (m_instance == null) {
       m_instance = new LEDs();
@@ -32,11 +37,19 @@ public class LEDs extends Subsystem {
 
   @Override
   public void periodic() {
-    setArmRightColorMode(LEDModes.setColor(Color.kRed));
-    setArmLeftColorMode(LEDModes.setColor(Color.kBlue));
+    setArmRightColorMode(m_rightArmColor);
+    setArmLeftColorMode(m_leftArmColor);
     setDriveColorMode(LEDModes.rainbow);
 
     m_led.setData(m_buffer);
+  }
+
+  public void setColor(Color color) {
+    if (color == Color.kBlack) {
+      m_rightArmColor = LEDModes.off;
+    }
+    m_rightArmColor = LEDModes.setColor(color);
+    m_leftArmColor = LEDModes.setColor(color);
   }
 
   public void setArmRightColorMode(
