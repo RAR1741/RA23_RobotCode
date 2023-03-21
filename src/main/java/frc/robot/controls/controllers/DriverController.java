@@ -41,7 +41,7 @@ public class DriverController extends FilteredController {
   }
 
   public boolean getWantsBrake() {
-    return this.getFilteredAxis(3) > 0.5;
+    return this.getFilteredAxis(3) > k_triggerActivationThreshold;
   }
 
   public void outputTelemetry() {
