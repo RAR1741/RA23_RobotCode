@@ -64,6 +64,8 @@ public class Arm extends Subsystem {
   private boolean m_runningTrajectory = false;
   private Timer m_trajTimer = new Timer();
 
+  private boolean m_inverted = false;
+
   private static class PeriodicIO {
     // Automated control
     public double shoulderAngle = 0.0;
@@ -233,7 +235,8 @@ public class Arm extends Subsystem {
     double[] currentAngles = m_armSim.getArmAngles();
     double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
 
-    ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetPose.getX(), targetPose.getY());
+    ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1],
+        m_inverted ? -targetPose.getX() : targetPose.getX(), targetPose.getY());
     m_currentTrajectory = new ArmTrajectory(waypoints);
 
     m_arm.startTrajectory();
@@ -386,6 +389,13 @@ public class Arm extends Subsystem {
 
   public void adjustPosition(double xChange, double yChange) {
     setArmPosition(m_xPosition + xChange, m_yPosition + yChange);
+  }
+
+  public void setInverted() {
+    if (m_xPosition == Constants.Arm.Preset.HOME.getPose().getX()
+        && m_yPosition == Constants.Arm.Preset.HOME.getPose().getY()) {
+      m_inverted = !m_inverted;
+    }
   }
 
   @Override

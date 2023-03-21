@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.autonomous.AutoChooser;
 import frc.robot.autonomous.AutoRunner;
 import frc.robot.autonomous.tasks.Task;
@@ -30,6 +31,8 @@ import frc.robot.subsystems.leds.LEDs;
 public class Robot extends TimedRobot {
   private final DriverController m_driverController = new DriverController(0, true, true);
   private final OperatorController m_operatorController = new OperatorController(1, true, true);
+
+  private int m_colorState = 0;
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xRateLimiter = new SlewRateLimiter(3);
@@ -170,6 +173,18 @@ public class Robot extends TimedRobot {
       m_arm.setGripper(!m_arm.getGripperEngaged());
     }
 
+    if (m_driverController.getWantsBrake()) {
+      m_swerve.pointInwards();
+    }
+
+    if (m_operatorController.getWantsColorCycle()) {
+      if (m_colorState == 2) {
+        m_colorState = 0;
+      } else {
+        m_colorState++;
+      }
+    }
+
     if (!m_arm.runTrajectory()) {
       m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
           m_operatorController.getArmVerticalChange(0.5));
@@ -211,6 +226,10 @@ public class Robot extends TimedRobot {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_MID_CUBE.getPose());
     }
 
+    if (m_operatorController.getWantsRobotFrontInverted()) {
+      m_arm.setInverted();
+    }
+
     if (m_driverController.getWantsGripToggle() ||
         m_operatorController.getWantsGripToggle()) {
       m_arm.setGripper(!m_arm.getGripperEngaged());
@@ -227,6 +246,21 @@ public class Robot extends TimedRobot {
      * Medium cube hat down
      */
 
+    switch (m_colorState) {
+      case 0:
+        m_leds.setColor(Color.kBlack);
+        break;
+      case 1:
+        m_leds.setColor(Color.kPurple);
+        break;
+      case 2:
+        m_leds.setColor(Color.kYellow);
+        break;
+      default:
+        m_leds.setColor(Color.kBlack);
+        break;
+    }
+
     m_driverController.outputTelemetry();
   }
 
@@ -239,6 +273,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_allSubsystems.forEach(subsystem -> subsystem.stop());
     m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
+    m_leds.setColor(Color.kRed);
   }
 
   @Override
