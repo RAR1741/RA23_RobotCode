@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -26,6 +27,7 @@ import frc.robot.simulation.Field;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
+import frc.robot.subsystems.leds.LEDModes;
 import frc.robot.subsystems.leds.LEDs;
 
 public class Robot extends TimedRobot {
@@ -112,6 +114,12 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     // If there is a current task, run it
     if (m_currentTask != null) {
+      if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+        m_leds.setColor(Color.kBlue);
+      } else {
+        m_leds.setColor(Color.kRed);
+      }
+
       // Run the current task
       m_currentTask.update();
       m_currentTask.updateSim();

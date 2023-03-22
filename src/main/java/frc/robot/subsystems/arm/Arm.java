@@ -158,6 +158,10 @@ public class Arm extends Subsystem {
       path.add(new ArmPose(startX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
+    if (startY >= 35.0) {
+      path.add(new ArmPose(startX > 0 ? startX - 9 : startX + 9, startY, null));
+    }
+
     if (enteringFront) {
       path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
       if (exitingBack) {
