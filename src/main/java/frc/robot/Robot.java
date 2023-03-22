@@ -110,8 +110,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    // m_arm.runTrajectory();
-
     // If there is a current task, run it
     if (m_currentTask != null) {
       // Run the current task

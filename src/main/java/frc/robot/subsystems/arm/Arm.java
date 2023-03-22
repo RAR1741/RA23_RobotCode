@@ -92,10 +92,6 @@ public class Arm extends Subsystem {
   private Arm() {
     m_armSim = ArmSim.getInstance();
 
-    // m_shoulderEncoder.setDistancePerRotation(k_shoulderDegreesPerPulse);
-    // m_elbowEncoder.setDistancePerRotation(k_elbowDegreesPerPulse);
-    // m_wristEncoder.setDistancePerRotation(k_wristDegreesPerPulse);
-
     // TODO: do this for shoulder and wrist as well
     m_shoulderPID.enableContinuousInput(0, 360);
     m_elbowPID.enableContinuousInput(0, 360);
@@ -262,12 +258,6 @@ public class Arm extends Subsystem {
         stopTrajectory();
       }
     }
-    // else {
-    // double[] currentAngles = m_armSim.getArmAngles();
-    // double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
-    // Pose2d currentPose = new Pose2d(currentXY[0], currentXY[1], new
-    // Rotation2d(0));
-    // }
 
     return m_runningTrajectory;
   }

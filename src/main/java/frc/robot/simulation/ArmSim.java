@@ -133,58 +133,6 @@ public class ArmSim {
     return new double[] { shoulderAngle, elbowAngle };
   }
 
-  // TODO I don't really understand this and didn't want to break anything, so I
-  // just disabled it
-  /*
-   * @Override
-   * public void periodic() {
-   * // In this method, we update our simulation of what our arm is doing
-   * // First, we set our "inputs" (voltages)
-   * m_shoulderSim.setInput(m_shoulderMotor.get() *
-   * RobotController.getBatteryVoltage());
-   * m_elbowSim.setInput(m_elbowMotor.get() *
-   * RobotController.getBatteryVoltage());
-   *
-   * // Next, we update it. The standard loop time is 20ms.
-   * m_shoulderSim.update(0.020);
-   * m_elbowSim.update(0.020);
-   *
-   * // Finally, we set our simulated encoder's readings and simulated battery
-   * // voltage
-   * m_shoulderEncoderSim.setDistance(m_shoulderSim.getAngleRads());
-   * m_elbowEncoderSim.setDistance(m_elbowSim.getAngleRads());
-   *
-   * // SimBattery estimates loaded battery voltages RoboRioSim.setVInVoltage(
-   * BatterySim.calculateDefaultBatteryLoadedVoltage(
-   * m_shoulderSim.getCurrentDrawAmps() + m_elbowSim.getCurrentDrawAmps());
-   *
-   * m_periodicIO.shoulderAngle = Preferences.getDouble("shoulderAngle",
-   * m_periodicIO.shoulderAngle);
-   * m_periodicIO.elbowAngle = Preferences.getDouble("elbowAngle",
-   * m_periodicIO.elbowAngle);
-   *
-   * double shoulderPIDOutput =
-   * m_shoulderPID.calculate(m_shoulderEncoder.getDistance(),
-   * Units.degreesToRadians(m_periodicIO.shoulderAngle));
-   * double elbowPIDOutput = m_elbowPID.calculate(m_elbowEncoder.getDistance(),
-   * Units.degreesToRadians(m_periodicIO.elbowAngle));
-   *
-   * SmartDashboard.putNumber("Shoulder Diff",
-   * Units.radiansToDegrees(m_shoulderEncoder.getDistance() -
-   * Units.degreesToRadians(m_periodicIO.shoulderAngle)));
-   * SmartDashboard.putNumber("Elbow Diff",
-   * Units.radiansToDegrees(m_elbowEncoder.getDistance() -
-   * Units.degreesToRadians(m_periodicIO.elbowAngle)));
-   *
-   * m_shoulderMotor.setVoltage(shoulderPIDOutput);
-   * m_elbowMotor.setVoltage(elbowPIDOutput);
-   *
-   * // Update the Mechanism Arm angle based on the simulated arm angle
-   * m_arm1.setAngle(Units.radiansToDegrees(m_shoulderSim.getAngleRads()));
-   * m_arm2.setAngle(Units.radiansToDegrees(m_elbowSim.getAngleRads()));
-   * }
-   */
-
   private void addAdditionalDrawings() {
     // Draw the robot's bumpers
     double bumperPosition = Constants.Simulation.k_width / 2 - Constants.Robot.k_length / 2;
