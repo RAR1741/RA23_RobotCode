@@ -129,7 +129,7 @@ public class ArmSim {
     double simShoulderAngle = m_arm1.getAngle();
     double simElbowAngle = m_arm2.getAngle();
     double shoulderAngle = k_shoulderSimOffset - simShoulderAngle;
-    double elbowAngle = simElbowAngle - k_elbowSimOffset;
+    double elbowAngle = simElbowAngle - k_elbowSimOffset - shoulderAngle;
     return new double[] { shoulderAngle, elbowAngle };
   }
 
