@@ -120,7 +120,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.233257;
+      public static final double k_offset = 0.813489;
     }
 
     public static enum Preset {
