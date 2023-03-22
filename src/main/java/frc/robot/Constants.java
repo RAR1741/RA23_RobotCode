@@ -109,7 +109,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.775828;
+      public static final double k_offset = 0.581143;
     }
 
     public static class Wrist {
