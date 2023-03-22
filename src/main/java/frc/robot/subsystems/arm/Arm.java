@@ -153,7 +153,7 @@ public class Arm extends Subsystem {
     boolean enteringBack = (startX < -Constants.Robot.k_length / 2 && endX > -Constants.Robot.k_length / 2);
     boolean exitingFront = (startX < Constants.Robot.k_length / 2 && endX > Constants.Robot.k_length / 2);
     boolean exitingBack = (startX > -Constants.Robot.k_length / 2 && endX < -Constants.Robot.k_length / 2);
-    ;
+
     boolean startingLow = (startY < Constants.Arm.k_homeHeight);
     boolean endingLow = (endY < Constants.Arm.k_homeHeight);
 

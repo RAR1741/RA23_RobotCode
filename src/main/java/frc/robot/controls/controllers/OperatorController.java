@@ -31,7 +31,7 @@ public class OperatorController extends FilteredController {
   }
 
   public boolean getWantsDefaultState() {
-    return this.getRawButton(2);
+    return this.getRawButtonPressed(2);
   }
 
   public boolean getWantsDoubleSubstation() {
