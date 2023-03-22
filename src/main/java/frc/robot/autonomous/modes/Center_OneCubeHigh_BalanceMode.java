@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
 import frc.robot.autonomous.tasks.AutoBalanceTask;
+import frc.robot.autonomous.tasks.BrakeTask;
 import frc.robot.autonomous.tasks.DriveForwardTask;
 import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
@@ -23,17 +24,16 @@ public class Center_OneCubeHigh_BalanceMode extends AutoModeBase {
         new WaitTask(0.5)));
 
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
+    queueTask(new WaitTask(0.5));
     queueTask(new GripperTask(false));
     queueTask(new WaitTask(0.5));
 
-    // queueTask(new ParallelTask(
-    // new DriveTrajectoryTask("RedLeftFarBalance", 1.0, 0.5),
-    // new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose())));
-
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveForwardTask(2.0, 1.0)));
+        new DriveForwardTask(2.25, 1.0)));
 
     queueTask(new AutoBalanceTask());
+
+    queueTask(new BrakeTask(true));
   }
 }

@@ -126,7 +126,7 @@ public final class Constants {
     public static enum Preset {
       HOME(new ArmPose(0.0, Constants.Arm.k_homeHeight, null)),
       SCORE_MID_CUBE(new ArmPose(-47.6, 39.66, null)),
-      SCORE_HIGH_CUBE(new ArmPose(-58.4, 53.9, null)),
+      SCORE_HIGH_CUBE(new ArmPose(-60.9, 49.3, null)),
       SCORE_MID_CONE(new ArmPose(-42.0, 55.2, null)),
       SCORE_HIGH_CONE(new ArmPose(-52.5, 63.5, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
