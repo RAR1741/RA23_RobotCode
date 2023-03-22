@@ -29,7 +29,7 @@ public class Arm extends Subsystem {
   private static final double k_shoulderMotorI = 0.0;
   private static final double k_shoulderMotorD = 0.0;
 
-  private static final double k_elbowMotorP = 0.65;
+  private static final double k_elbowMotorP = 0.3;
   private static final double k_elbowMotorI = 0.0;
   private static final double k_elbowMotorD = 0.0;
 
@@ -102,6 +102,7 @@ public class Arm extends Subsystem {
     m_wristPID.enableContinuousInput(0, 360);
 
     m_wristMotor.setInverted(true);
+    m_elbowMotor.setInverted(false);
 
     m_shoulderMotor.setIdleMode(IdleMode.kBrake);
     m_elbowMotor.setIdleMode(IdleMode.kBrake);
@@ -214,7 +215,7 @@ public class Arm extends Subsystem {
 
     if (isArmPositionValid(x, y)) {
       m_periodicIO.shoulderAngle = armAngles[0];
-      m_periodicIO.elbowAngle = armAngles[1];
+      m_periodicIO.elbowAngle = -armAngles[1]; // TODO: elbow angle needs to be reversed
 
       m_xPosition = x;
       m_yPosition = y;
