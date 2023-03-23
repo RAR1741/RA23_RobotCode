@@ -5,9 +5,11 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Logger {
 
@@ -27,8 +29,6 @@ public class Logger {
 
   private Logger() {
     // Initialize on-board logging
-    // DataLogManager.start();
-    // m_log = DataLogManager.getLog();
 
     String dir;
     if (RobotBase.isReal()) {
@@ -50,11 +50,12 @@ public class Logger {
     }
 
     String fileName = "RAR_LOG-" + date + "-" + match + ".wpilog";
-
-    m_log = new DataLog(dir, fileName);
-    System.out.println("Logging initialized. Fard."); // :)
-
+    DataLogManager.start(dir, fileName);
+    
+    m_log = DataLogManager.getLog();
     DriverStation.startDataLog(m_log); // Driver Station/Joystick Logs
+
+    DataLogManager.log("Logging initialized. Fard."); // :)
   }
 
   public static void addEntry(String key, String data) {
