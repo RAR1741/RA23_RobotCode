@@ -40,16 +40,9 @@ public class DriverController extends FilteredController {
     return this.getRawButton(4);
   }
 
-  // Intake
-  /*
-   * public boolean getWantsIntakeOpen() {
-   * return this.getLeftBumper();
-   * }
-   *
-   * public boolean getWantsIntakeClose() {
-   * return this.getRightBumper();
-   * }
-   */
+  public boolean getWantsBrake() {
+    return this.getFilteredAxis(3) > k_triggerActivationThreshold;
+  }
 
   public void outputTelemetry() {
     SmartDashboard.putNumber(m_smartDashboardKey + "Forward", getForwardAxis());

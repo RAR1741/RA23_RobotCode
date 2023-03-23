@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 
@@ -33,12 +34,14 @@ public class SwerveModule {
   private static final double k_turnFeedForwardA = 0.0;
 
   // These values were obtained via SysId
-  private static final double k_driveP = 0.80566;
+  // In "Feedback Analysis" section, we set Measurement Delay to 58 ms, which was
+  // pulled from the "Feedforward Analysis" Velocity Measurement Delay
+  private static final double k_driveP = 0.86853;
   private static final double k_driveI = 0.0;
   private static final double k_driveD = 0.0;
-  private static final double k_driveFeedForwardS = 0.19882;
-  private static final double k_driveFeedForwardV = 2.21080;
-  private static final double k_driveFeedForwardA = 0.11641;
+  private static final double k_driveFeedForwardS = 0.25016;
+  private static final double k_driveFeedForwardV = 2.302;
+  private static final double k_driveFeedForwardA = 0.28186;
 
   // TODO: Make sure these are right
   private static final double k_moduleMaxAngularVelocity = Math.PI;
@@ -94,6 +97,7 @@ public class SwerveModule {
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
     m_turningMotor.restoreFactoryDefaults();
+    m_turningMotor.setIdleMode(IdleMode.kBrake);
     m_turningEncoder = m_turningMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     m_turningMotor.setInverted(true);
 
@@ -123,6 +127,10 @@ public class SwerveModule {
 
   public WPI_TalonFX getDriveMotor() {
     return m_driveMotor;
+  }
+
+  public void clearTurnPIDAccumulation() {
+    m_turningPIDController.reset(getTurnPosition());
   }
 
   // Returns the drive velocity in meters per second.
@@ -155,7 +163,7 @@ public class SwerveModule {
   }
 
   public void resetDriveEncoder() {
-    m_driveEncoder.setIntegratedSensorPosition(0, 0);
+    m_driveEncoder.setIntegratedSensorPosition(0.0, 50);
   }
 
   /**

@@ -51,7 +51,7 @@ public class SwerveDrive extends Subsystem {
   private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-  private final SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  private SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       m_kinematics,
       m_gyro.getRotation2d(),
       new SwerveModulePosition[] {
@@ -70,7 +70,7 @@ public class SwerveDrive extends Subsystem {
 
   private SwerveDrive() {
     brakeOff();
-    resetGyro();
+    reset();
   }
 
   public void brakeOn() {
@@ -97,18 +97,29 @@ public class SwerveDrive extends Subsystem {
    */
   public void resetGyro() {
     m_gyro.reset();
+    m_gyro.setAngleAdjustment(0.0);
+  }
+
+  public AHRS getGyro() {
+    return m_gyro;
+  }
+
+  public void setGyroAngleAdjustment(double angle) {
+    m_gyro.setAngleAdjustment(angle);
   }
 
   public Rotation2d getRotation2d() {
     return m_gyro.getRotation2d();
   }
 
-  public void resetOdometry(Pose2d pose) {
-    m_frontLeft.resetDriveEncoder();
-    m_frontRight.resetDriveEncoder();
-    m_backLeft.resetDriveEncoder();
-    m_backRight.resetDriveEncoder();
+  public void clearTurnPIDAccumulation() {
+    m_frontLeft.clearTurnPIDAccumulation();
+    m_frontRight.clearTurnPIDAccumulation();
+    m_backLeft.clearTurnPIDAccumulation();
+    m_backRight.clearTurnPIDAccumulation();
+  }
 
+  public void setPose(Pose2d pose) {
     m_odometry.resetPosition(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
@@ -118,6 +129,31 @@ public class SwerveDrive extends Subsystem {
             m_backRight.getPosition()
         },
         pose);
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    m_frontLeft.resetDriveEncoder();
+    m_frontRight.resetDriveEncoder();
+    m_backLeft.resetDriveEncoder();
+    m_backRight.resetDriveEncoder();
+
+    // We're manually setting the drive encoder positions to 0, since we
+    // just reset them, but the encoder isn't reporting 0 yet.
+    m_odometry = new SwerveDriveOdometry(
+        m_kinematics,
+        m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_frontLeft.getTurnPosition())),
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_frontRight.getTurnPosition())),
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_backLeft.getTurnPosition())),
+            new SwerveModulePosition(0.0,
+                Rotation2d.fromRotations(m_backRight.getTurnPosition())),
+        });
+
+    setPose(pose);
   }
 
   /**
@@ -160,6 +196,18 @@ public class SwerveDrive extends Subsystem {
     m_backRight.setDesiredState(swerveModuleStates[3]);
   }
 
+  public void pointInwards() {
+    SwerveModuleState flState = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+    SwerveModuleState frState = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+    SwerveModuleState blState = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+    SwerveModuleState brState = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+
+    m_frontLeft.setDesiredState(flState);
+    m_frontRight.setDesiredState(frState);
+    m_backLeft.setDesiredState(blState);
+    m_backRight.setDesiredState(brState);
+  }
+
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
@@ -200,7 +248,9 @@ public class SwerveDrive extends Subsystem {
     m_backRight.outputTelemetry();
 
     SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
-    SmartDashboard.putNumberArray("Drivetrain/Pose", new double[] {getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()});
+    SmartDashboard.putNumber("Drivetrain/Gyro/Pitch", m_gyro.getPitch());
+    SmartDashboard.putNumberArray("Drivetrain/Pose",
+        new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
   }
 
   @Override

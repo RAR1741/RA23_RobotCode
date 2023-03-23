@@ -11,7 +11,7 @@ public class OperatorController extends FilteredController {
   }
 
   public double getArmHorizontalChange(double strength) {
-    return this.getFilteredAxis(0) * strength;
+    return -this.getFilteredAxis(0) * strength;
   }
 
   public double getArmVerticalChange(double strength) {
@@ -22,8 +22,16 @@ public class OperatorController extends FilteredController {
     return this.getRawButtonPressed(5);
   }
 
+  public boolean getWantsColorCycle() {
+    return this.getRawButtonPressed(8);
+  }
+
+  public boolean getWantsRobotFrontInverted() {
+    return this.getRawButtonPressed(7);
+  }
+
   public boolean getWantsDefaultState() {
-    return this.getRawButton(2);
+    return this.getRawButtonPressed(2);
   }
 
   public boolean getWantsDoubleSubstation() {

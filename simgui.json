@@ -1,5 +1,13 @@
 {
   "HALProvider": {
+    "Addressable LEDs": {
+      "0": {
+        "columns": 12
+      },
+      "window": {
+        "visible": true
+      }
+    },
     "Other Devices": {
       "AnalogGyro[0]": {
         "header": {
@@ -11,15 +19,13 @@
           "open": true
         }
       },
-      "SPARK MAX [13]": {
-        "header": {
-          "open": true
-        }
+      "window": {
+        "visible": false
       }
     },
-    "PWM Outputs": {
+    "Timing": {
       "window": {
-        "visible": true
+        "visible": false
       }
     }
   },
@@ -50,6 +56,8 @@
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
       "/SmartDashboard/Arm Sim": "Mechanism2d",
       "/SmartDashboard/Auto choices": "String Chooser",
+      "/SmartDashboard/Auto picked": "String Chooser",
+      "/SmartDashboard/Auto picker": "String Chooser",
       "/SmartDashboard/Field": "Field2d"
     },
     "windows": {
@@ -58,7 +66,7 @@
           "visible": true
         }
       },
-      "/SmartDashboard/Auto choices": {
+      "/SmartDashboard/Auto picker": {
         "window": {
           "visible": true
         }
@@ -98,10 +106,7 @@
     },
     "transitory": {
       "SmartDashboard": {
-        "Arm Sim": {
-          "ArmShoulderPivot": {
-            "open": true
-          },
+        "Drivetrain": {
           "open": true
         },
         "open": true
@@ -117,7 +122,7 @@
               "autoFit": true
             }
           ],
-          "height": -43,
+          "height": 338,
           "series": [
             {
               "color": [
@@ -139,7 +144,10 @@
             }
           ]
         }
-      ]
+      ],
+      "window": {
+        "visible": false
+      }
     }
   }
 }

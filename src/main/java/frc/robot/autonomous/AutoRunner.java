@@ -1,58 +1,59 @@
 package frc.robot.autonomous;
 
-import java.util.ArrayList;
-
-import frc.robot.Robot;
+import frc.robot.autonomous.modes.AutoModeBase;
+import frc.robot.autonomous.modes.DefaultMode;
+import frc.robot.autonomous.modes.DoNothingMode;
+import frc.robot.autonomous.modes.Center_OneCubeHigh_BalanceMode;
+import frc.robot.autonomous.modes.Left_OneCubeHigh_BalanceMode;
+import frc.robot.autonomous.modes.Right_OneCubeHigh_BalanceMode;
+import frc.robot.autonomous.tasks.Task;
 
 public class AutoRunner {
   private static AutoRunner m_autoRunner = null;
-  private ArrayList<AutoTask> m_tasks;
+  private AutoModeBase m_autoMode;
 
-  private Robot m_robot;
-
-  private AutoRunner(Robot robot) {
-    m_robot = robot;
-    m_tasks = new ArrayList<>();
-  }
-
-  public static AutoRunner getInstance(Robot robot) {
+  public static AutoRunner getInstance() {
     if (m_autoRunner == null) {
-      m_autoRunner = new AutoRunner(robot);
+      m_autoRunner = new AutoRunner();
     }
     return m_autoRunner;
   }
 
-  public AutoTask getNextTask() {
-    // Pop the first task off the list
-    // TODO: Safeguard this if we run out of tasks
-    return m_tasks.remove(0);
+  public enum AutoMode {
+    DO_NOTHING,
+    DEFAULT,
+    RIGHT_CUBE_BALANCE,
+    CENTER_CUBE_BALANCE,
+    LEFT_CUBE_BALANCE
   }
 
-  public void queueBlueDefaultTasks() {
-    m_tasks.add(new AutoTask(m_robot) {
-      @Override
-      public void start() {
-        System.out.println("1: Starting...");
-      }
+  public Task getNextTask() {
+    return m_autoMode.getNextTask();
+  }
 
-      @Override
-      public boolean run() {
-        System.out.println("1: Running...");
-        return false;
-      }
-    });
+  public void setAutoMode(AutoMode mode) {
+    switch (mode) {
+      case DO_NOTHING:
+        m_autoMode = new DoNothingMode();
+        break;
+      case DEFAULT:
+        m_autoMode = new DefaultMode();
+        break;
+      case RIGHT_CUBE_BALANCE:
+        m_autoMode = new Right_OneCubeHigh_BalanceMode();
+        break;
+      case CENTER_CUBE_BALANCE:
+        m_autoMode = new Center_OneCubeHigh_BalanceMode();
+        break;
+      case LEFT_CUBE_BALANCE:
+        m_autoMode = new Left_OneCubeHigh_BalanceMode();
+        break;
+      default:
+        System.out.println("Invalid auto mode selected. Defaulting to do nothing.");
+        m_autoMode = new DoNothingMode();
+        break;
+    }
 
-    m_tasks.add(new AutoTask(m_robot) {
-      @Override
-      public void start() {
-        System.out.println("2: Starting...");
-      }
-
-      @Override
-      public boolean run() {
-        System.out.println("2: Running...");
-        return false;
-      }
-    });
+    m_autoMode.queueTasks();
   }
 }

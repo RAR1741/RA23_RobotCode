@@ -12,6 +12,30 @@ public final class Constants {
     public static final double k_bumperHeight = 5; // Inches
   }
 
+  public static class LEDs {
+    public static final int k_PWMId = 0;
+    public static final int k_totalLength = ArmRight.k_length + ArmLeft.k_length + Drive.k_length;
+
+    public static class ArmRight {
+      public static final int k_start = 0;
+      public static final int k_length = 60;
+      public static final int k_frontTop = 23;
+      public static final int k_backTop = k_start + k_length - 23;
+    }
+
+    public static class ArmLeft {
+      public static final int k_start = ArmRight.k_start + ArmRight.k_length;
+      public static final int k_length = 60;
+      public static final int k_frontTop = k_start + 23;
+      public static final int k_backTop = k_start + k_length - 23;
+    }
+
+    public static class Drive {
+      public static final int k_start = ArmLeft.k_start + ArmLeft.k_length;
+      public static final int k_length = 120;
+    }
+  }
+
   public static class Simulation {
     public static final double k_width = 150; // Inches
     public static final double k_height = 80; // Inches
@@ -20,6 +44,7 @@ public final class Constants {
   public static class Auto {
     public static final double k_maxSpeed = 1; // 1 meters per second
     public static final double k_maxAcceleration = 0.5;
+    public static final double k_defaultGripperWait = 0.5;
   }
 
   public class Drivetrain {
@@ -47,10 +72,10 @@ public final class Constants {
     // Drivetrain (turn) constants
     public class Turn {
       // Drivetrain turning offset constants
-      public static final double k_FLOffset = 0.131019;
-      public static final double k_FROffset = 0.725897;
-      public static final double k_BLOffset = 0.201316;
-      public static final double k_BROffset = 0.416294;
+      public static final double k_FLOffset = 0.796705;
+      public static final double k_FROffset = 0.884635;
+      public static final double k_BLOffset = 0.757953;
+      public static final double k_BROffset = 0.103446;
 
       public static final int k_FLMotorId = 9;
       public static final int k_FRMotorId = 10;
@@ -74,7 +99,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
 
-      public static final double k_offset = 0.830012;
+      public static final double k_offset = 0.425264;
     }
 
     public static class Elbow {
@@ -85,7 +110,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.390261;
+      public static final double k_offset = 0.581143;
     }
 
     public static class Wrist {
@@ -96,13 +121,13 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.606600;
+      public static final double k_offset = 0.813489;
     }
 
     public static enum Preset {
       HOME(new ArmPose(0.0, Constants.Arm.k_homeHeight, null)),
       SCORE_MID_CUBE(new ArmPose(-47.6, 39.66, null)),
-      SCORE_HIGH_CUBE(new ArmPose(-58.4, 53.9, null)),
+      SCORE_HIGH_CUBE(new ArmPose(-60.9, 49.3, null)),
       SCORE_MID_CONE(new ArmPose(-42.0, 55.2, null)),
       SCORE_HIGH_CONE(new ArmPose(-52.5, 63.5, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
@@ -129,5 +154,8 @@ public final class Constants {
 
     public static final double k_highGoalX = 39.75; // Inches
     public static final double k_highGoalHeight = 46; // Inches
+
+    public static final double k_width = Units.feetToMeters(54.0);
+    public static final double k_length = Units.feetToMeters(27.0);
   }
 }
