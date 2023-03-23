@@ -214,10 +214,10 @@ public class SwerveDrive extends Subsystem {
 
   public double[] getModuleLog() {
     double[] moduleLog = {
-      m_frontLeft.getTurnPosition(),m_frontLeft.getDriveVelocity(),
-      m_frontRight.getTurnPosition(), m_frontRight.getDriveVelocity(),
-      m_backLeft.getTurnPosition(), m_backLeft.getDriveVelocity(),
-      m_backRight.getTurnPosition(), m_backRight.getDriveVelocity()
+      m_frontLeft.getTurnPosition() * 360,m_frontLeft.getDriveVelocity(),
+      m_frontRight.getTurnPosition() * 360, m_frontRight.getDriveVelocity(),
+      m_backLeft.getTurnPosition() * 360, m_backLeft.getDriveVelocity(),
+      m_backRight.getTurnPosition() * 360, m_backRight.getDriveVelocity()
     };
 
     return moduleLog;
@@ -257,6 +257,8 @@ public class SwerveDrive extends Subsystem {
     m_frontRight.outputTelemetry();
     m_backLeft.outputTelemetry();
     m_backRight.outputTelemetry();
+
+    SmartDashboard.putNumberArray("Drivetrain/States", getModuleLog());
 
     SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
     SmartDashboard.putNumber("Drivetrain/Gyro/Pitch", m_gyro.getPitch());
