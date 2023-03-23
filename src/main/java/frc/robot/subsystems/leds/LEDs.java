@@ -52,6 +52,11 @@ public class LEDs extends Subsystem {
     m_leftArmColor = LEDModes.setColor(color);
   }
 
+  public void breathe() {
+    m_rightArmColor = LEDModes.redBreathe;
+    m_leftArmColor = LEDModes.redBreathe;
+  }
+
   public void setArmRightColorMode(
       Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> callback) {
     m_buffer = callback.apply(Constants.LEDs.ArmRight.k_start).apply(Constants.LEDs.ArmRight.k_length)
