@@ -37,7 +37,8 @@ public class Arm extends Subsystem {
   private static final double k_wristMotorI = 0.025;
   private static final double k_wristMotorD = 0.0;
 
-  private static final double k_armSafetyOffset = 18.0; // inches
+  private static final double k_armSafetyOffset = 15.0; // inches
+  private static final double k_armSafetyOffsetThreshold = 35; // inches
 
   // TODO: Update for actual robot
   // distance per pulse = (angle per revolution) / (pulses per revolution)
@@ -115,13 +116,13 @@ public class Arm extends Subsystem {
     // SHOULDER //
     //////////////
     m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.shoulderAngle);
-    // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+    m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
 
     ///////////
     // ELBOW //
     ///////////
     m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
-    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
     ///////////
     // WRIST //
@@ -135,7 +136,7 @@ public class Arm extends Subsystem {
       m_periodicIO.wristMotorPower = 0.0;
     }
     m_periodicIO.wristMotorPower = wristPIDOutput;
-    // m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
+    m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
   }
 
   public void manual(double shoulder, double elbow, double wrist) {
@@ -160,7 +161,7 @@ public class Arm extends Subsystem {
       path.add(new ArmPose(startX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
-    if (startY >= 35.0) {
+    if (startY >= k_armSafetyOffsetThreshold) {
       path.add(new ArmPose(startX > 0 ? startX - k_armSafetyOffset : startX + k_armSafetyOffset, startY, null));
     }
 
@@ -176,6 +177,10 @@ public class Arm extends Subsystem {
         path.add(Constants.Arm.Preset.HOME.getPose());
         path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
       }
+    } else if (exitingFront) {
+      path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
+    } else if (exitingBack) {
+      path.add(new ArmPose(-Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
     if (endingLow) {
