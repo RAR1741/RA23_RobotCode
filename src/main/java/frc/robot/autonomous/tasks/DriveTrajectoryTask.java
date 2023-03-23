@@ -46,7 +46,7 @@ public class DriveTrajectoryTask extends Task {
     }
 
     Pose2d startingPosition = m_autoPath.getInitialPose();
-    m_swerve.setGyroAngleDegrees(startingPosition.getRotation().getDegrees());
+    m_swerve.setGyroAngleAdjustment(startingPosition.getRotation().getDegrees());
     m_swerve.resetOdometry(startingPosition);
 
     m_runningTimer.reset();

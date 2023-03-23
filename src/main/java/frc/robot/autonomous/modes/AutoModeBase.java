@@ -24,7 +24,7 @@ public abstract class AutoModeBase {
     // Reset the gyro and set the starting position
     Pose2d startingPosition = getStartingPosition();
     SwerveDrive swerve = SwerveDrive.getInstance();
-    swerve.setGyroAngleDegrees(startingPosition.getRotation().getDegrees());
+    swerve.setGyroAngleAdjustment(startingPosition.getRotation().getDegrees());
     swerve.resetOdometry(startingPosition);
   }
 

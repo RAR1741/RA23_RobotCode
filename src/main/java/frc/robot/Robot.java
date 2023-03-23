@@ -140,6 +140,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_swerve.brakeOff();
     m_swerve.drive(0, 0, 0, false);
+    m_swerve.setGyroAngleAdjustment(0);
   }
 
   @Override

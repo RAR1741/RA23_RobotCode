@@ -103,7 +103,7 @@ public class SwerveDrive extends Subsystem {
     return m_gyro;
   }
 
-  public void setGyroAngleDegrees(double angle) {
+  public void setGyroAngleAdjustment(double angle) {
     m_gyro.setAngleAdjustment(angle);
   }
 
