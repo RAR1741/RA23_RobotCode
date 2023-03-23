@@ -142,13 +142,13 @@ public class ArmSim {
   }
 
   public void updateActualPosition(double shoulderAngle, double elbowAngle, double wristAngle, double x, double y) {
-    m_targetShoulder.setAngle(k_shoulderSimOffset - shoulderAngle);
-    m_targetElbow.setAngle(k_elbowSimOffset + elbowAngle);
-    Translation2d setpoint = m_origin.plus(new Translation2d(x, y));
+    // m_targetShoulder.setAngle(k_shoulderSimOffset - shoulderAngle);
+    // m_targetElbow.setAngle(k_elbowSimOffset + elbowAngle);
+    // Translation2d setpoint = m_origin.plus(new Translation2d(x, y));
 
-    m_crosshair.setPosition(setpoint.getX(), setpoint.getY());
+    // m_crosshair.setPosition(setpoint.getX(), setpoint.getY());
 
-    SmartDashboard.putNumberArray("Actual Arm Angles", new double[] { shoulderAngle, elbowAngle });
+    // SmartDashboard.putNumberArray("Actual Arm Angles", new double[] { shoulderAngle, elbowAngle });
   }
 
   public double[] getArmAngles() {
