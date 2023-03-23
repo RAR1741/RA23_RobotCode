@@ -85,4 +85,10 @@ public class LEDs extends Subsystem {
   @Override
   public void outputTelemetry() {
   }
+
+  @Override
+  public void writeToLog() {
+    // TODO Auto-generated method stub
+    
+  }
 }
