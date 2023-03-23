@@ -107,7 +107,7 @@ public class ArmSim {
         4,
         new Color8Bit(Color.kBlack)));
 
-  private final MechanismLigament2d m_actualElbow = m_targetShoulder.append(
+  private final MechanismLigament2d m_actualElbow = m_actualShoulder.append(
     new MechanismLigament2d(
         "Actual Elbow",
         Constants.Arm.Elbow.k_length,

@@ -224,8 +224,8 @@ public class Arm extends Subsystem {
     }
     m_armSim.updateTargetPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
     m_armSim.updateActualPosition(
-      Units.rotationsToDegrees(m_shoulderEncoder.get()),
-      Units.rotationsToDegrees(m_elbowEncoder.get()),
+      Units.rotationsToDegrees(m_shoulderEncoder.get())-45,
+      Units.rotationsToDegrees(m_elbowEncoder.get())-90,
       m_periodicIO.wristAngle, x, y
     );
 
