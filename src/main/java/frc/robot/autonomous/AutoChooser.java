@@ -21,18 +21,13 @@ public class AutoChooser {
     SmartDashboard.putData("Auto picker", m_chooser);
   }
 
-  private void updateSelectedAutoName() {
+  private void updateSelectedAuto() {
     m_selectedAutoName = m_chooser.getSelected();
+    m_selectedAuto = AutoRunner.AutoMode.valueOf(m_selectedAutoName);
   }
 
   public AutoMode getSelectedAuto() {
-    updateSelectedAutoName();
-    m_selectedAuto = AutoRunner.AutoMode.valueOf(m_selectedAutoName);
-
+    updateSelectedAuto();
     return m_selectedAuto;
-  }
-
-  public String selectedAutoName() {
-    return m_selectedAutoName;
   }
 }

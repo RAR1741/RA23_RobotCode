@@ -20,6 +20,7 @@ public class LEDs extends Subsystem {
       .setColor(Color.kRed);
   private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_leftArmColor = LEDModes
       .setColor(Color.kRed);
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_driveColor = LEDModes.rainbow;
 
   public static LEDs getInstance() {
     if (m_instance == null) {
@@ -39,7 +40,7 @@ public class LEDs extends Subsystem {
   public void periodic() {
     setArmRightColorMode(m_rightArmColor);
     setArmLeftColorMode(m_leftArmColor);
-    setDriveColorMode(LEDModes.rainbow);
+    setDriveColorMode(m_driveColor);
 
     m_led.setData(m_buffer);
   }
@@ -50,6 +51,18 @@ public class LEDs extends Subsystem {
     }
     m_rightArmColor = LEDModes.setColor(color);
     m_leftArmColor = LEDModes.setColor(color);
+  }
+
+  public void setArmLeftColor(Color color) {
+    m_leftArmColor = LEDModes.setColor(color);
+  }
+
+  public void setArmRightColor(Color color) {
+    m_rightArmColor = LEDModes.setColor(color);
+  }
+
+  public void setDriveColor(Color color) {
+    m_driveColor = LEDModes.setColor(color);
   }
 
   public void breathe() {

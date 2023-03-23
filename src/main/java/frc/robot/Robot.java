@@ -46,7 +46,8 @@ public class Robot extends TimedRobot {
   public final Arm m_arm = Arm.getInstance();
   public final LEDs m_leds = LEDs.getInstance();
   private Task m_currentTask;
-  private AutoRunner m_autoRunner;
+  private AutoRunner m_autoRunner = AutoRunner.getInstance();
+  private boolean autoHasRan = false;
 
   // The mere instantiation of this object will cause the compressor to start
   // running. We don't need to do anything else with it, so we'll suppress the
@@ -97,6 +98,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    autoHasRan = true;
+
     m_swerve.brakeOff();
 
     if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
@@ -105,7 +108,6 @@ public class Robot extends TimedRobot {
       m_leds.setColor(Color.kRed);
     }
 
-    m_autoRunner = AutoRunner.getInstance();
     m_autoRunner.setAutoMode(m_autoChooser.getSelectedAuto());
     m_currentTask = m_autoRunner.getNextTask();
 
@@ -277,7 +279,40 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
 
-    m_leds.breathe();
+    if (autoHasRan) {
+      m_leds.breathe();
+    } else {
+      // Drive LEDs
+      if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+        m_leds.setDriveColor(Color.kRed);
+      } else {
+        m_leds.setDriveColor(Color.kBlue);
+      }
+
+      // Arm LEDs
+      switch (m_autoChooser.getSelectedAuto()) {
+        case DO_NOTHING:
+          m_leds.setColor(Color.kBlack);
+          break;
+        case DEFAULT:
+          m_leds.setColor(Color.kPurple);
+          break;
+        case RIGHT_CUBE_BALANCE:
+          m_leds.setArmLeftColor(Color.kBlack);
+          m_leds.setArmRightColor(Color.kGreen);
+          break;
+        case CENTER_CUBE_BALANCE:
+          m_leds.setColor(Color.kGreen);
+          break;
+        case LEFT_CUBE_BALANCE:
+          m_leds.setArmLeftColor(Color.kGreen);
+          m_leds.setArmRightColor(Color.kBlack);
+          break;
+        default:
+          m_leds.setColor(Color.kBlack);
+          break;
+      }
+    }
 
     updateSim();
   }
