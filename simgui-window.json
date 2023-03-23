@@ -5,11 +5,11 @@
   "MainWindow": {
     "GLOBAL": {
       "fps": "120",
-      "height": "1051",
+      "height": "749",
       "maximized": "0",
       "style": "0",
       "userScale": "2",
-      "width": "1723",
+      "width": "1370",
       "xpos": "0",
       "ypos": "71"
     }
@@ -50,8 +50,8 @@
     },
     "###/SmartDashboard/Arm Sim": {
       "Collapsed": "0",
-      "Pos": "908,30",
-      "Size": "808,466"
+      "Pos": "39,138",
+      "Size": "719,466"
     },
     "###/SmartDashboard/Auto choices": {
       "Collapsed": "0",
@@ -59,19 +59,19 @@
       "Size": "415,72"
     },
     "###/SmartDashboard/Auto picker": {
-      "Collapsed": "0",
-      "Pos": "111,114",
+      "Collapsed": "1",
+      "Pos": "117,95",
       "Size": "254,54"
     },
     "###/SmartDashboard/Field": {
-      "Collapsed": "0",
-      "Pos": "820,509",
+      "Collapsed": "1",
+      "Pos": "85,19",
       "Size": "892,473"
     },
     "###Addressable LEDs": {
-      "Collapsed": "0",
-      "Pos": "195,335",
-      "Size": "146,389"
+      "Collapsed": "1",
+      "Pos": "571,51",
+      "Size": "136,48"
     },
     "###Analog Inputs": {
       "Collapsed": "0",
@@ -84,19 +84,19 @@
       "Size": "168,77"
     },
     "###FMS": {
-      "Collapsed": "0",
-      "Pos": "8,183",
+      "Collapsed": "1",
+      "Pos": "100,77",
       "Size": "283,146"
     },
     "###Joysticks": {
-      "Collapsed": "0",
-      "Pos": "106,31",
-      "Size": "796,73"
+      "Collapsed": "1",
+      "Pos": "102,39",
+      "Size": "796,240"
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "341,172",
-      "Size": "468,872"
+      "Pos": "791,-4",
+      "Size": "426,558"
     },
     "###NetworkTables Info": {
       "Collapsed": "0",
@@ -124,8 +124,8 @@
       "Size": "119,146"
     },
     "###System Joysticks": {
-      "Collapsed": "0",
-      "Pos": "2,359",
+      "Collapsed": "1",
+      "Pos": "381,97",
       "Size": "192,218"
     },
     "###Timing": {

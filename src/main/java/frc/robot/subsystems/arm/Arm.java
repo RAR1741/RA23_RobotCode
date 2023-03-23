@@ -222,7 +222,7 @@ public class Arm extends Subsystem {
       // m_armSim.updateArmPosition(armAngles[0], armAngles[1],
       // m_periodicIO.wristAngle, x, y);
     }
-    m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
+    m_armSim.updateTargetPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
 
     return armAngles;
   }

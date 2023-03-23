@@ -83,21 +83,37 @@ public class ArmSim {
           4,
           new Color8Bit(Color.kBlue)));
 
-  private final MechanismLigament2d m_arm1 = m_shoulderPivot.append(
+  private final MechanismLigament2d m_targetShoulder = m_shoulderPivot.append(
       new MechanismLigament2d(
-          "Arm1",
+          "Target Shoulder",
           Constants.Arm.Shoulder.k_length,
           k_shoulderSimOffset,
           4,
           new Color8Bit(Color.kYellow)));
 
-  private final MechanismLigament2d m_arm2 = m_arm1.append(
+  private final MechanismLigament2d m_targetElbow = m_targetShoulder.append(
       new MechanismLigament2d(
-          "Arm2",
+          "Target Elbow",
           Constants.Arm.Elbow.k_length,
           k_elbowSimOffset,
           4,
           new Color8Bit(Color.kGreen)));
+  
+  private final MechanismLigament2d m_actualShoulder = m_shoulderPivot.append(
+    new MechanismLigament2d(
+        "Actual Shoulder",
+        Constants.Arm.Shoulder.k_length,
+        k_shoulderSimOffset,
+        4,
+        new Color8Bit(Color.kBlack)));
+
+  private final MechanismLigament2d m_actualElbow = m_targetShoulder.append(
+    new MechanismLigament2d(
+        "Actual Elbow",
+        Constants.Arm.Elbow.k_length,
+        k_elbowSimOffset,
+        4,
+        new Color8Bit(Color.kRed)));
 
   private final MechanismRoot2d m_crosshair = m_mech2d.getRoot("Crosshair", m_origin.getX(), m_origin.getY());
 
@@ -114,20 +130,30 @@ public class ArmSim {
     SmartDashboard.putData("Arm Sim", m_mech2d);
   }
 
-  public void updateArmPosition(double shoulderAngle, double elbowAngle, double wristAngle, double x, double y) {
-    m_arm1.setAngle(k_shoulderSimOffset - shoulderAngle);
-    m_arm2.setAngle(k_elbowSimOffset + elbowAngle);
+  public void updateTargetPosition(double shoulderAngle, double elbowAngle, double wristAngle, double x, double y) {
+    m_targetShoulder.setAngle(k_shoulderSimOffset - shoulderAngle);
+    m_targetElbow.setAngle(k_elbowSimOffset + elbowAngle);
     Translation2d setpoint = m_origin.plus(new Translation2d(x, y));
 
     m_crosshair.setPosition(setpoint.getX(), setpoint.getY());
 
-    SmartDashboard.putNumberArray("Arm Sim Angles", new double[] { shoulderAngle, elbowAngle });
+    SmartDashboard.putNumberArray("Target Arm Angles", new double[] { shoulderAngle, elbowAngle });
     // TODO: add wrist display... somehow...
   }
 
+  public void updateActualPosition(double shoulderAngle, double elbowAngle, double wristAngle, double x, double y) {
+    m_targetShoulder.setAngle(k_shoulderSimOffset - shoulderAngle);
+    m_targetElbow.setAngle(k_elbowSimOffset + elbowAngle);
+    Translation2d setpoint = m_origin.plus(new Translation2d(x, y));
+
+    m_crosshair.setPosition(setpoint.getX(), setpoint.getY());
+
+    SmartDashboard.putNumberArray("Actual Arm Angles", new double[] { shoulderAngle, elbowAngle });
+  }
+
   public double[] getArmAngles() {
-    double simShoulderAngle = m_arm1.getAngle();
-    double simElbowAngle = m_arm2.getAngle();
+    double simShoulderAngle = m_targetShoulder.getAngle();
+    double simElbowAngle = m_targetElbow.getAngle();
     double shoulderAngle = k_shoulderSimOffset - simShoulderAngle;
     double elbowAngle = simElbowAngle - k_elbowSimOffset - shoulderAngle;
     return new double[] { shoulderAngle, elbowAngle };

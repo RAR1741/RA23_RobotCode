@@ -188,7 +188,7 @@ public class Robot extends TimedRobot {
     }
 
     if (!m_arm.runTrajectory()) {
-      m_arm.adjustPosition(m_operatorController.getArmHorizontalChange(0.5),
+      m_arm.adjustPosition(-m_operatorController.getArmHorizontalChange(0.5),
           m_operatorController.getArmVerticalChange(0.5));
     }
 

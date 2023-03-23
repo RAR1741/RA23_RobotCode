@@ -96,16 +96,20 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "Retained Values": {
       "open": false
     },
-    "persistent": {
-      "Preferences": {
-        "open": true
-      }
-    },
     "transitory": {
       "SmartDashboard": {
+        "Arm": {
+          "Shoulder": {
+            "open": true
+          },
+          "open": true
+        },
         "Drivetrain": {
           "open": true
         },
