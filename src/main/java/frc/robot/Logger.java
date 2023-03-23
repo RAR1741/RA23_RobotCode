@@ -1,21 +1,13 @@
 package frc.robot;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTablesJNI;
-import edu.wpi.first.util.datalog.BooleanLogEntry;
 import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.Timer;
 
 public class Logger {
 
@@ -89,6 +81,15 @@ public class Logger {
       m_entries.put(key, m_log.start(key, "boolean"));
     } else {
       m_log.appendBoolean(m_entries.get(key).intValue(), data, 0);
+    }
+  }
+
+  public static void addEntry(String key, double[] data) {
+    if (!m_entries.containsKey(key)) {
+      m_log.start(key, "double[]");
+      m_entries.put(key, m_log.start(key, "double[]"));
+    } else {
+      m_log.appendDoubleArray(m_entries.get(key).intValue(), data, 0);
     }
   }
 }

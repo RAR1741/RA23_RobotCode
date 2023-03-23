@@ -212,6 +212,17 @@ public class SwerveDrive extends Subsystem {
     return m_odometry.getPoseMeters();
   }
 
+  public double[] getModuleLog() {
+    double[] moduleLog = {
+      m_frontLeft.getTurnPosition(),m_frontLeft.getDriveVelocity(),
+      m_frontRight.getTurnPosition(), m_frontRight.getDriveVelocity(),
+      m_backLeft.getTurnPosition(), m_backLeft.getDriveVelocity(),
+      m_backRight.getTurnPosition(), m_backRight.getDriveVelocity()
+    };
+
+    return moduleLog;
+  }
+
   @Override
   public void periodic() {
     m_frontLeft.periodic();
@@ -255,7 +266,7 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void writeToLog() {
-
+    Logger.addEntry("Drivetrain/States", getModuleLog());
     Logger.addEntry("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
   }
 }
