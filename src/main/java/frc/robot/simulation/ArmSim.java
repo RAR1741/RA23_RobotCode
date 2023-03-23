@@ -149,6 +149,11 @@ public class ArmSim {
     // m_crosshair.setPosition(setpoint.getX(), setpoint.getY());
 
     // SmartDashboard.putNumberArray("Actual Arm Angles", new double[] { shoulderAngle, elbowAngle });
+
+    m_actualShoulder.setAngle(k_shoulderSimOffset - shoulderAngle);
+    m_actualElbow.setAngle(k_elbowSimOffset + elbowAngle);
+
+    SmartDashboard.putNumberArray("Actual Arm Angles", new double[] { shoulderAngle, elbowAngle });
   }
 
   public double[] getArmAngles() {
