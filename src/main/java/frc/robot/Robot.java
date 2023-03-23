@@ -232,11 +232,6 @@ public class Robot extends TimedRobot {
       // m_arm.setInverted();
     }
 
-    if (m_driverController.getWantsGripToggle() ||
-        m_operatorController.getWantsGripToggle()) {
-      m_arm.setGripper(!m_arm.getGripperEngaged());
-    }
-
     /*
      * Ground pickup A
      * Station Y

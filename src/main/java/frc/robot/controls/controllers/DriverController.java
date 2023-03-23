@@ -41,16 +41,16 @@ public class DriverController extends FilteredController {
   }
 
   public boolean getWantsBrake() {
-    return this.getFilteredAxis(3) > k_triggerActivationThreshold;
+    return this.getRawButton(2);
+  }
+
+  public boolean getWantsGripToggle() {
+    return this.getRawButtonPressed(1);
   }
 
   public void outputTelemetry() {
     SmartDashboard.putNumber(m_smartDashboardKey + "Forward", getForwardAxis());
     SmartDashboard.putNumber(m_smartDashboardKey + "Strafe", getStrafeAxis());
     SmartDashboard.putNumber(m_smartDashboardKey + "Turn", getTurnAxis());
-  }
-
-  public boolean getWantsGripToggle() {
-    return this.getRawButtonPressed(1);
   }
 }
