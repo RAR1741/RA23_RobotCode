@@ -30,8 +30,26 @@ public final class LEDModes {
       return (buffer) -> {
         int firstPixelHue = (int) ((System.currentTimeMillis() / 1000.0 * rainbowSpeed) % 180);
         for (int i = start; i < (start + length); i++) {
-          final var hue = (firstPixelHue + (i * 180 / length)) % 180;
+          final int hue = (firstPixelHue + (i * 180 / length)) % 180;
           buffer.setHSV(i, hue, 255, 128);
+        }
+        return buffer;
+      };
+    };
+  };
+
+  private static int clamp(int val, int min, int max) {
+    return Math.max(min, Math.min(max, val));
+  }
+
+  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> redBreathe = (
+      start) -> {
+    return (length) -> {
+      return (buffer) -> {
+        int firstPixelHue = (int) ((System.currentTimeMillis() / 1000.0 * rainbowSpeed) % 180);
+        for (int i = start; i < (start + length); i++) {
+          final int hue = clamp((firstPixelHue + (i * 180 / length)) % 180, 51, 255);
+          buffer.setRGB(i, hue, 0, 0);
         }
         return buffer;
       };

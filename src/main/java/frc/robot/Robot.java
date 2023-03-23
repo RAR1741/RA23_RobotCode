@@ -281,6 +281,8 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
 
+    m_leds.breathe();
+
     updateSim();
   }
 
