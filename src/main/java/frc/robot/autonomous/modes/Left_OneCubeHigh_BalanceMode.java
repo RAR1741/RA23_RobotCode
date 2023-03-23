@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
 import frc.robot.autonomous.tasks.AutoBalanceTask;
-import frc.robot.autonomous.tasks.DriveForwardTask;
+import frc.robot.autonomous.tasks.BrakeTask;
 import frc.robot.autonomous.tasks.DriveTrajectoryTask;
 import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
@@ -15,7 +15,7 @@ import frc.robot.autonomous.tasks.WaitTask;
 public class Left_OneCubeHigh_BalanceMode extends AutoModeBase {
   @Override
   public Pose2d getRedStartingPosition() {
-    return new Pose2d(14.7, 1.05, Rotation2d.fromDegrees(180.0));
+    return new Pose2d(14.593739725550515, 1.0498446986741699, Rotation2d.fromDegrees(180.0));
   }
 
   public void queueTasks() {
@@ -26,23 +26,21 @@ public class Left_OneCubeHigh_BalanceMode extends AutoModeBase {
 
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
 
-    queueTask(new WaitTask(1.0));
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
     queueTask(new GripperTask(false));
 
-    queueTask(new WaitTask(1.0));
-
-    // queueTask(new ParallelTask( // TODO: DriveForward not working in ParallelTask
-    // new DriveTrajectoryTask("RedLeftFarBalance", 1.0, 0.5),
-    // new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose())));
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveTrajectoryTask("LeftFarBalance", 2.0, 0.5)));
+        new DriveTrajectoryTask("LeftFarBalance", 3.0, 1.5)));
 
-    queueTask(new DriveForwardTask(1.5, -1.0)); // TODO: Always goes forward in sim
+    // queueTask(new DriveForwardTask(1.5, -1.0));
 
     queueTask(new AutoBalanceTask());
+
+    queueTask(new BrakeTask(true));
   }
 
 }

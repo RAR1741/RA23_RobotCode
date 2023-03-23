@@ -25,7 +25,7 @@ public class Arm extends Subsystem {
 
   private final String m_smartDashboardKey = "Arm/";
 
-  private static final double k_shoulderMotorP = 0.2;
+  private static final double k_shoulderMotorP = 0.4;
   private static final double k_shoulderMotorI = 0.0;
   private static final double k_shoulderMotorD = 0.0;
 
@@ -36,6 +36,8 @@ public class Arm extends Subsystem {
   private static final double k_wristMotorP = 0.05;
   private static final double k_wristMotorI = 0.025;
   private static final double k_wristMotorD = 0.0;
+
+  private static final double k_armSafetyOffset = 18.0; // inches
 
   // TODO: Update for actual robot
   // distance per pulse = (angle per revolution) / (pulses per revolution)
@@ -113,13 +115,13 @@ public class Arm extends Subsystem {
     // SHOULDER //
     //////////////
     m_periodicIO.shoulderMotorPower = m_shoulderPID.calculate(getShoulderPositionDegrees(), m_periodicIO.shoulderAngle);
-    m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
+    // m_shoulderMotor.setVoltage(m_periodicIO.shoulderMotorPower);
 
     ///////////
     // ELBOW //
     ///////////
     m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
-    m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
+    // m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
     ///////////
     // WRIST //
@@ -133,7 +135,7 @@ public class Arm extends Subsystem {
       m_periodicIO.wristMotorPower = 0.0;
     }
     m_periodicIO.wristMotorPower = wristPIDOutput;
-    m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
+    // m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
   }
 
   public void manual(double shoulder, double elbow, double wrist) {
@@ -159,7 +161,7 @@ public class Arm extends Subsystem {
     }
 
     if (startY >= 35.0) {
-      path.add(new ArmPose(startX > 0 ? startX - 9 : startX + 9, startY, null));
+      path.add(new ArmPose(startX > 0 ? startX - k_armSafetyOffset : startX + k_armSafetyOffset, startY, null));
     }
 
     if (enteringFront) {

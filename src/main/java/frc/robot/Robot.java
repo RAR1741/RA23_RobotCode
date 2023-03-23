@@ -27,7 +27,6 @@ import frc.robot.simulation.Field;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
-import frc.robot.subsystems.leds.LEDModes;
 import frc.robot.subsystems.leds.LEDs;
 
 public class Robot extends TimedRobot {
@@ -100,6 +99,12 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_swerve.brakeOff();
 
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+      m_leds.setColor(Color.kBlue);
+    } else {
+      m_leds.setColor(Color.kRed);
+    }
+
     m_autoRunner = AutoRunner.getInstance();
     m_autoRunner.setAutoMode(m_autoChooser.getSelectedAuto());
     m_currentTask = m_autoRunner.getNextTask();
@@ -114,12 +119,6 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     // If there is a current task, run it
     if (m_currentTask != null) {
-      if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-        m_leds.setColor(Color.kBlue);
-      } else {
-        m_leds.setColor(Color.kRed);
-      }
-
       // Run the current task
       m_currentTask.update();
       m_currentTask.updateSim();
@@ -229,7 +228,7 @@ public class Robot extends TimedRobot {
     }
 
     if (m_operatorController.getWantsRobotFrontInverted()) {
-      m_arm.setInverted();
+      // m_arm.setInverted();
     }
 
     if (m_driverController.getWantsGripToggle() ||

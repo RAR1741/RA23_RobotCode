@@ -44,6 +44,7 @@ public final class Constants {
   public static class Auto {
     public static final double k_maxSpeed = 1; // 1 meters per second
     public static final double k_maxAcceleration = 0.5;
+    public static final double k_defaultGripperWait = 0.5;
   }
 
   public class Drivetrain {

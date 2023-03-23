@@ -9,7 +9,7 @@ public class AutoBalanceTask extends Task {
   private SwerveDrive m_swerve;
   private AHRS m_gyro;
 
-  private double m_tolerance = 2.0;
+  private double m_tolerance = 5.0;
   private double m_maxSpeed = 0.4;
 
   @Override

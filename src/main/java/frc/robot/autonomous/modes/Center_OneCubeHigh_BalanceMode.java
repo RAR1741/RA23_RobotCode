@@ -24,9 +24,12 @@ public class Center_OneCubeHigh_BalanceMode extends AutoModeBase {
         new WaitTask(0.5)));
 
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
-    queueTask(new WaitTask(0.5));
+
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
+
     queueTask(new GripperTask(false));
-    queueTask(new WaitTask(0.5));
+
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),

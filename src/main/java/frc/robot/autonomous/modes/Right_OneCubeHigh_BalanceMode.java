@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
 import frc.robot.autonomous.tasks.AutoBalanceTask;
-import frc.robot.autonomous.tasks.DriveForwardTask;
+import frc.robot.autonomous.tasks.BrakeTask;
 import frc.robot.autonomous.tasks.DriveTrajectoryTask;
 import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
@@ -19,23 +19,27 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
   }
 
   public void queueTasks() {
-    queueTask(new PointForwardTask());
+    queueTask(new ParallelTask(
+        new PointForwardTask(),
+        new WaitTask(0.5)));
 
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
 
-    queueTask(new WaitTask(1.0));
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
     queueTask(new GripperTask(false));
 
-    queueTask(new WaitTask(1.0));
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveTrajectoryTask("RightFarBalance", 1.0, 0.5)));
+        new DriveTrajectoryTask("RightFarBalance", 3.0, 1.5)));
 
-    queueTask(new DriveForwardTask(2.0, -1.0));
+    // queueTask(new DriveForwardTask(2.0, -1.0));
 
     queueTask(new AutoBalanceTask());
+
+    queueTask(new BrakeTask(true));
   }
 
 }
