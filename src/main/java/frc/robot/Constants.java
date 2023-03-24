@@ -99,7 +99,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
 
-      public static final double k_offset = 0.424599;
+      public static final double k_offset = 0.425142;
     }
 
     public static class Elbow {
@@ -110,7 +110,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.586487;
+      public static final double k_offset = 0.512655;
     }
 
     public static class Wrist {
@@ -121,7 +121,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.823785;
+      public static final double k_offset = 0.823823;
     }
 
     public static enum Preset {

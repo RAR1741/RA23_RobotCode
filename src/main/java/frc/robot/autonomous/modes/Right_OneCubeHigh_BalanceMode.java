@@ -2,6 +2,7 @@ package frc.robot.autonomous.modes;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
 import frc.robot.autonomous.tasks.AutoBalanceTask;
@@ -31,9 +32,15 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
 
     queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
-    queueTask(new ParallelTask(
-        new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveTrajectoryTask("RightFarBalance", 3.0, 1.5)));
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+      queueTask(new ParallelTask(
+          new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
+          new DriveTrajectoryTask("RightFarBalance", 3.0, 1.5)));
+    } else {
+      queueTask(new ParallelTask(
+          new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
+          new DriveTrajectoryTask("RightFarBalance-B", 3.0, 1.5)));
+    }
 
     // queueTask(new DriveForwardTask(2.0, -1.0));
 

@@ -28,6 +28,10 @@ public class AutoBalanceTask extends Task {
       speed = -m_maxSpeed;
     }
 
+    if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+      speed *= -1;
+    }
+
     double currentHeading = m_swerve.getPose().getRotation().getRadians();
     double xSpeed = speed * Math.cos(currentHeading);
     double ySpeed = speed * Math.sin(currentHeading);
