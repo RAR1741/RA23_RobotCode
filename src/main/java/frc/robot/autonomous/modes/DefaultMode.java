@@ -24,7 +24,7 @@ public class DefaultMode extends AutoModeBase {
 
     queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
 
-    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait + 0.5));
 
     queueTask(new GripperTask(false));
 

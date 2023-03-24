@@ -165,6 +165,7 @@ public class Robot extends TimedRobot {
 
     xSpeed *= slowScaler * boostScaler;
     ySpeed *= slowScaler * boostScaler;
+    rot *= slowScaler * boostScaler;
 
     m_swerve.drive(xSpeed, ySpeed, rot, true);
 
