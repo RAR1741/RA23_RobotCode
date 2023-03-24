@@ -161,7 +161,7 @@ public class Arm extends Subsystem {
       path.add(new ArmPose(startX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
-    if (startY >= k_armSafetyOffsetThreshold) {
+    if (startY >= k_armSafetyOffsetThreshold && Math.abs(startX) > 50) {
       path.add(new ArmPose(startX > 0 ? startX - k_armSafetyOffset : startX + k_armSafetyOffset, startY, null));
     }
 
