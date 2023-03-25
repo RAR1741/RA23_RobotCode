@@ -65,6 +65,11 @@ public class LEDs extends Subsystem {
     m_driveColor = LEDModes.setColor(color);
   }
 
+  public void chase() {
+    m_rightArmColor = LEDModes.redChase;
+    m_leftArmColor = LEDModes.redChase;
+  }
+
   public void breathe() {
     m_rightArmColor = LEDModes.redBreathe;
     m_leftArmColor = LEDModes.redBreathe;

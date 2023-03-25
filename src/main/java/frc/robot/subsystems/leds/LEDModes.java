@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.Helpers;
 
 // Custom yellow buffer.setRGB(i, 255, (int) (255 * 0.50), 0);
 
@@ -38,18 +39,28 @@ public final class LEDModes {
     };
   };
 
-  private static int clamp(int val, int min, int max) {
-    return Math.max(min, Math.min(max, val));
-  }
-
-  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> redBreathe = (
+  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> redChase = (
       start) -> {
     return (length) -> {
       return (buffer) -> {
         int firstPixelHue = (int) ((System.currentTimeMillis() / 1000.0 * rainbowSpeed) % 180);
         for (int i = start; i < (start + length); i++) {
-          final int hue = clamp((firstPixelHue + (i * 180 / length)) % 180, 51, 255);
+          final int hue = Helpers.clamp((firstPixelHue + (i * 180 / length)) % 180, 51, 255);
           buffer.setRGB(i, hue, 0, 0);
+        }
+        return buffer;
+      };
+    };
+  };
+
+  private static double breatheSpeed = 205;
+  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> redBreathe = (
+      start) -> {
+    return (length) -> {
+      return (buffer) -> {
+        int r = (int) (Math.pow(Math.sin(System.currentTimeMillis()/1000.0),2) * breatheSpeed)+50;
+        for (int i = start; i < (start + length); i++) {
+          buffer.setRGB(i, r, 0, 0);
         }
         return buffer;
       };

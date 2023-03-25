@@ -99,7 +99,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-45.0);
       public static final double k_maxAngle = Units.degreesToRadians(225.0);
 
-      public static final double k_offset = 0.425142;
+      public static final double k_offset = 0.428437;
     }
 
     public static class Elbow {
@@ -110,7 +110,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.512655;
+      public static final double k_offset = 0.505320;
     }
 
     public static class Wrist {
@@ -121,7 +121,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.823823;
+      public static final double k_offset = 0.830583;
     }
 
     public static enum Preset {
@@ -131,7 +131,7 @@ public final class Constants {
       SCORE_MID_CONE(new ArmPose(-45.58, 47.87, null)),
       SCORE_HIGH_CONE(new ArmPose(-55.9, 59.3, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
-      DOUBLE_SUBSTATION(new ArmPose(31.7, 51.86, null)),
+      DOUBLE_SUBSTATION(new ArmPose(29.350695, 49.393162, null)),
       FLOOR_PICKUP(new ArmPose(25.14, 0.02, null)),
       FLOOR_SCORE(new ArmPose(-25.14, 3.39, null));
 
