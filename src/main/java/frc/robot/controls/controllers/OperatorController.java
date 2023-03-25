@@ -61,4 +61,8 @@ public class OperatorController extends FilteredController {
   public boolean getWantsMidCubeScore() {
     return this.getHatDownPressed();
   }
+
+  public boolean getWantsElbowChange() {
+    return this.getRawButton(7);
+  }
 }

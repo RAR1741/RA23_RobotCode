@@ -235,6 +235,8 @@ public class Robot extends TimedRobot {
       // m_arm.setInverted();
     }
 
+    m_arm.setAntiBoost(m_operatorController.getWantsElbowChange());
+
     /*
      * Ground pickup A
      * Station Y

@@ -10,7 +10,7 @@ public class AutoBalanceTask extends Task {
   private AHRS m_gyro;
 
   private double m_tolerance = 5.0;
-  private double m_maxSpeed = 0.4;
+  private double m_maxSpeed = 0.325;
 
   @Override
   public void start() {
@@ -26,10 +26,6 @@ public class AutoBalanceTask extends Task {
       speed = m_maxSpeed;
     } else if (pitch > 0) {
       speed = -m_maxSpeed;
-    }
-
-    if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-      speed *= -1;
     }
 
     double currentHeading = m_swerve.getPose().getRotation().getRadians();

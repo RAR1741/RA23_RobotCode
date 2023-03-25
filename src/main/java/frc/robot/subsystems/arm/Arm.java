@@ -84,6 +84,7 @@ public class Arm extends Subsystem {
   private PeriodicIO m_periodicIO = new PeriodicIO();
   private double m_xPosition = 0;
   private double m_yPosition = Constants.Arm.k_homeHeight;
+  private boolean m_elbowAntiBoost;
 
   public static Arm getInstance() {
     if (m_arm == null) {
@@ -224,6 +225,10 @@ public class Arm extends Subsystem {
       m_periodicIO.shoulderAngle = armAngles[0];
       m_periodicIO.elbowAngle = -armAngles[1]; // TODO: elbow angle needs to be reversed
 
+      if (m_elbowAntiBoost) {
+        m_periodicIO.elbowAngle -= 10.0;
+      }
+
       m_xPosition = x;
       m_yPosition = y;
       // m_armSim.updateArmPosition(armAngles[0], armAngles[1],
@@ -232,6 +237,10 @@ public class Arm extends Subsystem {
     m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
 
     return armAngles;
+  }
+
+  public void setAntiBoost(boolean value) {
+    m_elbowAntiBoost = value;
   }
 
   /**
