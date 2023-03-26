@@ -65,4 +65,16 @@ public class OperatorController extends FilteredController {
   public boolean getWantsElbowChange() {
     return this.getRawButton(7);
   }
+
+  public boolean getWantsWristRotate() {
+    return this.getRawButtonPressed(6);
+  }
+
+  public boolean getWantsWristCorrectionClockwise() {
+    return this.getFilteredAxis(3) > 0.5;
+  }
+
+  public boolean getWantsWristCorrectionCounterClockwise() {
+    return this.getFilteredAxis(2) > 0.5;
+  }
 }

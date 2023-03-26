@@ -291,6 +291,10 @@ public class Arm extends Subsystem {
     m_periodicIO.wristAngle -= 90;
   }
 
+  public void rotateWrist(double change) {
+    m_periodicIO.wristAngle += change;
+  }
+
   public void setWristAngle(double wristAngle) {
     m_periodicIO.wristAngle = wristAngle;
   }

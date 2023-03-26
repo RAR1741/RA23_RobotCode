@@ -195,8 +195,14 @@ public class Robot extends TimedRobot {
           m_operatorController.getArmVerticalChange(0.5));
     }
 
-    if (m_operatorController.getRawButtonPressed(6)) {
+    if (m_operatorController.getWantsWristRotate()) {
       m_arm.rotateWrist();
+    }
+
+    if (m_operatorController.getWantsWristCorrectionClockwise()) {
+      m_arm.rotateWrist(1);
+    } else if (m_operatorController.getWantsWristCorrectionCounterClockwise()) {
+      m_arm.rotateWrist(-1);
     }
 
     if (m_operatorController.getWantsDefaultState()) {
