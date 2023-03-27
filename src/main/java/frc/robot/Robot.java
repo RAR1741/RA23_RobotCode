@@ -238,7 +238,7 @@ public class Robot extends TimedRobot {
     }
 
     if (m_operatorController.getWantsRobotFrontInverted()) {
-      // m_arm.setInverted();
+      m_arm.setInverted();
     }
 
     m_arm.setAntiBoost(m_operatorController.getWantsElbowChange());

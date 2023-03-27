@@ -23,11 +23,11 @@ public class OperatorController extends FilteredController {
   }
 
   public boolean getWantsColorCycle() {
-    return this.getRawButtonPressed(8);
+    return this.getRawButtonPressed(7);
   }
 
   public boolean getWantsRobotFrontInverted() {
-    return this.getRawButtonPressed(7);
+    return this.getRawButtonPressed(8);
   }
 
   public boolean getWantsDefaultState() {
