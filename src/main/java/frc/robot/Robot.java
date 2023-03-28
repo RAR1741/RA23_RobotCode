@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
     double boostScaler = 1 + (m_driverController.getBoostScaler() * (Constants.Drivetrain.k_boostScaler - 1));
 
     xSpeed *= slowScaler * boostScaler;
-    ySpeed *= slowScaler * boostScaler;
+    ySpeed *= slowScaler;// * boostScaler;
     rot *= slowScaler * boostScaler;
 
     m_swerve.drive(xSpeed, ySpeed, rot, true);
@@ -237,9 +237,15 @@ public class Robot extends TimedRobot {
       m_arm.generateTrajectoryToPose(Constants.Arm.Preset.SCORE_MID_CUBE.getPose());
     }
 
+    // Manual flip-flop
     if (m_operatorController.getWantsRobotFrontInverted()) {
-      m_arm.setInverted();
+      m_arm.setInverted(!m_arm.getInverted());
     }
+
+    // Auto front inversion
+    double currentHeading = Helpers.modDegrees(m_swerve.getRotation2d().getDegrees());
+    double buffer = 60.0;
+    m_arm.setInverted(currentHeading >= (180 - buffer) && (180 + buffer) >= currentHeading);
 
     m_arm.setAntiBoost(m_operatorController.getWantsElbowChange());
 
