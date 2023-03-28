@@ -227,7 +227,6 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void writePeriodicOutputs() {
-    // TODO Auto-generated method stub
   }
 
   @Override
