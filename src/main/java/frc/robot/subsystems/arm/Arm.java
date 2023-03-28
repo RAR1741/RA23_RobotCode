@@ -40,12 +40,6 @@ public class Arm extends Subsystem {
   private static final double k_armSafetyOffset = 15.0; // inches
   private static final double k_armSafetyOffsetThreshold = 35; // inches
 
-  // TODO: Update for actual robot
-  // distance per pulse = (angle per revolution) / (pulses per revolution)
-  private static final double k_shoulderDegreesPerPulse = 2.0 * Math.PI / 4096.0;
-  private static final double k_elbowDegreesPerPulse = 2.0 * Math.PI / 4096.0;
-  private static final double k_wristDegreesPerPulse = 2.0 * Math.PI / 4096.0;
-
   private final PIDController m_shoulderPID = new PIDController(k_shoulderMotorP, k_shoulderMotorI, k_shoulderMotorD);
   private final PIDController m_elbowPID = new PIDController(k_elbowMotorP, k_elbowMotorI, k_elbowMotorD);
   private final PIDController m_wristPID = new PIDController(k_wristMotorP, k_wristMotorI, k_wristMotorD);
@@ -61,8 +55,6 @@ public class Arm extends Subsystem {
   private final DutyCycleEncoder m_elbowEncoder = new DutyCycleEncoder(Constants.Arm.Elbow.k_encoderId);
   private final DutyCycleEncoder m_wristEncoder = new DutyCycleEncoder(Constants.Arm.Wrist.k_encoderId);
 
-  // private final TrajectoryConfig m_trajConfig = new
-  // TrajectoryConfig(k_maxTrajectorySpeed, k_maxTrajectoryAcceleration);
   private ArmTrajectory m_currentTrajectory;
   private boolean m_runningTrajectory = false;
   private Timer m_trajTimer = new Timer();
@@ -235,8 +227,6 @@ public class Arm extends Subsystem {
 
       m_xPosition = x;
       m_yPosition = y;
-      // m_armSim.updateArmPosition(armAngles[0], armAngles[1],
-      // m_periodicIO.wristAngle, x, y);
     }
     m_armSim.updateArmPosition(armAngles[0], armAngles[1], m_periodicIO.wristAngle, x, y);
 
@@ -275,8 +265,6 @@ public class Arm extends Subsystem {
     if (m_runningTrajectory) {
       ArmPose trajPose = m_currentTrajectory.sample(m_trajTimer.get());
       double[] trajAngles = setArmPosition(trajPose.getX(), trajPose.getY());
-      // m_periodicIO.shoulderAngle = trajAngles[0];
-      // m_periodicIO.elbowAngle = trajAngles[1];
 
       if (m_currentTrajectory.getTotalTime() < m_trajTimer.get()) {
         stopTrajectory();
