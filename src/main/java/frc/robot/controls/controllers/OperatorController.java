@@ -23,11 +23,13 @@ public class OperatorController extends FilteredController {
   }
 
   public boolean getWantsColorCycle() {
-    return this.getRawButtonPressed(7);
+    return false;
+    // return this.getRawButtonPressed(7);
   }
 
   public boolean getWantsRobotFrontInverted() {
-    return this.getRawButtonPressed(8);
+    // return false;
+    return this.getRawButtonPressed(7);
   }
 
   public boolean getWantsDefaultState() {
@@ -63,7 +65,7 @@ public class OperatorController extends FilteredController {
   }
 
   public boolean getWantsElbowChange() {
-    return this.getRawButton(7);
+    return this.getRawButton(8);
   }
 
   public boolean getWantsWristRotate() {

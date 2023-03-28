@@ -41,7 +41,7 @@ public class DriverController extends FilteredController {
   }
 
   public boolean getWantsBrake() {
-    return this.getRawButton(2);
+    return this.getRawButton(5);
   }
 
   public boolean getWantsGripToggle() {
