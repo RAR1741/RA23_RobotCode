@@ -231,6 +231,28 @@ public class SwerveDrive extends Subsystem {
   public void writePeriodicOutputs() {
   }
 
+  private double[] getCurrentStates() {
+    double[] currentStates = {
+        m_frontLeft.getTurnPosition() * 360, m_frontLeft.getDriveVelocity(),
+        m_frontRight.getTurnPosition() * 360, m_frontRight.getDriveVelocity(),
+        m_backLeft.getTurnPosition() * 360, m_backLeft.getDriveVelocity(),
+        m_backRight.getTurnPosition() * 360, m_backRight.getDriveVelocity()
+    };
+
+    return currentStates;
+  }
+
+  private double[] getDesiredStates() {
+    double[] desiredStates = {
+        m_frontLeft.getDesiredState().angle.getDegrees(), m_frontLeft.getDesiredState().speedMetersPerSecond,
+        m_frontRight.getDesiredState().angle.getDegrees(), m_frontRight.getDesiredState().speedMetersPerSecond,
+        m_backLeft.getDesiredState().angle.getDegrees(), m_backLeft.getDesiredState().speedMetersPerSecond,
+        m_backRight.getDesiredState().angle.getDegrees(), m_backRight.getDesiredState().speedMetersPerSecond
+    };
+
+    return desiredStates;
+  }
+
   @Override
   public void outputTelemetry() {
     m_odometry.update(
@@ -246,6 +268,9 @@ public class SwerveDrive extends Subsystem {
     m_frontRight.outputTelemetry();
     m_backLeft.outputTelemetry();
     m_backRight.outputTelemetry();
+
+    SmartDashboard.putNumberArray("Drivetrain/CurrentStates", getCurrentStates());
+    SmartDashboard.putNumberArray("Drivetrain/DesiredStates", getDesiredStates());
 
     SmartDashboard.putNumber("Drivetrain/Gyro/AngleDegrees", m_gyro.getRotation2d().getDegrees());
     SmartDashboard.putNumber("Drivetrain/Gyro/Pitch", m_gyro.getPitch());

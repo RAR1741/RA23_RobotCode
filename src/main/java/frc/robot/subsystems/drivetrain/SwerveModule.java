@@ -48,6 +48,7 @@ public class SwerveModule {
 
   private final WPI_TalonFX m_driveMotor;
   private final CANSparkMax m_turningMotor;
+  private SwerveModuleState m_desiredState;
 
   private final double m_turningOffset;
   private final String m_moduleName;
@@ -165,6 +166,10 @@ public class SwerveModule {
     m_driveEncoder.setIntegratedSensorPosition(0.0, 50);
   }
 
+  public SwerveModuleState getDesiredState() {
+    return m_desiredState;
+  }
+
   /**
    * Sets the desired state for the module.
    *
@@ -173,6 +178,7 @@ public class SwerveModule {
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRotations(getTurnPosition()));
+    m_desiredState = desiredState;
 
     // Calculate the drive output from the drive PID controller.
     double driveOutput = m_drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
