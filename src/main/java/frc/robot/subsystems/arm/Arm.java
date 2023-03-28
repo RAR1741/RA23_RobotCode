@@ -226,7 +226,11 @@ public class Arm extends Subsystem {
       m_periodicIO.elbowAngle = -armAngles[1]; // TODO: elbow angle needs to be reversed
 
       if (m_elbowAntiBoost) {
-        m_periodicIO.elbowAngle -= 10.0;
+        if (m_inverted) {
+          m_periodicIO.elbowAngle += 10.0;
+        } else {
+          m_periodicIO.elbowAngle -= 10.0;
+        }
       }
 
       m_xPosition = x;
@@ -406,11 +410,15 @@ public class Arm extends Subsystem {
     setArmPosition(m_xPosition + xChange, m_yPosition + yChange);
   }
 
-  public void setInverted() {
+  public void setInverted(boolean inverted) {
     if (m_xPosition == Constants.Arm.Preset.HOME.getPose().getX()
         && m_yPosition == Constants.Arm.Preset.HOME.getPose().getY()) {
-      m_inverted = !m_inverted;
+      m_inverted = inverted;
     }
+  }
+
+  public boolean getInverted() {
+    return m_inverted;
   }
 
   @Override
