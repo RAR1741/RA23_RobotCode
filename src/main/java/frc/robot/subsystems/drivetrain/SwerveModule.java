@@ -38,9 +38,9 @@ public class SwerveModule {
   private static final double k_driveP = 0.86853;
   private static final double k_driveI = 0.0;
   private static final double k_driveD = 0.0;
-  private static final double k_driveFeedForwardS = 0.25016;
-  private static final double k_driveFeedForwardV = 2.302;
-  private static final double k_driveFeedForwardA = 0.28186;
+  private static final double k_driveFeedForwardS = 0.25043;
+  private static final double k_driveFeedForwardV = 3.0125;
+  private static final double k_driveFeedForwardA = 0.38005;
 
   // TODO: Make sure these are right
   private static final double k_moduleMaxAngularVelocity = Math.PI;
