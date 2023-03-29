@@ -25,9 +25,9 @@ public class SwerveModule {
   private static final double k_driveEncPerRot = 2048.0;
   private static final double k_driveEncPerSec = 2048.0 / 10.0; // Encoder reports 2048 Encoder counter per 100 ms
 
-  private static final double k_turningP = 8.0;
+  private static final double k_turningP = 20.0;
   private static final double k_turningI = 0.1;
-  private static final double k_turningD = 0.0;
+  private static final double k_turningD = 0.01;
   private static final double k_turnFeedForwardS = 1;
   private static final double k_turnFeedForwardV = 0.5;
   private static final double k_turnFeedForwardA = 0.0;
