@@ -60,6 +60,7 @@ public class Arm extends Subsystem {
   private Timer m_trajTimer = new Timer();
 
   private boolean m_inverted = false;
+  private double m_invertedLengthBoostFactor = 2.0; // inches
 
   private static class PeriodicIO {
     // Automated control
@@ -246,8 +247,13 @@ public class Arm extends Subsystem {
     double[] currentAngles = m_armSim.getArmAngles();
     double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
 
-    ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1],
-        m_inverted ? -targetPose.getX() : targetPose.getX(), targetPose.getY());
+    double targetX = m_inverted ? -targetPose.getX() - m_invertedLengthBoostFactor : targetPose.getX();
+    if (targetPose.getX() == Constants.Arm.Preset.HOME.getPose().getX()) {
+      targetX = Constants.Arm.Preset.HOME.getPose().getX();
+    }
+    double targetY = targetPose.getY();
+    ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetX, targetY);
+
     m_currentTrajectory = new ArmTrajectory(waypoints);
 
     m_arm.startTrajectory();
@@ -399,8 +405,7 @@ public class Arm extends Subsystem {
   }
 
   public void setInverted(boolean inverted) {
-    if (m_xPosition == Constants.Arm.Preset.HOME.getPose().getX()
-        && m_yPosition == Constants.Arm.Preset.HOME.getPose().getY()) {
+    if (m_xPosition == Constants.Arm.Preset.HOME.getPose().getX()) {
       m_inverted = inverted;
     }
   }

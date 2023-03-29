@@ -238,14 +238,15 @@ public class Robot extends TimedRobot {
     }
 
     // Manual flip-flop
-    if (m_operatorController.getWantsRobotFrontInverted()) {
-      m_arm.setInverted(!m_arm.getInverted());
-    }
+    // if (m_operatorController.getWantsRobotFrontInverted()) {
+    // m_arm.setInverted(!m_arm.getInverted());
+    // }
 
     // Auto front inversion
     double currentHeading = Helpers.modDegrees(m_swerve.getRotation2d().getDegrees());
     double buffer = 60.0;
-    m_arm.setInverted(currentHeading >= (180 - buffer) && (180 + buffer) >= currentHeading);
+    System.out.println(m_arm.getInverted() + ":" + currentHeading);
+    m_arm.setInverted(currentHeading >= (180.0 - buffer) && (180.0 + buffer) >= currentHeading);
 
     m_arm.setAntiBoost(m_operatorController.getWantsElbowChange());
 
