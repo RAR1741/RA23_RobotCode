@@ -44,9 +44,9 @@ public class Arm extends Subsystem {
   private static final double k_elbowMotorI = 0.007500;
   private static final double k_elbowMotorD = 0.010000;
 
-  private static final double k_wristMotorP = 0.05;
-  private static final double k_wristMotorI = 0.025;
-  private static final double k_wristMotorD = 0.0;
+  private static final double k_wristMotorP = 0.045;
+  private static final double k_wristMotorI = 0.003;
+  private static final double k_wristMotorD = 0.001;
 
   private static final double k_armSafetyLengthOffset = 35.0; // inches
   private static final double k_armSafetyHeightOffset = 20.0; // inches
