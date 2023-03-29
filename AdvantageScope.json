@@ -30,10 +30,36 @@
           },
           "fields": [
             {
-              "key": "/SmartDashboard/Arm/Elbow/PositionError",
+              "key": "/SmartDashboard/Drivetrain/Gyro/AngleDegrees",
               "color": "#e5b31b",
               "show": true
-            },
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Gyro"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
             {
               "key": "/SmartDashboard/Arm/Shoulder/PositionError",
               "color": "#2b66a2",
@@ -50,7 +76,13 @@
             "type": null,
             "factor": 1
           },
-          "fields": []
+          "fields": [
+            {
+              "key": "/SmartDashboard/Arm/Elbow/PositionError",
+              "color": "#e5b31b",
+              "show": true
+            }
+          ]
         }
       },
       "title": "Arm"

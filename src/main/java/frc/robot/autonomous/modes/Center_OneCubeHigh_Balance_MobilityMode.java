@@ -33,7 +33,7 @@ public class Center_OneCubeHigh_Balance_MobilityMode extends AutoModeBase {
 
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveTrajectoryTask("testMobility", 1.5, 0.5)));
+        new DriveTrajectoryTask("testMobility", 1.5, 1.0)));
 
     queueTask(new AutoBalanceTask());
 
