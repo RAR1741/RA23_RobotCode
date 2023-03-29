@@ -137,7 +137,7 @@ public final class Constants {
       SCORE_HIGH_CONE(new ArmPose(-56.9, 59.3, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
       DOUBLE_SUBSTATION(new ArmPose(30.350695, 49.393162, null)),
-      FLOOR_PICKUP(new ArmPose(25.14, 0.02, null)),
+      FLOOR_PICKUP(new ArmPose(24.129862, 0.405395, null)),
       FLOOR_SCORE(new ArmPose(-25.14, 3.39, null));
 
       private ArmPose m_armPose;

@@ -5,13 +5,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants;
 import frc.robot.autonomous.tasks.ArmTrajectoryTask;
-import frc.robot.autonomous.tasks.AutoBalanceTask;
-import frc.robot.autonomous.tasks.BrakeTask;
 import frc.robot.autonomous.tasks.DriveTrajectoryTask;
 import frc.robot.autonomous.tasks.GripperTask;
 import frc.robot.autonomous.tasks.ParallelTask;
 import frc.robot.autonomous.tasks.PointForwardTask;
 import frc.robot.autonomous.tasks.WaitTask;
+import frc.robot.subsystems.arm.ArmPose;
 
 public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
   @Override
@@ -22,11 +21,13 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
   public void queueTasks() {
     queueTask(new ParallelTask(
         new PointForwardTask(),
-        new WaitTask(0.5)));
+        new WaitTask(0.5),
+        new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose())));
 
-    queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
+    // queueTask(new
+    // ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CUBE.getPose()));
 
-    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait + 0.2));
 
     queueTask(new GripperTask(false));
 
@@ -35,18 +36,33 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
     if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
       queueTask(new ParallelTask(
           new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-          new DriveTrajectoryTask("RightFarBalance", 3.0, 1.5)));
+          new DriveTrajectoryTask("RightFar2Piece1", 2.0, 1.0)));
     } else {
       queueTask(new ParallelTask(
           new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-          new DriveTrajectoryTask("RightFarBalance-B", 3.0, 1.5)));
+          new DriveTrajectoryTask("RightFar2Piece1-B", 2.0, 1.0)));
     }
+
+    queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.FLOOR_PICKUP.getPose()));
+
+    queueTask(new WaitTask(1.5));
+    queueTask(new GripperTask(true));
+    queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
+
+    Pose2d tempPose = Constants.Arm.Preset.FLOOR_PICKUP.getPose();
+    queueTask(new ArmTrajectoryTask(new ArmPose(tempPose.getX() + 12, tempPose.getY() + 10, tempPose.getRotation())));
+
+    queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
+
+    // queueTask(new ParallelTask(
+    // new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
+    // new DriveTrajectoryTask("RightFar2Piece2", 2.0, 1.0)));
 
     // queueTask(new DriveForwardTask(2.0, -1.0));
 
-    queueTask(new AutoBalanceTask());
+    // queueTask(new AutoBalanceTask());
 
-    queueTask(new BrakeTask(true));
+    // queueTask(new BrakeTask(true));
   }
 
 }

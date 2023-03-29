@@ -33,8 +33,8 @@ public class DriveTrajectoryTask extends Task {
     m_swerve = SwerveDrive.getInstance();
 
     m_driveController = new PPHolonomicDriveController(
-        new PIDController(1.0, 0, 0),
-        new PIDController(1.0, 0, 0),
+        new PIDController(0.75, 0, 0),
+        new PIDController(0.3, 0.005, 0),
         new PIDController(1.0, 0, 0));
   }
 
