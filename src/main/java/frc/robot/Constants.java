@@ -89,9 +89,10 @@ public final class Constants {
     public static final double k_shoulderPivotHeight = 19; // Inches
     public static final double k_homeHeight = Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length
         - Constants.Arm.Elbow.k_length;
-    public static final double k_maxTrajectorySpeed = 45;
-    // TODO: Before CG
-    // public static final double k_maxTrajectorySpeed = 90;
+    public static final double k_maxTrajectorySpeed = 90;
+
+    // Tippy values
+    // public static final double k_maxTrajectorySpeed = 45;
 
     public static class Shoulder {
       public static final int k_motorId = 13;
@@ -129,7 +130,7 @@ public final class Constants {
     public static enum Preset {
       HOME(new ArmPose(0.0, Constants.Arm.k_homeHeight, null)),
       SCORE_MID_CUBE(new ArmPose(-47.6, 39.66, null)),
-      SCORE_HIGH_CUBE(new ArmPose(-60.9, 49.3, null)),
+      SCORE_HIGH_CUBE(new ArmPose(-59.1, 52.9, null)),
       SCORE_MID_CONE(new ArmPose(-45.58, 47.87, null)),
       SCORE_HIGH_CONE(new ArmPose(-55.9, 59.3, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),

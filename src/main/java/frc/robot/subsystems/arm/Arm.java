@@ -7,12 +7,12 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -26,29 +26,30 @@ public class Arm extends Subsystem {
 
   private final String m_smartDashboardKey = "Arm/";
 
-  private static final double k_shoulderMotorP = 0.4;
-  private static final double k_shoulderMotorI = 0.0;
-  private static final double k_shoulderMotorD = 0.0;
+  // Tippy values
+  // private static final double k_shoulderMotorP = 0.4;
+  // private static final double k_shoulderMotorI = 0.0;
+  // private static final double k_shoulderMotorD = 0.0;
 
-  private static final double k_elbowMotorP = 0.3;
-  private static final double k_elbowMotorI = 0.0;
-  private static final double k_elbowMotorD = 0.0;
+  // private static final double k_elbowMotorP = 0.3;
+  // private static final double k_elbowMotorI = 0.0;
+  // private static final double k_elbowMotorD = 0.0;
 
-  // TODO: Before CG
   // New test PID values
-  // private static final double k_shoulderMotorP = 0.2;
-  // private static final double k_shoulderMotorI = 0.005;
-  // private static final double k_shoulderMotorD = 0.03;
+  private static final double k_shoulderMotorP = 0.250000;
+  private static final double k_shoulderMotorI = 0.010000;
+  private static final double k_shoulderMotorD = 0.007500;
 
-  // private static final double k_elbowMotorP = 0.15;
-  // private static final double k_elbowMotorI = 0.005;
-  // private static final double k_elbowMotorD = 0.01;
+  private static final double k_elbowMotorP = 0.150000;
+  private static final double k_elbowMotorI = 0.007500;
+  private static final double k_elbowMotorD = 0.010000;
 
   private static final double k_wristMotorP = 0.05;
   private static final double k_wristMotorI = 0.025;
   private static final double k_wristMotorD = 0.0;
 
-  private static final double k_armSafetyOffset = 15.0; // inches
+  private static final double k_armSafetyLengthOffset = 35.0; // inches
+  private static final double k_armSafetyHeightOffset = 20.0; // inches
   private static final double k_armSafetyOffsetThreshold = 35; // inches
 
   private final PIDController m_shoulderPID = new PIDController(k_shoulderMotorP, k_shoulderMotorI, k_shoulderMotorD);
@@ -71,7 +72,7 @@ public class Arm extends Subsystem {
   private Timer m_trajTimer = new Timer();
 
   private boolean m_inverted = false;
-  private double m_invertedLengthBoostFactor = 0.0; // inches
+  private double m_invertedLengthBoostFactor = 2.0; // inches
 
   private static class PeriodicIO {
     // Automated control
@@ -113,10 +114,39 @@ public class Arm extends Subsystem {
     m_wristMotor.setIdleMode(IdleMode.kBrake);
 
     System.out.println("Hey, I just met you,\nAnd this is CRAZY\nBut here's my number,\nSo call me, maybe");
+
+    if (!Preferences.containsKey("k_shoulderMotorP")) {
+      Preferences.setDouble("k_shoulderMotorP", k_shoulderMotorP);
+    }
+    if (!Preferences.containsKey("k_shoulderMotorI")) {
+      Preferences.setDouble("k_shoulderMotorI", k_shoulderMotorI);
+    }
+    if (!Preferences.containsKey("k_shoulderMotorD")) {
+      Preferences.setDouble("k_shoulderMotorD", k_shoulderMotorD);
+    }
+    if (!Preferences.containsKey("k_elbowMotorP")) {
+      Preferences.setDouble("k_elbowMotorP", k_elbowMotorP);
+    }
+    if (!Preferences.containsKey("k_elbowMotorI")) {
+      Preferences.setDouble("k_elbowMotorI", k_elbowMotorI);
+    }
+    if (!Preferences.containsKey("k_elbowMotorD")) {
+      Preferences.setDouble("k_elbowMotorD", k_elbowMotorD);
+    }
   }
 
   @Override
   public void periodic() {
+    // TODO: Comment this out when not tuning PID
+    m_shoulderPID.setPID(
+        Preferences.getDouble("k_shoulderMotorP", k_shoulderMotorP),
+        Preferences.getDouble("k_shoulderMotorI", k_shoulderMotorI),
+        Preferences.getDouble("k_shoulderMotorD", k_shoulderMotorD));
+    m_elbowPID.setPID(
+        Preferences.getDouble("k_elbowMotorP", k_elbowMotorP),
+        Preferences.getDouble("k_elbowMotorI", k_elbowMotorI),
+        Preferences.getDouble("k_elbowMotorD", k_elbowMotorD));
+
     //////////////
     // SHOULDER //
     //////////////
@@ -166,8 +196,10 @@ public class Arm extends Subsystem {
       path.add(new ArmPose(startX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
+    // So we don't get caught in the high cube goal
     if (startY >= k_armSafetyOffsetThreshold && Math.abs(startX) > 50) {
-      path.add(new ArmPose(startX > 0 ? startX - k_armSafetyOffset : startX + k_armSafetyOffset, startY + 12.0, null));
+      path.add(new ArmPose(startX > 0 ? startX - k_armSafetyLengthOffset : startX + k_armSafetyLengthOffset,
+          startY + k_armSafetyHeightOffset, null));
     }
 
     double xPosThresh = Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getX() + 5;
@@ -175,8 +207,10 @@ public class Arm extends Subsystem {
     double yPosThresh = Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY() + 5;
     double yNegThresh = Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY() - 5;
 
-    if(Math.abs(startX) < xPosThresh && Math.abs(startX) > xNegThresh && startY < yPosThresh && startY > yNegThresh) {
-      path.add(new ArmPose(startX > 0 ? Constants.Robot.k_length / 2 + 0.1 : -Constants.Robot.k_length / 2 - 0.1, startY, null));
+    // Safety point for feeder station -> home
+    if (Math.abs(startX) < xPosThresh && Math.abs(startX) > xNegThresh && startY < yPosThresh && startY > yNegThresh) {
+      path.add(new ArmPose(startX > 0 ? Constants.Robot.k_length / 2 + 0.1 : -Constants.Robot.k_length / 2 - 0.1,
+          startY, null));
     }
 
     if (enteringFront) {
@@ -201,8 +235,10 @@ public class Arm extends Subsystem {
       path.add(new ArmPose(endX, Constants.Arm.k_homeHeight + 3.0639, null));
     }
 
-    if(Math.abs(endX) < xPosThresh && Math.abs(endX) > xNegThresh && endY < yPosThresh && endY > yNegThresh) {
-      path.add(new ArmPose(endX > 0 ? Constants.Robot.k_length / 2 + 0.1 : -Constants.Robot.k_length / 2 - 0.1, endY, null));
+    // Safety point for feeder station <- home
+    if (Math.abs(endX) < xPosThresh && Math.abs(endX) > xNegThresh && endY < yPosThresh && endY > yNegThresh) {
+      path.add(
+          new ArmPose(endX > 0 ? Constants.Robot.k_length / 2 + 0.1 : -Constants.Robot.k_length / 2 - 0.1, endY, null));
     }
 
     path.add(new ArmPose(endX, endY, null));
