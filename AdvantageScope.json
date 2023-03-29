@@ -2,31 +2,6 @@
   "version": "2.2.3",
   "layout": [
     {
-      "type": 1,
-      "legends": {
-        "left": {
-          "lockedRange": null,
-          "unitConversion": {
-            "type": null,
-            "factor": 1
-          },
-          "fields": []
-        },
-        "discrete": {
-          "fields": []
-        },
-        "right": {
-          "lockedRange": null,
-          "unitConversion": {
-            "type": null,
-            "factor": 1
-          },
-          "fields": []
-        }
-      },
-      "title": "Line Graph"
-    },
-    {
       "type": 9,
       "fields": [
         "/SmartDashboard/Drivetrain/CurrentStates",
@@ -43,6 +18,42 @@
         "forwardDirection": "up"
       },
       "title": "Swerve"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/SmartDashboard/Arm/Elbow/PositionError",
+              "color": "#e5b31b",
+              "show": true
+            },
+            {
+              "key": "/SmartDashboard/Arm/Shoulder/PositionError",
+              "color": "#2b66a2",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Arm"
     }
   ]
 }

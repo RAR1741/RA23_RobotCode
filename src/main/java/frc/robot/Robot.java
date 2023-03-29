@@ -245,7 +245,6 @@ public class Robot extends TimedRobot {
     // Auto front inversion
     double currentHeading = Helpers.modDegrees(m_swerve.getRotation2d().getDegrees());
     double buffer = 60.0;
-    System.out.println(m_arm.getInverted() + ":" + currentHeading);
     m_arm.setInverted(currentHeading >= (180.0 - buffer) && (180.0 + buffer) >= currentHeading);
 
     m_arm.setAntiBoost(m_operatorController.getWantsElbowChange());
