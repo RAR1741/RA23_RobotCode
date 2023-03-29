@@ -244,7 +244,7 @@ public class Robot extends TimedRobot {
 
     // Auto front inversion
     double currentHeading = Helpers.modDegrees(m_swerve.getRotation2d().getDegrees());
-    double buffer = 60.0;
+    double buffer = 90.0;
     m_arm.setInverted(currentHeading >= (180.0 - buffer) && (180.0 + buffer) >= currentHeading);
 
     m_arm.setAntiBoost(m_operatorController.getWantsElbowChange());
@@ -260,18 +260,25 @@ public class Robot extends TimedRobot {
      * Medium cube hat down
      */
 
+    Color frontColor = !m_arm.getInverted() ? Color.kGreen : Color.kRed;
+    Color backColor = !m_arm.getInverted() ? Color.kRed : Color.kGreen;
+
     switch (m_colorState) {
       case 0:
-        m_leds.setColor(Color.kBlack);
+        m_leds.setArmRightColor(frontColor, Color.kBlack, backColor);
+        m_leds.setArmLeftColor(frontColor, Color.kBlack, backColor);
         break;
       case 1:
-        m_leds.setColor(Color.kPurple);
+        m_leds.setArmRightColor(frontColor, Color.kPurple, backColor);
+        m_leds.setArmLeftColor(frontColor, Color.kPurple, backColor);
         break;
       case 2:
-        m_leds.setColor(Color.kYellow);
+        m_leds.setArmRightColor(frontColor, Color.kYellow, backColor);
+        m_leds.setArmLeftColor(frontColor, Color.kYellow, backColor);
         break;
       default:
-        m_leds.setColor(Color.kBlack);
+        m_leds.setArmRightColor(frontColor, Color.kBlack, backColor);
+        m_leds.setArmLeftColor(frontColor, Color.kBlack, backColor);
         break;
     }
 
@@ -288,6 +295,7 @@ public class Robot extends TimedRobot {
     m_allSubsystems.forEach(subsystem -> subsystem.stop());
     m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
     m_leds.setColor(Color.kRed);
+    m_leds.setDriveColor(Color.kRed);
   }
 
   @Override

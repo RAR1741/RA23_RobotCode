@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Helpers;
 
-// Custom yellow buffer.setRGB(i, 255, (int) (255 * 0.50), 0);
-
 public final class LEDModes {
   public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> setColor(
       Color color) {
@@ -16,7 +14,12 @@ public final class LEDModes {
       return (length) -> {
         return (buffer) -> {
           for (int i = start; i < (start + length); i++) {
-            buffer.setLED(i, color);
+            if (color == Color.kYellow) {
+              // Custom yellow
+              buffer.setRGB(i, 255, (int) (255 * 0.50), 0);
+            } else {
+              buffer.setLED(i, color);
+            }
           }
           return buffer;
         };
@@ -58,21 +61,9 @@ public final class LEDModes {
       start) -> {
     return (length) -> {
       return (buffer) -> {
-        int r = (int) (Math.pow(Math.sin(System.currentTimeMillis()/1000.0),2) * breatheSpeed)+50;
+        int r = (int) (Math.pow(Math.sin(System.currentTimeMillis() / 1000.0), 2) * breatheSpeed) + 50;
         for (int i = start; i < (start + length); i++) {
           buffer.setRGB(i, r, 0, 0);
-        }
-        return buffer;
-      };
-    };
-  };
-
-  public static Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> off = (
-      start) -> {
-    return (length) -> {
-      return (buffer) -> {
-        for (int i = start; i < (start + length); i++) {
-          buffer.setLED(i, Color.kBlack);
         }
         return buffer;
       };

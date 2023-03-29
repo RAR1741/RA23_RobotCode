@@ -15,19 +15,21 @@ public final class Constants {
   public static class LEDs {
     public static final int k_PWMId = 0;
     public static final int k_totalLength = ArmRight.k_length + ArmLeft.k_length + Drive.k_length;
+    public static final int k_sideLength = 13;
+    public static final int k_sideLengthOffset = 23 - k_sideLength;
 
     public static class ArmRight {
       public static final int k_start = 0;
       public static final int k_length = 60;
-      public static final int k_frontTop = 23;
-      public static final int k_backTop = k_start + k_length - 23;
+      public static final int k_frontTop = k_sideLength;
+      public static final int k_backTop = k_start + k_length - k_sideLength - k_sideLengthOffset;
     }
 
     public static class ArmLeft {
       public static final int k_start = ArmRight.k_start + ArmRight.k_length;
       public static final int k_length = 60;
-      public static final int k_frontTop = k_start + 23;
-      public static final int k_backTop = k_start + k_length - 23;
+      public static final int k_frontTop = k_start + k_sideLength;
+      public static final int k_backTop = k_start + k_length - k_sideLength - k_sideLengthOffset;
     }
 
     public static class Drive {
