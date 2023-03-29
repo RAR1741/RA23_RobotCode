@@ -90,6 +90,8 @@ public final class Constants {
     public static final double k_homeHeight = Constants.Arm.k_shoulderPivotHeight + Constants.Arm.Shoulder.k_length
         - Constants.Arm.Elbow.k_length;
     public static final double k_maxTrajectorySpeed = 45;
+    // TODO: Before CG
+    // public static final double k_maxTrajectorySpeed = 90;
 
     public static class Shoulder {
       public static final int k_motorId = 13;

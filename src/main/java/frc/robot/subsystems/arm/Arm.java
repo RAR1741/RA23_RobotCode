@@ -33,6 +33,16 @@ public class Arm extends Subsystem {
   private static final double k_elbowMotorI = 0.0;
   private static final double k_elbowMotorD = 0.0;
 
+  // TODO: Before CG
+  // New test PID values
+  // private static final double k_shoulderMotorP = 0.2;
+  // private static final double k_shoulderMotorI = 0.005;
+  // private static final double k_shoulderMotorD = 0.03;
+
+  // private static final double k_elbowMotorP = 0.15;
+  // private static final double k_elbowMotorI = 0.005;
+  // private static final double k_elbowMotorD = 0.01;
+
   private static final double k_wristMotorP = 0.05;
   private static final double k_wristMotorI = 0.025;
   private static final double k_wristMotorD = 0.0;
@@ -60,7 +70,7 @@ public class Arm extends Subsystem {
   private Timer m_trajTimer = new Timer();
 
   private boolean m_inverted = false;
-  private double m_invertedLengthBoostFactor = 2.0; // inches
+  private double m_invertedLengthBoostFactor = 0.0; // inches
 
   private static class PeriodicIO {
     // Automated control
@@ -443,6 +453,7 @@ public class Arm extends Subsystem {
     // Elbow
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Position", getElbowPositionDegrees());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/AbsPosition", m_elbowEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/PositionError", m_elbowPID.getPositionError());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Velocity", m_elbowMotor.get());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Temperature", m_elbowMotor.getMotorTemperature());
     SmartDashboard.putNumber(m_smartDashboardKey + "Elbow/Current", m_elbowMotor.getOutputCurrent());
