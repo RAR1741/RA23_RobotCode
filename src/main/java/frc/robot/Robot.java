@@ -183,7 +183,7 @@ public class Robot extends TimedRobot {
     }
 
     if (m_operatorController.getWantsColorCycle()) {
-      if (m_colorState == 2) {
+      if (m_colorState == 1) {
         m_colorState = 0;
       } else {
         m_colorState++;
@@ -265,17 +265,17 @@ public class Robot extends TimedRobot {
 
     switch (m_colorState) {
       case 0:
-        m_leds.setArmRightColor(frontColor, Color.kBlack, backColor);
-        m_leds.setArmLeftColor(frontColor, Color.kBlack, backColor);
+        m_leds.setArmRightColor(frontColor, Color.kYellow, backColor);
+        m_leds.setArmLeftColor(frontColor, Color.kYellow, backColor);
         break;
       case 1:
         m_leds.setArmRightColor(frontColor, Color.kPurple, backColor);
         m_leds.setArmLeftColor(frontColor, Color.kPurple, backColor);
         break;
-      case 2:
-        m_leds.setArmRightColor(frontColor, Color.kYellow, backColor);
-        m_leds.setArmLeftColor(frontColor, Color.kYellow, backColor);
-        break;
+      // case 2:
+      // m_leds.setArmRightColor(frontColor, Color.kYellow, backColor);
+      // m_leds.setArmLeftColor(frontColor, Color.kYellow, backColor);
+      // break;
       default:
         m_leds.setArmRightColor(frontColor, Color.kBlack, backColor);
         m_leds.setArmLeftColor(frontColor, Color.kBlack, backColor);
