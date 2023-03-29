@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -159,6 +160,15 @@ public class Arm extends Subsystem {
       path.add(new ArmPose(startX > 0 ? startX - k_armSafetyOffset : startX + k_armSafetyOffset, startY + 12.0, null));
     }
 
+    double xPosThresh = Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getX() + 5;
+    double xNegThresh = Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getX() - 5;
+    double yPosThresh = Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY() + 5;
+    double yNegThresh = Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY() - 5;
+
+    if(Math.abs(startX) < xPosThresh && Math.abs(startX) > xNegThresh && startY < yPosThresh && startY > yNegThresh) {
+      path.add(new ArmPose(startX > 0 ? Constants.Robot.k_length / 2 + 0.1 : -Constants.Robot.k_length / 2 - 0.1, startY, null));
+    }
+
     if (enteringFront) {
       path.add(new ArmPose(Constants.Robot.k_length / 2, Constants.Arm.k_homeHeight + 3.0639, null));
       if (exitingBack) {
@@ -179,6 +189,10 @@ public class Arm extends Subsystem {
 
     if (endingLow) {
       path.add(new ArmPose(endX, Constants.Arm.k_homeHeight + 3.0639, null));
+    }
+
+    if(Math.abs(endX) < xPosThresh && Math.abs(endX) > xNegThresh && endY < yPosThresh && endY > yNegThresh) {
+      path.add(new ArmPose(endX > 0 ? Constants.Robot.k_length / 2 + 0.1 : -Constants.Robot.k_length / 2 - 0.1, endY, null));
     }
 
     path.add(new ArmPose(endX, endY, null));
