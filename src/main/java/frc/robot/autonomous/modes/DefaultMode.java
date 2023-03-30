@@ -32,7 +32,7 @@ public class DefaultMode extends AutoModeBase {
 
     queueTask(new ParallelTask(
         new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new DriveTrajectoryTask("ForwardOnly", 1.5, 0.5)));
+        new DriveTrajectoryTask("ForwardOnly", 1.5, 0.5, true)));
 
     queueTask(new BrakeTask(true));
   }

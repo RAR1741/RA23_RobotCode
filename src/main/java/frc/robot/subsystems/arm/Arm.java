@@ -69,7 +69,9 @@ public class Arm extends Subsystem {
 
   private ArmTrajectory m_currentTrajectory;
   private boolean m_runningTrajectory = false;
+  private boolean m_runningThrow = false;
   private Timer m_trajTimer = new Timer();
+  private Timer m_throwTimer = new Timer();
 
   private boolean m_inverted = false;
   private double m_invertedLengthBoostFactor = 2.0; // inches
@@ -156,6 +158,19 @@ public class Arm extends Subsystem {
     ///////////
     // ELBOW //
     ///////////
+    if (m_runningThrow) {
+      if (m_throwTimer.get() > 0.010) {
+        setGripper(false);
+      }
+
+      if (m_throwTimer.get() > 1.0) {
+        m_runningThrow = false;
+        m_periodicIO.elbowAngle = 0.0;
+        m_throwTimer.stop();
+        m_throwTimer.reset();
+      }
+    }
+
     m_periodicIO.elbowMotorPower = m_elbowPID.calculate(getElbowPositionDegrees(), m_periodicIO.elbowAngle);
     m_elbowMotor.setVoltage(m_periodicIO.elbowMotorPower);
 
@@ -324,6 +339,15 @@ public class Arm extends Subsystem {
       m_runningTrajectory = true;
       m_trajTimer.reset();
       m_trajTimer.start();
+    }
+  }
+
+  public void throwCube() {
+    if (!m_runningTrajectory && !m_runningThrow && m_periodicIO.shoulderAngle == 0.0) {
+      m_runningThrow = true;
+      m_throwTimer.reset();
+      m_throwTimer.start();
+      m_periodicIO.elbowAngle = 160.0;
     }
   }
 

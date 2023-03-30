@@ -37,11 +37,11 @@ public class Left_OneCubeHigh_BalanceMode extends AutoModeBase {
     if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
       queueTask(new ParallelTask(
           new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-          new DriveTrajectoryTask("LeftFarBalance", 3.0, 1.5)));
+          new DriveTrajectoryTask("LeftFarBalance", 3.0, 1.5, true)));
     } else {
       queueTask(new ParallelTask(
           new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-          new DriveTrajectoryTask("LeftFarBalance-B", 3.0, 1.5)));
+          new DriveTrajectoryTask("LeftFarBalance-B", 3.0, 1.5, true)));
     }
 
     // queueTask(new DriveForwardTask(1.5, -1.0));

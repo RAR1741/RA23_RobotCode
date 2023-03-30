@@ -18,11 +18,14 @@ public class DriveTrajectoryTask extends Task {
   private SwerveDrive m_swerve;
   private PathPlannerTrajectory m_autoPath;
   private boolean m_isFinished = false;
+  private boolean m_resetGyro = false;
 
   private final Timer m_runningTimer = new Timer();
   private PPHolonomicDriveController m_driveController;
 
-  public DriveTrajectoryTask(String pathName, double maxSpeed, double maxAcceleration) {
+  public DriveTrajectoryTask(String pathName, double maxSpeed, double maxAcceleration, boolean resetGyro) {
+    m_resetGyro = resetGyro;
+
     try {
       m_autoPath = PathPlanner.loadPath(pathName, new PathConstraints(maxSpeed, maxAcceleration));
     } catch (Exception ex) {
@@ -34,8 +37,8 @@ public class DriveTrajectoryTask extends Task {
 
     m_driveController = new PPHolonomicDriveController(
         new PIDController(0.75, 0, 0),
-        new PIDController(0.3, 0.005, 0),
-        new PIDController(1.0, 0, 0));
+        new PIDController(0.3, 0, 0),
+        new PIDController(0.5, 0, 0));
   }
 
   @Override
@@ -44,9 +47,11 @@ public class DriveTrajectoryTask extends Task {
     // m_autoPath = AutoModeBase.transformTrajectoryForAlliance(m_autoPath);
     // }
 
-    Pose2d startingPosition = m_autoPath.getInitialPose();
-    m_swerve.setGyroAngleAdjustment(startingPosition.getRotation().getDegrees());
-    m_swerve.resetOdometry(startingPosition);
+    if (m_resetGyro) {
+      Pose2d startingPosition = m_autoPath.getInitialPose();
+      m_swerve.setGyroAngleAdjustment(startingPosition.getRotation().getDegrees());
+      m_swerve.resetOdometry(startingPosition);
+    }
 
     m_runningTimer.reset();
     m_runningTimer.start();
