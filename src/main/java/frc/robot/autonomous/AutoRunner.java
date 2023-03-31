@@ -24,8 +24,9 @@ public class AutoRunner {
     DO_NOTHING,
     DEFAULT,
     RIGHT_CUBE_BALANCE,
-    CENTER_CUBE_BALANCE,
-    LEFT_CUBE_BALANCE
+    CENTER_CUBE_BALANCE_MOBILITY,
+    LEFT_CUBE_BALANCE,
+    CENTER_CUBE_BALANCE
   }
 
   public Task getNextTask() {
@@ -43,8 +44,11 @@ public class AutoRunner {
       case RIGHT_CUBE_BALANCE:
         m_autoMode = new Right_OneCubeHigh_BalanceMode();
         break;
-      case CENTER_CUBE_BALANCE:
+      case CENTER_CUBE_BALANCE_MOBILITY:
         m_autoMode = new Center_OneCubeHigh_Balance_MobilityMode();
+        break;
+      case CENTER_CUBE_BALANCE:
+        m_autoMode = new Center_OneCubeHigh_BalanceMode();
         break;
       case LEFT_CUBE_BALANCE:
         m_autoMode = new Left_OneCubeHigh_BalanceMode();

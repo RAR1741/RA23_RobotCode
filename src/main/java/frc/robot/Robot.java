@@ -143,6 +143,7 @@ public class Robot extends TimedRobot {
     m_swerve.brakeOff();
     m_swerve.drive(0, 0, 0, false);
     m_swerve.setGyroAngleAdjustment(0);
+    m_arm.setGripper(true);
   }
 
   @Override
@@ -331,8 +332,11 @@ public class Robot extends TimedRobot {
           m_leds.setArmLeftColor(Color.kBlack);
           m_leds.setArmRightColor(Color.kGreen);
           break;
-        case CENTER_CUBE_BALANCE:
+        case CENTER_CUBE_BALANCE_MOBILITY:
           m_leds.setColor(Color.kGreen);
+          break;
+        case CENTER_CUBE_BALANCE:
+          m_leds.setColor(Color.kLightSteelBlue);
           break;
         case LEFT_CUBE_BALANCE:
           m_leds.setArmLeftColor(Color.kGreen);

@@ -75,7 +75,6 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
       // Diff: 4.93, 0.54
       queueTask(new ParallelTask(
           new WristTask(180.0),
-          new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose()),
           new DriveTrajectoryTask("RightFar2Piece2", 2.0, 1.0, false)));
     } else {
       // Start: 6.64, 4.51
@@ -83,7 +82,6 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
       // Diff: -4.93, 0.54
       queueTask(new ParallelTask(
           new WristTask(180.0),
-          new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose()),
           new DriveTrajectoryTask("RightFar2Piece2-B", 2.0, 1.0, false)));
     }
 
@@ -91,11 +89,11 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
     // new DriveForwardTask(-1, -0.4),
     // new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose())));
 
-    queueTask(new ParallelTask(
-        new GripperTask(false),
-        new WaitTask(Constants.Auto.k_defaultGripperWait)));
+    // queueTask(new ParallelTask(
+    //     new GripperTask(false),
+    //     new WaitTask(Constants.Auto.k_defaultGripperWait)));
 
-    queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
+    // queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
 
     // queueTask(new DriveForwardTask(2.0, -1.0));
 

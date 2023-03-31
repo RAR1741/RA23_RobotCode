@@ -9,8 +9,8 @@ public class AutoBalanceTask extends Task {
   private SwerveDrive m_swerve;
   private AHRS m_gyro;
 
-  private double m_tolerance = 5.0;
-  private double m_maxSpeed = 0.325;
+  private double m_tolerance = 10.0;
+  private double m_maxSpeed = 0.3;
 
   @Override
   public void start() {
