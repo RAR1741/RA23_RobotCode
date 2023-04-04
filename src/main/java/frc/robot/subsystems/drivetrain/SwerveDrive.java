@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
@@ -157,8 +156,7 @@ public class SwerveDrive extends Subsystem {
             new SwerveModulePosition(0.0,
                 Rotation2d.fromRotations(m_backRight.getTurnPosition())),
         },
-        new Pose2d(0, 0, Rotation2d.fromDegrees(0))
-    );
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
     setPose(pose);
   }
@@ -263,6 +261,7 @@ public class SwerveDrive extends Subsystem {
   @Override
   public void outputTelemetry() {
     double currentTime = Timer.getFPGATimestamp();
+
     m_poseEstimator.updateWithTime(
         currentTime,
         m_gyro.getRotation2d(),
@@ -272,8 +271,13 @@ public class SwerveDrive extends Subsystem {
             m_backLeft.getPosition(),
             m_backRight.getPosition()
         });
-    
-    m_poseEstimator.addVisionMeasurement(m_limelight.getBotpose2D(), currentTime); // TODO: MAKE SURE THIS WORKS
+
+    // TODO: MAKE SURE THIS WORKS
+    if (m_limelight.seesAprilTag()) {
+      m_poseEstimator.addVisionMeasurement(
+          m_limelight.getBotpose2D(),
+          currentTime);
+    }
 
     m_frontLeft.outputTelemetry();
     m_frontRight.outputTelemetry();

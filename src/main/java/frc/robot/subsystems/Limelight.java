@@ -1,14 +1,13 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.LimelightHelpers;
-
 import java.util.Arrays;
 import java.util.HashMap;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.LimelightHelpers;
 
 public class Limelight extends Subsystem {
   private static Limelight m_limelight;
@@ -25,6 +24,7 @@ public class Limelight extends Subsystem {
 
   /**
    * Get a new instance of the limelight class
+   *
    * @return New instance of the limelight class
    */
   public static Limelight getInstance() {
@@ -43,6 +43,7 @@ public class Limelight extends Subsystem {
 
   /**
    * Get the current bot position
+   *
    * @return Current bot pose
    */
   public Pose2d getBotpose2D() {
@@ -51,6 +52,7 @@ public class Limelight extends Subsystem {
 
   /**
    * Get whether there is a visible AprilTag
+   *
    * @return If there is a visible AprilTag
    */
   public boolean seesAprilTag() {
