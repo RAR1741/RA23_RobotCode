@@ -3,6 +3,7 @@ package frc.robot.subsystems.drivetrain;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,8 +13,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Subsystem;
 
 public class SwerveDrive extends Subsystem {
@@ -46,11 +49,12 @@ public class SwerveDrive extends Subsystem {
       Constants.Drivetrain.Turn.k_BROffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  private final Limelight m_limelight = Limelight.getInstance();
 
   private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-  private SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  private SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
       m_kinematics,
       m_gyro.getRotation2d(),
       new SwerveModulePosition[] {
@@ -58,7 +62,9 @@ public class SwerveDrive extends Subsystem {
           m_frontRight.getPosition(),
           m_backLeft.getPosition(),
           m_backRight.getPosition()
-      });
+      },
+      new Pose2d(0, 0, Rotation2d.fromDegrees(0)) // TODO: CLARIFY THIS WORKS
+  );
 
   public static SwerveDrive getInstance() {
     if (m_swerve == null) {
@@ -119,7 +125,7 @@ public class SwerveDrive extends Subsystem {
   }
 
   public void setPose(Pose2d pose) {
-    m_odometry.resetPosition(
+    m_poseEstimator.resetPosition(
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
@@ -138,7 +144,7 @@ public class SwerveDrive extends Subsystem {
 
     // We're manually setting the drive encoder positions to 0, since we
     // just reset them, but the encoder isn't reporting 0 yet.
-    m_odometry = new SwerveDriveOdometry(
+    m_poseEstimator = new SwerveDrivePoseEstimator(
         m_kinematics,
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
@@ -150,7 +156,9 @@ public class SwerveDrive extends Subsystem {
                 Rotation2d.fromRotations(m_backLeft.getTurnPosition())),
             new SwerveModulePosition(0.0,
                 Rotation2d.fromRotations(m_backRight.getTurnPosition())),
-        });
+        },
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0))
+    );
 
     setPose(pose);
   }
@@ -209,7 +217,7 @@ public class SwerveDrive extends Subsystem {
   }
 
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_poseEstimator.getEstimatedPosition();
   }
 
   @Override
@@ -254,7 +262,9 @@ public class SwerveDrive extends Subsystem {
 
   @Override
   public void outputTelemetry() {
-    m_odometry.update(
+    double currentTime = Timer.getFPGATimestamp();
+    m_poseEstimator.updateWithTime(
+        currentTime,
         m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
@@ -262,6 +272,8 @@ public class SwerveDrive extends Subsystem {
             m_backLeft.getPosition(),
             m_backRight.getPosition()
         });
+    
+    m_poseEstimator.addVisionMeasurement(m_limelight.getBotpose2D(), currentTime); // TODO: MAKE SURE THIS WORKS
 
     m_frontLeft.outputTelemetry();
     m_frontRight.outputTelemetry();

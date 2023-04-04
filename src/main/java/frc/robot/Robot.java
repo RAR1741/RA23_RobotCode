@@ -83,6 +83,10 @@ public class Robot extends TimedRobot {
     // Camera server
     m_camera = CameraServer.startAutomaticCapture();
 
+    // Turn Limelight LED's off
+    m_limelight.setLightEnabled(false);
+
+    m_allSubsystems.add(m_limelight);
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
     m_allSubsystems.add(m_leds);
