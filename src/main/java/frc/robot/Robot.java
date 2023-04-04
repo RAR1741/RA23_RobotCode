@@ -24,6 +24,7 @@ import frc.robot.autonomous.tasks.Task;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.simulation.Field;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -47,7 +48,8 @@ public class Robot extends TimedRobot {
   public final LEDs m_leds = LEDs.getInstance();
   private Task m_currentTask;
   private AutoRunner m_autoRunner = AutoRunner.getInstance();
-  private boolean autoHasRan = false;
+  private final Limelight m_limelight = Limelight.getInstance();
+  private boolean m_autoHasRan = false;
 
   // The mere instantiation of this object will cause the compressor to start
   // running. We don't need to do anything else with it, so we'll suppress the
@@ -98,7 +100,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    autoHasRan = true;
+    m_autoHasRan = true;
 
     m_swerve.brakeOff();
 
@@ -310,7 +312,7 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
 
-    if (autoHasRan) {
+    if (m_autoHasRan) {
       m_leds.breathe();
     } else {
       // Drive LEDs
