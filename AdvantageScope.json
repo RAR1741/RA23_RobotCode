@@ -1,0 +1,91 @@
+{
+  "version": "2.2.3",
+  "layout": [
+    {
+      "type": 9,
+      "fields": [
+        "/SmartDashboard/Drivetrain/CurrentStates",
+        "/SmartDashboard/Drivetrain/DesiredStates",
+        "/SmartDashboard/Drivetrain/Gyro/AngleDegrees"
+      ],
+      "listFields": [],
+      "options": {
+        "maxSpeed": 3,
+        "rotationUnits": "degrees",
+        "arrangement": "0,1,2,3",
+        "sizeLeftRight": 0.65,
+        "sizeFrontBack": 0.65,
+        "forwardDirection": "up"
+      },
+      "title": "Swerve"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/SmartDashboard/Drivetrain/Gyro/AngleDegrees",
+              "color": "#e5b31b",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": []
+        }
+      },
+      "title": "Gyro"
+    },
+    {
+      "type": 1,
+      "legends": {
+        "left": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/SmartDashboard/Arm/Shoulder/PositionError",
+              "color": "#2b66a2",
+              "show": true
+            }
+          ]
+        },
+        "discrete": {
+          "fields": []
+        },
+        "right": {
+          "lockedRange": null,
+          "unitConversion": {
+            "type": null,
+            "factor": 1
+          },
+          "fields": [
+            {
+              "key": "/SmartDashboard/Arm/Elbow/PositionError",
+              "color": "#e5b31b",
+              "show": true
+            }
+          ]
+        }
+      },
+      "title": "Arm"
+    }
+  ]
+}

@@ -28,24 +28,25 @@ public class DriverController extends FilteredController {
     return -this.getFilteredAxis(4);
   }
 
-  public boolean getWantsSlowMode() {
-    return this.getFilteredAxis(3) > k_triggerActivationThreshold;
+  public double getSlowScaler() {
+    return this.getFilteredAxis(3);
+  }
+
+  public double getBoostScaler() {
+    return this.getFilteredAxis(2);
   }
 
   public boolean getWantsResetGyro() {
     return this.getRawButton(4);
   }
 
-  // Intake
-  /*
-   * public boolean getWantsIntakeOpen() {
-   * return this.getLeftBumper();
-   * }
-   *
-   * public boolean getWantsIntakeClose() {
-   * return this.getRightBumper();
-   * }
-   */
+  public boolean getWantsBrake() {
+    return this.getRawButton(5);
+  }
+
+  public boolean getWantsGripToggle() {
+    return this.getRawButtonPressed(1);
+  }
 
   public void outputTelemetry() {
     SmartDashboard.putNumber(m_smartDashboardKey + "Forward", getForwardAxis());
