@@ -503,6 +503,10 @@ public class Arm extends Subsystem {
     m_shoulderMotor.set(0);
     m_elbowMotor.set(0);
     m_wristMotor.set(0);
+
+    stopTrajectory();
+    m_periodicIO.shoulderAngle = getShoulderPositionDegrees();
+    m_periodicIO.elbowAngle = getElbowPositionDegrees();
   }
 
   @Override

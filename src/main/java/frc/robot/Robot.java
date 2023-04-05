@@ -310,6 +310,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledExit() {
     m_arm.clearPIDAccumulation();
+    m_arm.stop();
   }
 
   @Override
