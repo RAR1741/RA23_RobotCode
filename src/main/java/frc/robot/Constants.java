@@ -134,9 +134,9 @@ public final class Constants {
       SCORE_MID_CUBE(new ArmPose(-47.6, 39.66, null)),
       SCORE_HIGH_CUBE(new ArmPose(-59.1, 52.9, null)),
       SCORE_MID_CONE(new ArmPose(-45.58, 47.87, null)),
-      SCORE_HIGH_CONE(new ArmPose(-57.9, 60.3, null)),
+      SCORE_HIGH_CONE(new ArmPose(-55.77, 59.60, null)),
       SINGLE_SUBSTATION(new ArmPose(0.0, 0.0, null)),
-      DOUBLE_SUBSTATION(new ArmPose(29.350695, 48.393162, null)),
+      DOUBLE_SUBSTATION(new ArmPose(32.509282, 47.050315, null)),
       FLOOR_PICKUP(new ArmPose(24.129862, 0.405395, null)),
       FLOOR_SCORE(new ArmPose(-25.14, 3.39, null));
 

@@ -61,7 +61,7 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
     queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
     Pose2d tempPose = Constants.Arm.Preset.FLOOR_PICKUP.getPose();
-    queueTask(new ArmTrajectoryTask(new ArmPose(tempPose.getX() + 12, tempPose.getY() + 10, tempPose.getRotation())));
+    queueTask(new ArmTrajectoryTask(new ArmPose(tempPose.getX() + 25, tempPose.getY() + 25, tempPose.getRotation())));
 
     // queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
 
@@ -90,8 +90,8 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
     // new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose())));
 
     // queueTask(new ParallelTask(
-    //     new GripperTask(false),
-    //     new WaitTask(Constants.Auto.k_defaultGripperWait)));
+    // new GripperTask(false),
+    // new WaitTask(Constants.Auto.k_defaultGripperWait)));
 
     // queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
 
