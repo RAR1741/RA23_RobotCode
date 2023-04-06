@@ -322,11 +322,18 @@ public class Arm extends Subsystem {
     double[] currentAngles = m_armSim.getArmAngles();
     double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
 
-    double targetX = m_inverted ? -targetPose.getX() - m_invertedLengthBoostFactor : targetPose.getX();
+    // double targetX = m_inverted ? -targetPose.getX() -
+    // m_invertedLengthBoostFactor : targetPose.getX();
+    double targetX = m_inverted ? -targetPose.getX() : targetPose.getX();
     if (targetPose.getX() == Constants.Arm.Preset.HOME.getPose().getX()) {
       targetX = Constants.Arm.Preset.HOME.getPose().getX();
     }
+
+    // Boost the double feeder station height, if inverted
     double targetY = targetPose.getY();
+    if (m_inverted && targetPose.getY() == Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY()) {
+      targetY += 5.0;
+    }
     ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetX, targetY);
 
     m_currentTrajectory = new ArmTrajectory(waypoints);

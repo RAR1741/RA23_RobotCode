@@ -272,11 +272,10 @@ public class SwerveDrive extends Subsystem {
             m_backRight.getPosition()
         });
 
-    // TODO: MAKE SURE THIS WORKS
     if (m_limelight.seesAprilTag()) {
-      m_poseEstimator.addVisionMeasurement(
-          m_limelight.getBotpose2D(),
-          currentTime);
+      // m_poseEstimator.addVisionMeasurement(
+      // m_limelight.getBotpose2D(),
+      // m_limelight.getTimeOffset(currentTime));
     }
 
     m_frontLeft.outputTelemetry();

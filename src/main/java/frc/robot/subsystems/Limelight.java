@@ -64,6 +64,10 @@ public class Limelight extends Subsystem {
     return m_limelightTable.getEntry("tv").getInteger(0) == 1;
   }
 
+  public double getTimeOffset(double currentTime) {
+    return currentTime - LimelightHelpers.getLatency_Pipeline(m_name);
+  }
+
   @Override
   public void periodic() {
   }
