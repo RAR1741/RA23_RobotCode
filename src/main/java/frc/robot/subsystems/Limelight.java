@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.HashMap;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -11,7 +9,6 @@ import frc.robot.LimelightHelpers;
 public class Limelight extends Subsystem {
   private static Limelight m_limelight;
   private NetworkTable m_limelightTable;
-  private HashMap<String, Object> m_limelightInfo;
   private String m_name = "limelight";
 
   // Limelight Offsets:
@@ -24,7 +21,6 @@ public class Limelight extends Subsystem {
    */
   private Limelight() {
     m_limelightTable = NetworkTableInstance.getDefault().getTable(m_name);
-    m_limelightInfo = new HashMap<String, Object>();
   }
 
   /**
