@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
   // The mere instantiation of this object will cause the compressor to start
   // running. We don't need to do anything else with it, so we'll suppress the
   // warning.
-  @SuppressWarnings("unused")
   private final Compressor m_compressor = new Compressor(PneumaticsModuleType.REVPH);
 
   @SuppressWarnings("unused")
@@ -98,6 +97,8 @@ public class Robot extends TimedRobot {
     m_allSubsystems.forEach(subsystem -> subsystem.writePeriodicOutputs());
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
+
+    SmartDashboard.putNumber("Compressor/Pressure", m_compressor.getPressure());
 
     updateSim();
   }
@@ -310,6 +311,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledExit() {
     m_arm.clearPIDAccumulation();
+    m_arm.stop();
   }
 
   @Override
