@@ -48,6 +48,10 @@ public class DriverController extends FilteredController {
     return this.getRawButtonPressed(1);
   }
 
+  public boolean getWantsGripClosed() {
+    return this.getRawButtonPressed(3);
+  }
+
   public void outputTelemetry() {
     SmartDashboard.putNumber(m_smartDashboardKey + "Forward", getForwardAxis());
     SmartDashboard.putNumber(m_smartDashboardKey + "Strafe", getStrafeAxis());

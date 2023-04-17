@@ -60,50 +60,51 @@ public class Right_OneCubeHigh_BalanceMode extends AutoModeBase {
     queueTask(new GripperTask(true));
     queueTask(new WaitTask(Constants.Auto.k_defaultGripperWait));
 
-    Pose2d tempPose = Constants.Arm.Preset.FLOOR_PICKUP.getPose();
-    queueTask(new ArmTrajectoryTask(new ArmPose(tempPose.getX() + 25, tempPose.getY() + 25, tempPose.getRotation())));
+    queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose()));
+    
+    queueTask(new WaitTask(0.5));
 
-    // queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
-
-    Pose2d highPose = Constants.Arm.Preset.SCORE_HIGH_CONE.getPose();
-    ArmPose higherPose = new ArmPose(highPose.getX(), highPose.getY() + 2, highPose.getRotation());
-
-    queueTask(new ParallelTask(
-        new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
-        new WaitTask(0.0)));
-
-    if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
-      // Start: 9.90, 4.51
-      // End: 14.83, 5.05
-      // Diff: 4.93, 0.54
-      queueTask(new ParallelTask(
-          new WristTask(180.0),
-          new ArmTrajectoryTask(higherPose),
-          new DriveTrajectoryTask("RightFar2Piece2", 2.0, 1.5, false)));
-    } else {
-      // Start: 6.64, 4.51
-      // End: 1.71, 5.05
-      // Diff: -4.93, 0.54
-      queueTask(new ParallelTask(
-          new WristTask(180.0),
-          new ArmTrajectoryTask(higherPose),
-          new DriveTrajectoryTask("RightFar2Piece2-B", 2.0, 1.5, false)));
-    }
+    queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
 
     // queueTask(new ParallelTask(
-    // new DriveForwardTask(-1, -0.4),
-    // new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose())));
+    //     new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()),
+    //     new WaitTask(0.0)));
 
-    queueTask(new ParallelTask(
-        new GripperTask(false),
-        new WaitTask(Constants.Auto.k_defaultGripperWait)));
+    // Pose2d highPose = Constants.Arm.Preset.SCORE_HIGH_CONE.getPose();
+    // ArmPose higherPose = new ArmPose(highPose.getX(), highPose.getY() + 2, highPose.getRotation());
 
-    // queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
+    // if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+    //   // Start: 9.90, 4.51
+    //   // End: 14.83, 5.05
+    //   // Diff: 4.93, 0.54
+    //   queueTask(new ParallelTask(
+    //       new WristTask(180.0),
+    //       new ArmTrajectoryTask(higherPose),
+    //       new DriveTrajectoryTask("RightFar2Piece2", 2.0, 1.5, false)));
+    // } else {
+    //   // Start: 6.64, 4.51
+    //   // End: 1.71, 5.05
+    //   // Diff: -4.93, 0.54
+    //   queueTask(new ParallelTask(
+    //       new WristTask(180.0),
+    //       new ArmTrajectoryTask(higherPose),
+    //       new DriveTrajectoryTask("RightFar2Piece2-B", 2.0, 1.5, false)));
+    // }
 
-    // queueTask(new DriveForwardTask(2.0, -1.0));
+    // // queueTask(new ParallelTask(
+    // // new DriveForwardTask(-1, -0.4),
+    // // new ArmTrajectoryTask(Constants.Arm.Preset.SCORE_HIGH_CONE.getPose())));
 
-    // queueTask(new AutoBalanceTask());
+    // queueTask(new ParallelTask(
+    //     new GripperTask(false),
+    //     new WaitTask(Constants.Auto.k_defaultGripperWait)));
 
-    // queueTask(new BrakeTask(true));
+    // // queueTask(new ArmTrajectoryTask(Constants.Arm.Preset.HOME.getPose()));
+
+    // // queueTask(new DriveForwardTask(2.0, -1.0));
+
+    // // queueTask(new AutoBalanceTask());
+
+    // // queueTask(new BrakeTask(true));
   }
 }

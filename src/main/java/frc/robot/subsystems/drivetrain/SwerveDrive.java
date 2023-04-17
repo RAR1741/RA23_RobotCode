@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Subsystem;
 
 public class SwerveDrive extends Subsystem {
@@ -48,7 +47,7 @@ public class SwerveDrive extends Subsystem {
       Constants.Drivetrain.Turn.k_BROffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-  private final Limelight m_limelight = Limelight.getInstance();
+  //private final Limelight m_limelight = Limelight.getInstance();
 
   private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
@@ -272,11 +271,11 @@ public class SwerveDrive extends Subsystem {
             m_backRight.getPosition()
         });
 
-    if (m_limelight.seesAprilTag()) {
+    // if (m_limelight.seesAprilTag()) {
       // m_poseEstimator.addVisionMeasurement(
       // m_limelight.getBotpose2D(),
       // m_limelight.getTimeOffset(currentTime));
-    }
+    // }
 
     m_frontLeft.outputTelemetry();
     m_frontRight.outputTelemetry();

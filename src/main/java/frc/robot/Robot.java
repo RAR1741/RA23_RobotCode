@@ -24,7 +24,6 @@ import frc.robot.autonomous.tasks.Task;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.simulation.Field;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -48,7 +47,7 @@ public class Robot extends TimedRobot {
   public final LEDs m_leds = LEDs.getInstance();
   private Task m_currentTask;
   private AutoRunner m_autoRunner = AutoRunner.getInstance();
-  private final Limelight m_limelight = Limelight.getInstance();
+  //private final Limelight m_limelight = Limelight.getInstance();
   private boolean m_autoHasRan = false;
 
   // The mere instantiation of this object will cause the compressor to start
@@ -68,7 +67,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Initialize on-board logging
     DataLogManager.start();
-    DataLogManager.log("Logging initialized. Fard.");
+    System.out.println("Logging initialized. Fard.");
 
     // Start the PathPlanner server
     PathPlannerServer.startServer(5811);
@@ -83,9 +82,9 @@ public class Robot extends TimedRobot {
     m_camera = CameraServer.startAutomaticCapture();
 
     // Turn Limelight LED's off
-    m_limelight.setLightEnabled(false);
+    //m_limelight.setLightEnabled(false);
 
-    m_allSubsystems.add(m_limelight);
+    //m_allSubsystems.add(m_limelight);
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
     m_allSubsystems.add(m_leds);
@@ -183,7 +182,11 @@ public class Robot extends TimedRobot {
 
     if (m_driverController.getWantsGripToggle() ||
         m_operatorController.getWantsGripToggle()) {
-      m_arm.setGripper(!m_arm.getGripperEngaged());
+      m_arm.toggleGripper();
+    }
+
+    if (m_driverController.getWantsGripClosed()) {
+      m_arm.setGripper(true);
     }
 
     if (m_driverController.getWantsBrake()) {
