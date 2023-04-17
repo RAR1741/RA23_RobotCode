@@ -47,12 +47,12 @@ public class Robot extends TimedRobot {
   public final LEDs m_leds = LEDs.getInstance();
   private Task m_currentTask;
   private AutoRunner m_autoRunner = AutoRunner.getInstance();
-  private boolean autoHasRan = false;
+  //private final Limelight m_limelight = Limelight.getInstance();
+  private boolean m_autoHasRan = false;
 
   // The mere instantiation of this object will cause the compressor to start
   // running. We don't need to do anything else with it, so we'll suppress the
   // warning.
-  @SuppressWarnings("unused")
   private final Compressor m_compressor = new Compressor(PneumaticsModuleType.REVPH);
 
   @SuppressWarnings("unused")
@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Initialize on-board logging
     DataLogManager.start();
-    DataLogManager.log("Logging initialized. Fard.");
+    System.out.println("Logging initialized. Fard.");
 
     // Start the PathPlanner server
     PathPlannerServer.startServer(5811);
@@ -81,6 +81,10 @@ public class Robot extends TimedRobot {
     // Camera server
     m_camera = CameraServer.startAutomaticCapture();
 
+    // Turn Limelight LED's off
+    //m_limelight.setLightEnabled(false);
+
+    //m_allSubsystems.add(m_limelight);
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
     m_allSubsystems.add(m_leds);
@@ -93,12 +97,14 @@ public class Robot extends TimedRobot {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
 
+    SmartDashboard.putNumber("Compressor/Pressure", m_compressor.getPressure());
+
     updateSim();
   }
 
   @Override
   public void autonomousInit() {
-    autoHasRan = true;
+    m_autoHasRan = true;
 
     m_swerve.brakeOff();
 
@@ -176,7 +182,11 @@ public class Robot extends TimedRobot {
 
     if (m_driverController.getWantsGripToggle() ||
         m_operatorController.getWantsGripToggle()) {
-      m_arm.setGripper(!m_arm.getGripperEngaged());
+      m_arm.toggleGripper();
+    }
+
+    if (m_driverController.getWantsGripClosed()) {
+      m_arm.setGripper(true);
     }
 
     if (m_driverController.getWantsBrake()) {
@@ -304,13 +314,14 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledExit() {
     m_arm.clearPIDAccumulation();
+    m_arm.stop();
   }
 
   @Override
   public void disabledPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
 
-    if (autoHasRan) {
+    if (m_autoHasRan) {
       m_leds.breathe();
     } else {
       // Drive LEDs

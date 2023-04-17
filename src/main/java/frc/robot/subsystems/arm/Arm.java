@@ -61,7 +61,6 @@ public class Arm extends Subsystem {
   private final CANSparkMax m_wristMotor = new CANSparkMax(Constants.Arm.Wrist.k_motorId, MotorType.kBrushless);
 
   private final DoubleSolenoid m_gripper = new DoubleSolenoid(PneumaticsModuleType.REVPH, 1, 0);
-  private boolean m_gripperEngaged = false;
 
   private final DutyCycleEncoder m_shoulderEncoder = new DutyCycleEncoder(Constants.Arm.Shoulder.k_encoderId);
   private final DutyCycleEncoder m_elbowEncoder = new DutyCycleEncoder(Constants.Arm.Elbow.k_encoderId);
@@ -86,6 +85,8 @@ public class Arm extends Subsystem {
     public double shoulderMotorPower = 0.0;
     public double elbowMotorPower = 0.0;
     public double wristMotorPower = 0.0;
+
+    public boolean gripperEngaged = true;
   }
 
   private PeriodicIO m_periodicIO = new PeriodicIO();
@@ -187,6 +188,8 @@ public class Arm extends Subsystem {
     }
     m_periodicIO.wristMotorPower = wristPIDOutput;
     m_wristMotor.setVoltage(m_periodicIO.wristMotorPower);
+
+    m_gripper.set(m_periodicIO.gripperEngaged ? Value.kForward : Value.kReverse);
   }
 
   public void manual(double shoulder, double elbow, double wrist) {
@@ -322,11 +325,18 @@ public class Arm extends Subsystem {
     double[] currentAngles = m_armSim.getArmAngles();
     double[] currentXY = calcXY(currentAngles[0], currentAngles[1]);
 
-    double targetX = m_inverted ? -targetPose.getX() - m_invertedLengthBoostFactor : targetPose.getX();
+    // double targetX = m_inverted ? -targetPose.getX() -
+    // m_invertedLengthBoostFactor : targetPose.getX();
+    double targetX = m_inverted ? -targetPose.getX() : targetPose.getX();
     if (targetPose.getX() == Constants.Arm.Preset.HOME.getPose().getX()) {
       targetX = Constants.Arm.Preset.HOME.getPose().getX();
     }
+
+    // Boost the double feeder station height, if inverted
     double targetY = targetPose.getY();
+    if (m_inverted && targetPose.getY() == Constants.Arm.Preset.DOUBLE_SUBSTATION.getPose().getY()) {
+      targetY += 5.0;
+    }
     ArrayList<ArmPose> waypoints = m_arm.getPath(currentXY[0], currentXY[1], targetX, targetY);
 
     m_currentTrajectory = new ArmTrajectory(waypoints);
@@ -469,13 +479,16 @@ public class Arm extends Subsystem {
     return Units.rotationsToDegrees(Helpers.modRotations(value));
   }
 
+  public void toggleGripper() {
+    m_periodicIO.gripperEngaged = !m_periodicIO.gripperEngaged;
+  }
+
   public void setGripper(boolean engaged) {
-    m_gripper.set(engaged ? Value.kForward : Value.kReverse);
-    m_gripperEngaged = engaged;
+    m_periodicIO.gripperEngaged = engaged;
   }
 
   public boolean getGripperEngaged() {
-    return m_gripperEngaged;
+    return m_periodicIO.gripperEngaged;
   }
 
   public void clearPIDAccumulation() {
@@ -503,6 +516,10 @@ public class Arm extends Subsystem {
     m_shoulderMotor.set(0);
     m_elbowMotor.set(0);
     m_wristMotor.set(0);
+
+    stopTrajectory();
+    m_periodicIO.shoulderAngle = getShoulderPositionDegrees();
+    m_periodicIO.elbowAngle = getElbowPositionDegrees();
   }
 
   @Override

@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
 
 public class DriveTrajectoryTask extends Task {
@@ -19,6 +20,7 @@ public class DriveTrajectoryTask extends Task {
   private PathPlannerTrajectory m_autoPath;
   private boolean m_isFinished = false;
   private boolean m_resetGyro = false;
+  private String m_smartDashboardKey = "DriveTrajectoryTask/";
 
   private final Timer m_runningTimer = new Timer();
   private PPHolonomicDriveController m_driveController;
@@ -36,9 +38,9 @@ public class DriveTrajectoryTask extends Task {
     m_swerve = SwerveDrive.getInstance();
 
     m_driveController = new PPHolonomicDriveController(
-        new PIDController(0.75, 0, 0),
-        new PIDController(0.3, 0, 0),
-        new PIDController(0.5, 0, 0));
+        new PIDController(0.1, 0.01, 0.0),
+        new PIDController(0.2, 0.0, 0.0),
+        new PIDController(0.5, 0.0, 0.0));
   }
 
   @Override
@@ -73,6 +75,10 @@ public class DriveTrajectoryTask extends Task {
         false); // And we probably want to change this to true
 
     m_isFinished |= m_runningTimer.get() >= m_autoPath.getTotalTimeSeconds();
+
+    SmartDashboard.putNumber(m_smartDashboardKey + "vx", chassisSpeeds.vxMetersPerSecond);
+    SmartDashboard.putNumber(m_smartDashboardKey + "vy", chassisSpeeds.vyMetersPerSecond);
+    SmartDashboard.putNumber(m_smartDashboardKey + "vr", chassisSpeeds.omegaRadiansPerSecond);
   }
 
   @Override
