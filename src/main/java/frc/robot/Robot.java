@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
   public final LEDs m_leds = LEDs.getInstance();
   private Task m_currentTask;
   private AutoRunner m_autoRunner = AutoRunner.getInstance();
-  //private final Limelight m_limelight = Limelight.getInstance();
+  // private final Limelight m_limelight = Limelight.getInstance();
   private boolean m_autoHasRan = false;
 
   // The mere instantiation of this object will cause the compressor to start
@@ -69,6 +69,14 @@ public class Robot extends TimedRobot {
     DataLogManager.start();
     System.out.println("Logging initialized. Fard.");
 
+    // Set up demo mode picker
+    if (!Preferences.containsKey("demoMode")) {
+      Preferences.setBoolean("demoMode", false);
+    }
+    if (!Preferences.containsKey("demoLEDMode")) {
+      Preferences.setInt("demoLEDMode", 0);
+    }
+
     // Start the PathPlanner server
     PathPlannerServer.startServer(5811);
 
@@ -82,9 +90,9 @@ public class Robot extends TimedRobot {
     m_camera = CameraServer.startAutomaticCapture();
 
     // Turn Limelight LED's off
-    //m_limelight.setLightEnabled(false);
+    // m_limelight.setLightEnabled(false);
 
-    //m_allSubsystems.add(m_limelight);
+    // m_allSubsystems.add(m_limelight);
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
     m_allSubsystems.add(m_leds);
@@ -109,9 +117,9 @@ public class Robot extends TimedRobot {
     m_swerve.brakeOff();
 
     if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-      m_leds.setColor(Color.kBlue);
+      m_leds.setArmsColor(Color.kBlue);
     } else {
-      m_leds.setColor(Color.kRed);
+      m_leds.setArmsColor(Color.kRed);
     }
 
     m_autoRunner.setAutoMode(m_autoChooser.getSelectedAuto());
@@ -307,7 +315,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_allSubsystems.forEach(subsystem -> subsystem.stop());
     m_swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d(0)));
-    m_leds.setColor(Color.kRed);
+    m_leds.setArmsColor(Color.kRed);
     m_leds.setDriveColor(Color.kRed);
   }
 
@@ -321,8 +329,33 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
 
-    if (m_autoHasRan) {
-      m_leds.breathe();
+    if (m_autoHasRan || Preferences.getBoolean("demoMode", false)) {
+      switch (Preferences.getInt("demoLEDMode", 0)) {
+        case 0:
+          m_leds.breathe();
+          break;
+        case 1:
+          m_leds.chase();
+          break;
+        case 2:
+          m_leds.rainbowChase();
+          break;
+        case 3:
+          m_leds.rainbowBreatheSlow();
+          break;
+        case 4:
+          m_leds.rainbowBreatheFast();
+          break;
+        case 5:
+          m_leds.redTwinkleSlow();
+          break;
+        case 6:
+          m_leds.redTwinkleFast();
+          break;
+        default:
+          m_leds.breathe();
+          break;
+      }
     } else {
       // Drive LEDs
       if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
@@ -334,27 +367,27 @@ public class Robot extends TimedRobot {
       // Arm LEDs
       switch (m_autoChooser.getSelectedAuto()) {
         case DO_NOTHING:
-          m_leds.setColor(Color.kBlack);
+          m_leds.setArmsColor(Color.kBlack);
           break;
         case DEFAULT:
-          m_leds.setColor(Color.kPurple);
+          m_leds.setArmsColor(Color.kPurple);
           break;
         case RIGHT_CUBE_BALANCE:
           m_leds.setArmLeftColor(Color.kBlack);
           m_leds.setArmRightColor(Color.kGreen);
           break;
         case CENTER_CUBE_BALANCE_MOBILITY:
-          m_leds.setColor(Color.kGreen);
+          m_leds.setArmsColor(Color.kGreen);
           break;
         case CENTER_CUBE_BALANCE:
-          m_leds.setColor(Color.kLightSteelBlue);
+          m_leds.setArmsColor(Color.kLightSteelBlue);
           break;
         case LEFT_CUBE_BALANCE:
           m_leds.setArmLeftColor(Color.kGreen);
           m_leds.setArmRightColor(Color.kBlack);
           break;
         default:
-          m_leds.setColor(Color.kBlack);
+          m_leds.setArmsColor(Color.kBlack);
           break;
       }
     }
