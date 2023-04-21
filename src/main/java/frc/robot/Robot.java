@@ -185,7 +185,7 @@ public class Robot extends TimedRobot {
     double boostScaler = 1 + (m_driverController.getBoostScaler() * (Constants.Drivetrain.k_boostScaler - 1));
 
     if(Preferences.getBoolean("demoMode", false)) {
-      boostScaler = 1;
+      // boostScaler = 1;
       xSpeed *= Constants.Drivetrain.k_maxDemoSpeed;
       ySpeed *= Constants.Drivetrain.k_maxDemoSpeed;
       rot *= Constants.Drivetrain.k_maxDemoAngularSpeed;
@@ -197,6 +197,9 @@ public class Robot extends TimedRobot {
 
     xSpeed *= slowScaler * boostScaler;
     ySpeed *= slowScaler;// * boostScaler;
+    if(Preferences.getBoolean("demoMode", false)){
+      ySpeed *= boostScaler;
+    }
     rot *= slowScaler * boostScaler;
 
     m_swerve.drive(xSpeed, ySpeed, rot, true);
@@ -349,8 +352,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
-
-    setLEDs();
 
     updateSim();
   }
