@@ -105,6 +105,15 @@ public class Robot extends TimedRobot {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
 
+    if (m_driverController.getWantsDemoLEDCycle()){
+      int mode = Preferences.getInt("demoLEDMode", 0);
+
+      mode += 1;
+      mode %= 8;
+
+      Preferences.setInt("demoLEDMode", mode);
+    }
+
     SmartDashboard.putNumber("Compressor/Pressure", m_compressor.getPressure());
 
     updateSim();
@@ -162,14 +171,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    double xSpeed = m_xRateLimiter.calculate(m_driverController.getForwardAxis())
-        * Constants.Drivetrain.k_maxSpeed;
+    double xSpeed = m_xRateLimiter.calculate(m_driverController.getForwardAxis());
 
-    double ySpeed = m_yRateLimiter.calculate(m_driverController.getStrafeAxis())
-        * Constants.Drivetrain.k_maxSpeed;
+    double ySpeed = m_yRateLimiter.calculate(m_driverController.getStrafeAxis());
 
-    double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis()) *
-        Constants.Drivetrain.k_maxAngularSpeed;
+    double rot = m_rotRateLimiter.calculate(m_driverController.getTurnAxis());
 
     // slowScaler should scale between k_slowScaler and 1
     double slowScaler = Constants.Drivetrain.k_slowScaler
@@ -177,6 +183,17 @@ public class Robot extends TimedRobot {
 
     // boostScaler should scale between 1 and k_boostScaler
     double boostScaler = 1 + (m_driverController.getBoostScaler() * (Constants.Drivetrain.k_boostScaler - 1));
+
+    if(Preferences.getBoolean("demoMode", false)) {
+      boostScaler = 1;
+      xSpeed *= Constants.Drivetrain.k_maxDemoSpeed;
+      ySpeed *= Constants.Drivetrain.k_maxDemoSpeed;
+      rot *= Constants.Drivetrain.k_maxDemoAngularSpeed;
+    } else {
+      xSpeed *= Constants.Drivetrain.k_maxSpeed;
+      ySpeed *= Constants.Drivetrain.k_maxSpeed;
+      rot *= Constants.Drivetrain.k_maxAngularSpeed;
+    }
 
     xSpeed *= slowScaler * boostScaler;
     ySpeed *= slowScaler;// * boostScaler;
@@ -284,6 +301,9 @@ public class Robot extends TimedRobot {
     Color frontColor = !m_arm.getInverted() ? Color.kGreen : Color.kRed;
     Color backColor = !m_arm.getInverted() ? Color.kRed : Color.kGreen;
 
+    if(Preferences.getBoolean("demoMode", false)) {
+      setLEDs();
+    } else {
     switch (m_colorState) {
       case 0:
         m_leds.setArmRightColor(frontColor, Color.kYellow, backColor);
@@ -302,6 +322,7 @@ public class Robot extends TimedRobot {
         m_leds.setArmLeftColor(frontColor, Color.kBlack, backColor);
         break;
     }
+  }
 
     m_driverController.outputTelemetry();
   }
@@ -329,6 +350,37 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     m_allSubsystems.forEach(subsystem -> subsystem.outputTelemetry());
 
+    setLEDs();
+
+    updateSim();
+  }
+
+  @Override
+  public void testInit() {
+    if (!Preferences.containsKey("targetX")) {
+      Preferences.setDouble("targetX", 0);
+    }
+
+    if (!Preferences.containsKey("targetY")) {
+      Preferences.setDouble("targetY", Constants.Arm.k_homeHeight);
+    }
+
+    if (!Preferences.containsKey("wristAngle")) {
+      Preferences.setDouble("wristAngle", 0);
+    }
+  }
+
+  @Override
+  public void testPeriodic() {
+    m_swerve.drive(0, 0, 0, false);
+  }
+
+  private void updateSim() {
+    // Update the odometry in the sim.
+    m_field.setRobotPose(m_swerve.getPose());
+  }
+
+  public void setLEDs() {
     if (m_autoHasRan || Preferences.getBoolean("demoMode", false)) {
       switch (Preferences.getInt("demoLEDMode", 0)) {
         case 0:
@@ -351,6 +403,9 @@ public class Robot extends TimedRobot {
           break;
         case 6:
           m_leds.redTwinkleFast();
+          break;
+        case 7:
+          m_leds.off();
           break;
         default:
           m_leds.breathe();
@@ -391,32 +446,5 @@ public class Robot extends TimedRobot {
           break;
       }
     }
-
-    updateSim();
-  }
-
-  @Override
-  public void testInit() {
-    if (!Preferences.containsKey("targetX")) {
-      Preferences.setDouble("targetX", 0);
-    }
-
-    if (!Preferences.containsKey("targetY")) {
-      Preferences.setDouble("targetY", Constants.Arm.k_homeHeight);
-    }
-
-    if (!Preferences.containsKey("wristAngle")) {
-      Preferences.setDouble("wristAngle", 0);
-    }
-  }
-
-  @Override
-  public void testPeriodic() {
-    m_swerve.drive(0, 0, 0, false);
-  }
-
-  private void updateSim() {
-    // Update the odometry in the sim.
-    m_field.setRobotPose(m_swerve.getPose());
   }
 }

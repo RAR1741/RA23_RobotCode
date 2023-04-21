@@ -138,6 +138,10 @@ public class LEDs extends Subsystem {
     setAllColorMode(LEDModes.redTwinkleFast);
   }
 
+  public void off() {
+    setAllColorMode(LEDModes.setColor(Color.kBlack));
+  }
+
   public void setRightArmColorMode() {
     // Main color
     m_buffer = m_rightArmColor

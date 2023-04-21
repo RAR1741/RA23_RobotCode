@@ -63,6 +63,9 @@ public final class Constants {
     public static final double k_slowScaler = 0.2; // 20% reduction in speed
     public static final double k_boostScaler = 2.0; // 200% increase in speed
 
+    public static final double k_maxDemoSpeed = 1;
+    public static final double k_maxDemoAngularSpeed = Math.PI / 2;
+
     // Drivetrain drive motor constants
     public class Drive {
       public static final int k_FLMotorId = 5;

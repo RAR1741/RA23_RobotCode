@@ -81,7 +81,7 @@ public final class LEDModes {
 
         int firstPixelHue = (int) ((System.currentTimeMillis() / 1000.0 * chaseSpeed) % 180);
         for (int i = start; i < (start + length); i++) {
-          final int hue = Helpers.clamp((firstPixelHue + (i * 180 / length)) % 180, 51, 255);
+          final int hue = Helpers.clamp((firstPixelHue + (i * 180 / length)) % 180, 10, 255);
           buffer.setRGB(i, hue, 0, 0);
         }
         return buffer;
