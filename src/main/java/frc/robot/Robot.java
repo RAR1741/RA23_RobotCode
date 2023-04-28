@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -24,6 +25,7 @@ import frc.robot.autonomous.tasks.Task;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.simulation.Field;
+import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -45,9 +47,10 @@ public class Robot extends TimedRobot {
   public final SwerveDrive m_swerve = SwerveDrive.getInstance();
   public final Arm m_arm = Arm.getInstance();
   public final LEDs m_leds = LEDs.getInstance();
+  public final PoseEstimator m_poseEstimator = PoseEstimator.getInstance();
   private Task m_currentTask;
   private AutoRunner m_autoRunner = AutoRunner.getInstance();
-  //private final Limelight m_limelight = Limelight.getInstance();
+  // private final Limelight m_limelight = Limelight.getInstance();
   private boolean m_autoHasRan = false;
 
   // The mere instantiation of this object will cause the compressor to start
@@ -82,12 +85,16 @@ public class Robot extends TimedRobot {
     m_camera = CameraServer.startAutomaticCapture();
 
     // Turn Limelight LED's off
-    //m_limelight.setLightEnabled(false);
+    // m_limelight.setLightEnabled(false);
 
-    //m_allSubsystems.add(m_limelight);
+    // m_allSubsystems.add(m_limelight);
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
     m_allSubsystems.add(m_leds);
+
+    if (RobotBase.isReal()) {
+      m_allSubsystems.add(m_poseEstimator);
+    }
   }
 
   @Override

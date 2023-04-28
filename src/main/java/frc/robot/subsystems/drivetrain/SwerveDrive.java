@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Subsystem;
 
 public class SwerveDrive extends Subsystem {
@@ -47,7 +48,7 @@ public class SwerveDrive extends Subsystem {
       Constants.Drivetrain.Turn.k_BROffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-  //private final Limelight m_limelight = Limelight.getInstance();
+  private final Limelight m_limelight = Limelight.getInstance();
 
   private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
@@ -272,9 +273,9 @@ public class SwerveDrive extends Subsystem {
         });
 
     // if (m_limelight.seesAprilTag()) {
-      // m_poseEstimator.addVisionMeasurement(
-      // m_limelight.getBotpose2D(),
-      // m_limelight.getTimeOffset(currentTime));
+    // m_poseEstimator.addVisionMeasurement(
+    // m_limelight.getBotpose2D(),
+    // m_limelight.getTimeOffset(currentTime));
     // }
 
     m_frontLeft.outputTelemetry();
@@ -289,5 +290,18 @@ public class SwerveDrive extends Subsystem {
     SmartDashboard.putNumber("Drivetrain/Gyro/Pitch", m_gyro.getPitch());
     SmartDashboard.putNumberArray("Drivetrain/Pose",
         new double[] { getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees() });
+  }
+
+  public SwerveDriveKinematics getKinematics() {
+    return m_kinematics;
+  }
+
+  public SwerveModulePosition[] getModulePositions() {
+    return new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_backLeft.getPosition(),
+        m_backRight.getPosition()
+    };
   }
 }
