@@ -79,7 +79,7 @@ public final class Constants {
       // Drivetrain turning offset constants
       public static final double k_FLOffset = 0.796705;
       public static final double k_FROffset = 0.884635;
-      public static final double k_BLOffset = 0.757953;
+      public static final double k_BLOffset = 0.754982;
       public static final double k_BROffset = 0.103446;
 
       public static final int k_FLMotorId = 9;
