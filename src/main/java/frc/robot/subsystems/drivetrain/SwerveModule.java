@@ -6,6 +6,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -100,6 +101,9 @@ public class SwerveModule {
     m_turningMotor.setIdleMode(IdleMode.kBrake);
     m_turningEncoder = m_turningMotor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     m_turningMotor.setInverted(true);
+
+    // Attempt to fix robot drivetrain jittery-ness
+    m_turningMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20);
 
     // Limit the PID Controller's input range between 0 and 1 and set the input to
     // be continuous.
