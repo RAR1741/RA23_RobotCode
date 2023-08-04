@@ -47,7 +47,7 @@ public class SwerveDrive extends Subsystem {
       Constants.Drivetrain.Turn.k_BROffset, "BR");
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-  //private final Limelight m_limelight = Limelight.getInstance();
+  // private final Limelight m_limelight = Limelight.getInstance();
 
   private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
@@ -213,6 +213,10 @@ public class SwerveDrive extends Subsystem {
     m_backRight.setDesiredState(brState);
   }
 
+  public void addVisionMeasurement(Pose2d botPose) {
+    m_poseEstimator.addVisionMeasurement(botPose, 0);
+  }
+
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
   }
@@ -272,9 +276,9 @@ public class SwerveDrive extends Subsystem {
         });
 
     // if (m_limelight.seesAprilTag()) {
-      // m_poseEstimator.addVisionMeasurement(
-      // m_limelight.getBotpose2D(),
-      // m_limelight.getTimeOffset(currentTime));
+    // m_poseEstimator.addVisionMeasurement(
+    // m_limelight.getBotpose2D(),
+    // m_limelight.getTimeOffset(currentTime));
     // }
 
     m_frontLeft.outputTelemetry();

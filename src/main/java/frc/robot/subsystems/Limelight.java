@@ -9,7 +9,7 @@ import frc.robot.LimelightHelpers;
 public class Limelight extends Subsystem {
   private static Limelight m_limelight;
   private NetworkTable m_limelightTable;
-  private String m_name = "limelight";
+  private String m_table;
 
   // Limelight Offsets:
   // X: 12 5426 in
@@ -19,20 +19,9 @@ public class Limelight extends Subsystem {
   /**
    * Constructor
    */
-  private Limelight() {
-    m_limelightTable = NetworkTableInstance.getDefault().getTable(m_name);
-  }
-
-  /**
-   * Get a new instance of the limelight class
-   *
-   * @return New instance of the limelight class
-   */
-  public static Limelight getInstance() {
-    if (m_limelight == null) {
-      m_limelight = new Limelight();
-    }
-    return m_limelight;
+  public Limelight(String table) {
+    m_table = table;
+    m_limelightTable = NetworkTableInstance.getDefault().getTable(m_table);
   }
 
   /**
@@ -48,7 +37,7 @@ public class Limelight extends Subsystem {
    * @return Current bot pose
    */
   public Pose2d getBotpose2D() {
-    return toFieldPose(LimelightHelpers.getBotPose2d(m_name));
+    return toFieldPose(LimelightHelpers.getBotPose2d(m_table));
   }
 
   /**
@@ -61,7 +50,7 @@ public class Limelight extends Subsystem {
   }
 
   public double getTimeOffset(double currentTime) {
-    return currentTime - LimelightHelpers.getLatency_Pipeline(m_name);
+    return currentTime - LimelightHelpers.getLatency_Pipeline(m_table);
   }
 
   @Override

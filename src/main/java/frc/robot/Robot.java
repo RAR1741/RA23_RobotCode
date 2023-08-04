@@ -24,6 +24,7 @@ import frc.robot.autonomous.tasks.Task;
 import frc.robot.controls.controllers.DriverController;
 import frc.robot.controls.controllers.OperatorController;
 import frc.robot.simulation.Field;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drivetrain.SwerveDrive;
@@ -47,8 +48,12 @@ public class Robot extends TimedRobot {
   public final LEDs m_leds = LEDs.getInstance();
   private Task m_currentTask;
   private AutoRunner m_autoRunner = AutoRunner.getInstance();
-  //private final Limelight m_limelight = Limelight.getInstance();
+  // private final Limelight m_limelight = Limelight.getInstance();
   private boolean m_autoHasRan = false;
+
+  // Limelights
+  private Limelight m_limelightBR = new Limelight("limelightBR");
+  private Limelight m_limelightBL = new Limelight("limelightBL");
 
   // The mere instantiation of this object will cause the compressor to start
   // running. We don't need to do anything else with it, so we'll suppress the
@@ -82,9 +87,9 @@ public class Robot extends TimedRobot {
     m_camera = CameraServer.startAutomaticCapture();
 
     // Turn Limelight LED's off
-    //m_limelight.setLightEnabled(false);
+    // m_limelight.setLightEnabled(false);
 
-    //m_allSubsystems.add(m_limelight);
+    // m_allSubsystems.add(m_limelight);
     m_allSubsystems.add(m_swerve);
     m_allSubsystems.add(m_arm);
     m_allSubsystems.add(m_leds);
@@ -98,6 +103,14 @@ public class Robot extends TimedRobot {
     m_allSubsystems.forEach(subsystem -> subsystem.writeToLog());
 
     SmartDashboard.putNumber("Compressor/Pressure", m_compressor.getPressure());
+
+    if (m_limelightBL.seesAprilTag()) {
+      m_swerve.addVisionMeasurement(m_limelightBL.getBotpose2D());
+    }
+
+    if (m_limelightBR.seesAprilTag()) {
+      m_swerve.addVisionMeasurement(m_limelightBR.getBotpose2D());
+    }
 
     updateSim();
   }
