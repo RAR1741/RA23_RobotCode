@@ -110,5 +110,21 @@
     "properties": {
       "persistent": true
     }
+  },
+  {
+    "name": "/Preferences/demoMode",
+    "type": "boolean",
+    "value": true,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/demoLEDMode",
+    "type": "double",
+    "value": 6.0,
+    "properties": {
+      "persistent": true
+    }
   }
 ]

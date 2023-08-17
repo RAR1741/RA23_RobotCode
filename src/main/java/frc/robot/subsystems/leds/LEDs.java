@@ -21,13 +21,13 @@ public class LEDs extends Subsystem {
       .setColor(Color.kRed);
   private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_leftArmColor = LEDModes
       .setColor(Color.kRed);
-  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_driveColor = LEDModes.rainbow;
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_driveColor = LEDModes.rainbowChase;
 
   // Front/back overrides
-  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_rightArmFrontColor = LEDModes.rainbow;
-  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_rightArmBackColor = LEDModes.rainbow;
-  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_leftArmFrontColor = LEDModes.rainbow;
-  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_leftArmBackColor = LEDModes.rainbow;
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_rightArmFrontColor = LEDModes.rainbowChase;
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_rightArmBackColor = LEDModes.rainbowChase;
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_leftArmFrontColor = LEDModes.rainbowChase;
+  private Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> m_leftArmBackColor = LEDModes.rainbowChase;
 
   public static LEDs getInstance() {
     if (m_instance == null) {
@@ -52,7 +52,18 @@ public class LEDs extends Subsystem {
     m_led.setData(m_buffer);
   }
 
-  public void setColor(Color color) {
+  public void setAllColorMode(
+      Function<Integer, Function<Integer, Function<AddressableLEDBuffer, AddressableLEDBuffer>>> mode) {
+    m_rightArmColor = mode;
+    m_leftArmColor = mode;
+    m_rightArmFrontColor = mode;
+    m_rightArmBackColor = mode;
+    m_leftArmFrontColor = mode;
+    m_leftArmBackColor = mode;
+    m_driveColor = mode;
+  }
+
+  public void setArmsColor(Color color) {
     setArmRightColor(LEDModes.setColor(color));
     setArmLeftColor(LEDModes.setColor(color));
   }
@@ -100,13 +111,35 @@ public class LEDs extends Subsystem {
   }
 
   public void chase() {
-    m_rightArmColor = LEDModes.redChase;
-    m_leftArmColor = LEDModes.redChase;
+    setAllColorMode(LEDModes.redChase);
   }
 
   public void breathe() {
-    m_rightArmColor = LEDModes.redBreathe;
-    m_leftArmColor = LEDModes.redBreathe;
+    setAllColorMode(LEDModes.redBreathe);
+  }
+
+  public void rainbowChase() {
+    setAllColorMode(LEDModes.rainbowChase);
+  }
+
+  public void rainbowBreatheSlow() {
+    setAllColorMode(LEDModes.rainbowBreatheSlow);
+  }
+
+  public void rainbowBreatheFast() {
+    setAllColorMode(LEDModes.rainbowBreatheFast);
+  }
+
+  public void redTwinkleSlow() {
+    setAllColorMode(LEDModes.redTwinkleSlow);
+  }
+
+  public void redTwinkleFast() {
+    setAllColorMode(LEDModes.redTwinkleFast);
+  }
+
+  public void off() {
+    setAllColorMode(LEDModes.setColor(Color.kBlack));
   }
 
   public void setRightArmColorMode() {

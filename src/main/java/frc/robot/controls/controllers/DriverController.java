@@ -1,5 +1,6 @@
 package frc.robot.controls.controllers;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriverController extends FilteredController {
@@ -50,6 +51,13 @@ public class DriverController extends FilteredController {
 
   public boolean getWantsGripClosed() {
     return this.getRawButtonPressed(3);
+  }
+
+  public boolean getWantsDemoLEDCycle() {
+    if(!Preferences.getBoolean("demoMode", false)){
+      return false;
+    }
+    return this.getRawButtonPressed(7);
   }
 
   public void outputTelemetry() {

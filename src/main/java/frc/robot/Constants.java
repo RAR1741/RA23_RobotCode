@@ -63,6 +63,9 @@ public final class Constants {
     public static final double k_slowScaler = 0.2; // 20% reduction in speed
     public static final double k_boostScaler = 2.0; // 200% increase in speed
 
+    public static final double k_maxDemoSpeed = 1;
+    public static final double k_maxDemoAngularSpeed = Math.PI / 2;
+
     // Drivetrain drive motor constants
     public class Drive {
       public static final int k_FLMotorId = 5;
@@ -76,7 +79,7 @@ public final class Constants {
       // Drivetrain turning offset constants
       public static final double k_FLOffset = 0.796705;
       public static final double k_FROffset = 0.884635;
-      public static final double k_BLOffset = 0.757953;
+      public static final double k_BLOffset = 0.754982;
       public static final double k_BROffset = 0.103446;
 
       public static final int k_FLMotorId = 9;
@@ -126,7 +129,7 @@ public final class Constants {
       public static final double k_minAngle = Units.degreesToRadians(-360.0);
       public static final double k_maxAngle = Units.degreesToRadians(360.0);
 
-      public static final double k_offset = 0.195004;
+      public static final double k_offset = 0.055869;
     }
 
     public static enum Preset {
