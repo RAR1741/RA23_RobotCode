@@ -142,6 +142,11 @@ public class LEDs extends Subsystem {
     setAllColorMode(LEDModes.setColor(Color.kBlack));
   }
 
+  public void setColor(Color color) {
+    setArmRightColor(LEDModes.setColor(color));
+    setArmLeftColor(LEDModes.setColor(color));
+  }
+
   public void setRightArmColorMode() {
     // Main color
     m_buffer = m_rightArmColor
