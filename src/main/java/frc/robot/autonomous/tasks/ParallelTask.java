@@ -52,8 +52,8 @@ public class ParallelTask extends Task {
 
   @Override
   public void done() {
-    // for (Task task : m_tasks) {
-    // task.done();
-    // }
+    for (Task task : m_tasks) {
+      task.done();
+    }
   }
 }
