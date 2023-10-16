@@ -10,7 +10,7 @@ public class AutoBalanceTask extends Task {
   private AHRS m_gyro;
 
   private double m_tolerance = 10.0;
-  private double m_maxSpeed = 0.3;
+  private double m_maxSpeed = 0.35;
 
   @Override
   public void start() {
